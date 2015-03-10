@@ -9,8 +9,8 @@ public class NodeProper {
 	String properUnit;
 	Integer proID;
 	public NodeProper(Integer id, Integer properid, String properValue,
-			Integer parentID, String properName, String properUnit,
-			Integer proID) {
+			Integer parentID, String properName, String properUnit
+			) {
 		super();
 		this.id = id;
 		this.properid = properid;
@@ -18,7 +18,7 @@ public class NodeProper {
 		this.parentID = parentID;
 		this.properName = properName;
 		this.properUnit = properUnit;
-		this.proID = proID;
+		
 	}
 	public Integer getId() {
 		return id;
