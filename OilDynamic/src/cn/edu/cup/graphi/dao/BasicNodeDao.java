@@ -1,7 +1,13 @@
 package cn.edu.cup.graphi.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
+import cn.edu.cup.graphi.business.BasicNode;
+import cn.edu.cup.graphi.business.Edge;
 import cn.edu.cup.tools.HibernateSessionManager;
 
 public class BasicNodeDao {
@@ -24,5 +30,67 @@ public class BasicNodeDao {
 	{	
 		session = HibernateSessionManager.getThreadLocalSession();
 	
+	}
+
+	public int addBasicNode(String typeName, int type, String filePath) {
+		SQLQuery q;
+		HibernateSessionManager.getThreadLocalTransaction();
+		
+		q = session.createSQLQuery("insert into t_basicNode (typeName,type,IconFile) values (?,?,?)");
+		q.setParameter(0, typeName);
+		q.setParameter(1, type);	
+		q.setParameter(2, filePath);
+		int re=q.executeUpdate();
+	
+		return re;
+	}
+
+	public List<BasicNode> getBasicNodes() {
+		List<BasicNode> tempList=new ArrayList<BasicNode>();
+		SQLQuery q;
+		
+		 q = session
+				.createSQLQuery("select t1.ID,t1.type,t1.iconFile,t1.TypeName from t_basicnode t1 order by id desc");
+			
+		List l = q.list();
+		
+		for (int i = 0; i < l.size(); i++) {
+			// TestDb user = (TestDb)l.get(i);
+			// System.out.println(user.getUsername());
+
+			Object[] row = (Object[]) l.get(i);
+			
+			Integer id = ((Integer) row[0]);
+			Integer type = ((Integer) row[1]);
+			
+			String iconFile = (String) row[2];
+			String typeName = (String) row[3];
+			
+			BasicNode temp=new BasicNode(id, type, typeName, iconFile);
+			tempList.add(temp);
+
+		}
+		
+		return tempList;
+	}
+
+	public void deleteBasicNode(int id) {
+		HibernateSessionManager.getThreadLocalTransaction();
+		SQLQuery q = session
+				.createSQLQuery("delete from t_basicnode where ID=?");
+		q.setParameter(0, id);
+		int re = q.executeUpdate();
+	}
+
+	public int modifyBasicNode(int id, String proper, String value) {
+		SQLQuery q;
+		HibernateSessionManager.getThreadLocalTransaction();
+		
+		q = session.createSQLQuery("update t_basicnode set ?=?  where id=?");
+		q.setParameter(0, proper);
+		q.setParameter(1, value);	
+		q.setParameter(2, id);	
+		int re=q.executeUpdate();
+			return re;
 	}
 }

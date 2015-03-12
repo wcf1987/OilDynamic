@@ -7,8 +7,8 @@ public class GraphiProjects {
 	String proName;
 	Integer authorID;
 	String authorName;
-	Date CreateTime;
-	Date ModifyTime;
+	Date createDate;
+	Date modifyDate;
 	public GraphiProjects(Integer id, String proName, Integer authorID,
 			String authorName, Date createTime, Date modifyTime) {
 		super();
@@ -16,8 +16,8 @@ public class GraphiProjects {
 		this.proName = proName;
 		this.authorID = authorID;
 		this.authorName = authorName;
-		CreateTime = createTime;
-		ModifyTime = modifyTime;
+		createDate = createTime;
+		modifyDate = modifyTime;
 	}
 	public Integer getId() {
 		return id;
@@ -44,15 +44,15 @@ public class GraphiProjects {
 		this.authorName = authorName;
 	}
 	public Date getCreateTime() {
-		return CreateTime;
+		return createDate;
 	}
 	public void setCreateTime(Date createTime) {
-		CreateTime = createTime;
+		createDate = createTime;
 	}
 	public Date getModifyTime() {
-		return ModifyTime;
+		return modifyDate;
 	}
 	public void setModifyTime(Date modifyTime) {
-		ModifyTime = modifyTime;
+		modifyDate = modifyTime;
 	}
 }

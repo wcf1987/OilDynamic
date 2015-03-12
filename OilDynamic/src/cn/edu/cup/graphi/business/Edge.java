@@ -6,6 +6,8 @@ public class Edge {
 	Integer targetid;
 	Integer BasicNodeID;
 	Integer proID;
+	String sourceName;
+	String targetName;
 	public Edge(Integer id, Integer sourceid, Integer targetid,
 			Integer basicNodeID, Integer proID) {
 		super();
@@ -14,6 +16,18 @@ public class Edge {
 		this.targetid = targetid;
 		BasicNodeID = basicNodeID;
 		this.proID = proID;
+	}
+	public Edge(Integer id2, Integer sourceID2, Integer targetID2,
+			Integer basicNodeID2, int proID2, String sourceName,
+			String targetName) {
+		super();
+		this.id = id2;
+		this.sourceid = sourceID2;
+		this.targetid = targetID2;
+		BasicNodeID = basicNodeID2;
+		this.proID = proID2;
+		this.sourceName=sourceName;
+		this.targetName=targetName;
 	}
 	public Integer getId() {
 		return id;

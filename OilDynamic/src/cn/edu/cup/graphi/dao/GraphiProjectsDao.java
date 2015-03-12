@@ -1,14 +1,18 @@
 package cn.edu.cup.graphi.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 import cn.edu.cup.graphi.business.Graphi;
+import cn.edu.cup.graphi.business.GraphiProjects;
 import cn.edu.cup.graphi.business.Line;
 import cn.edu.cup.graphi.business.Point;
 import cn.edu.cup.tools.HibernateSessionManager;
@@ -86,5 +90,70 @@ public class GraphiProjectsDao {
 		a.setPoints(points);
 		a.setLines(lines);
 		return a;
+	}
+
+	public int addGraphiProject(String proName, int authorID) {
+		SQLQuery q;
+		HibernateSessionManager.getThreadLocalTransaction();
+		
+		q = session.createSQLQuery("insert into t_graphiproject (proName,authorID,createDate,modifyDate) values (?,?,now(),now())");
+		q.setParameter(0, proName);
+		q.setParameter(1, authorID);	
+		int re=q.executeUpdate();
+	
+		
+		Query q2 = session.createSQLQuery("select LAST_INSERT_ID()");
+		int ret_id = ((BigInteger) q2.uniqueResult()).intValue();
+		return ret_id;
+	}
+
+	public List<GraphiProjects> getProjects() {
+		List<GraphiProjects> tempList=new ArrayList<GraphiProjects>();
+		SQLQuery q;
+		
+		 q = session
+				.createSQLQuery("select t1.ID,t1.proName,'test',t2.CreateDate,t1.modifyDate from t_graphiproject t1 order by modifyDate desc");
+				
+		List l = q.list();
+		
+		for (int i = 0; i < l.size(); i++) {
+			// TestDb user = (TestDb)l.get(i);
+			// System.out.println(user.getUsername());
+
+			Object[] row = (Object[]) l.get(i);
+			
+			Integer id = ((Integer) row[0]);
+			String proName = ((String) row[1]);
+			String  authorName= ((String) row[2]);
+			
+			Date createDate = (Date) row[3];
+			Date modifyDate = (Date) row[4];
+			
+			
+			GraphiProjects temp=new GraphiProjects(id, proName, 0, authorName, createDate, modifyDate);
+			tempList.add(temp);
+
+		}
+		return tempList;
+	}
+
+	public void deleteProject(int id) {
+		HibernateSessionManager.getThreadLocalTransaction();
+		SQLQuery q = session
+				.createSQLQuery("delete from t_graphiproject where ID=?");
+		q.setParameter(0, id);
+		int re = q.executeUpdate();
+		
+	}
+
+	public int modifyProject(int id, String proName, String value) {
+		SQLQuery q;
+		HibernateSessionManager.getThreadLocalTransaction();
+		
+		q = session.createSQLQuery("update t_graphiproject set proName=?,modifyDate=now()  where id=?");
+		q.setParameter(0, proName);
+		q.setParameter(1, id);	
+		int re=q.executeUpdate();
+			return re;
 	}
 }

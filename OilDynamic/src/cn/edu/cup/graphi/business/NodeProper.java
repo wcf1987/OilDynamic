@@ -4,10 +4,20 @@ public class NodeProper {
 	Integer id ;
 	Integer properid;
 	String properValue;
+	String properDefaultValue;
 	Integer parentID;
 	String properName;
 	String properUnit;
 	Integer proID;
+	public NodeProper(Integer id, String properName, String properDefaultValue,
+			 String properUnit			) {
+		super();
+		this.id = id;
+		this.properDefaultValue = properDefaultValue;
+		this.properName = properName;
+		this.properUnit = properUnit;
+		
+	}
 	public NodeProper(Integer id, Integer properid, String properValue,
 			Integer parentID, String properName, String properUnit
 			) {

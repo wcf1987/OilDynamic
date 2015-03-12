@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
@@ -36,6 +37,32 @@ public class NodeProperDao {
 	
 	}
 
+	public List<NodeProper> getBasicPropersByNodeID(int basicNodeID) {
+		List<NodeProper> tempList=new ArrayList<NodeProper>();
+		SQLQuery q;
+		
+		 q = session
+				.createSQLQuery("select t2.id,t2.ProperName,t2.ProperDefaultValue,t2.ProperUnit from t_proper t2 where t2.parentID=?");
+		q.setParameter(0, basicNodeID);		
+		List l = q.list();
+		
+		for (int i = 0; i < l.size(); i++) {
+			// TestDb user = (TestDb)l.get(i);
+			// System.out.println(user.getUsername());
+
+			Object[] row = (Object[]) l.get(i);
+			
+			Integer id = ((Integer) row[0]);
+			String ProperName = (String) row[1];
+			String propervalue = (String) row[2];
+			String ProperUnit = (String) row[3];
+			NodeProper temp=new NodeProper(id,  ProperName, propervalue, ProperUnit);
+			tempList.add(temp);
+
+		}
+		
+		return tempList;
+	}
 	public List<NodeProper> getPropersByNodeID(int nodeID) {
 		List<NodeProper> tempList=new ArrayList<NodeProper>();
 		SQLQuery q;
@@ -62,5 +89,56 @@ public class NodeProperDao {
 		}
 		
 		return tempList;
+	}
+	public int addBasicProper(String properName,
+			String properDefaultValue, String properUnit, String parentID) {
+		SQLQuery q;
+		HibernateSessionManager.getThreadLocalTransaction();
+		
+		q = session.createSQLQuery("insert into t_proper (properName,properDefaultValue,properUnit,parentID) values (?,?,?,?)");
+		q.setParameter(0, properName);
+		q.setParameter(1, properDefaultValue);	
+		q.setParameter(2, properUnit);	
+		q.setParameter(3, parentID);	
+		int re=q.executeUpdate();
+	
+		return re;
+	}
+
+	public int deleteBasicProper(int id) {
+		HibernateSessionManager.getThreadLocalTransaction();
+		SQLQuery q = session
+				.createSQLQuery("delete from t_proper where ID=?");
+		q.setParameter(0, id);
+		int re = q.executeUpdate();
+		// tx.commit();
+		return re;
+		
+	}
+
+	public int modifyBasicProper(int id, String properName,String properDefaultValue, String properUnit, String parentID) {
+			SQLQuery q;
+	HibernateSessionManager.getThreadLocalTransaction();
+	
+	q = session.createSQLQuery("update t_proper set properName=?,properDefaultValue=?,properUnit=? where id=?");
+	q.setParameter(0, properName);
+	q.setParameter(1, properDefaultValue);	
+	q.setParameter(2, properUnit);	
+	
+	q.setParameter(3, id);	
+	int re=q.executeUpdate();
+		return re;
+	}
+
+	public int modifyNodeProper(int id, String properValue) {
+		HibernateSessionManager.getThreadLocalTransaction();
+		SQLQuery q;
+		q = session.createSQLQuery("update t_nodeproper set properValue=? where id=?");
+		q.setParameter(0, properValue);
+		q.setParameter(1, id);	
+		
+		int re=q.executeUpdate();
+			return re;
+	
 	}
 }
