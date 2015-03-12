@@ -18,9 +18,20 @@ public class NodeProperAction {
 	}
 	int nodeID;
 	List<NodeProper> nodePropers;
+	private int page;
+	private int records;
+	private int rows;
+	private int rowNum;
+	private int total;
 	public String listNodePropers(){
 		NodeProperDao dao=new NodeProperDao();
-		nodePropers=dao.getPropersByNodeID(nodeID);
+		nodePropers=dao.getPropersByNodeID(nodeID,page, rows);
+		records = dao.getProperCounts(nodeID);
+		total = records / rows;
+		if (records % rows != 0) {
+			total++;
+		}
+		dao.close();
 		dao.close();
 		return "SUCCESS";
 	}

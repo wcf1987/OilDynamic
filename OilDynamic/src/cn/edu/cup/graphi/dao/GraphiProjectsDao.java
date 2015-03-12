@@ -107,13 +107,14 @@ public class GraphiProjectsDao {
 		return ret_id;
 	}
 
-	public List<GraphiProjects> getProjects() {
+	public List<GraphiProjects> getProjects(int page, int rows) {
 		List<GraphiProjects> tempList=new ArrayList<GraphiProjects>();
 		SQLQuery q;
 		
 		 q = session
 				.createSQLQuery("select t1.ID,t1.proName,'test',t2.CreateDate,t1.modifyDate from t_graphiproject t1 order by modifyDate desc");
-				
+			q.setFirstResult((page - 1) * rows);
+			q.setMaxResults(rows);
 		List l = q.list();
 		
 		for (int i = 0; i < l.size(); i++) {
@@ -155,5 +156,12 @@ public class GraphiProjectsDao {
 		q.setParameter(1, id);	
 		int re=q.executeUpdate();
 			return re;
+	}
+
+	public int getCounts() {
+		String sql = "select count(*) from t_graphiproject t2 ";
+		SQLQuery q = session.createSQLQuery(sql);
+		Integer count = ((BigInteger) q.uniqueResult()).intValue();
+		return count;
 	}
 }

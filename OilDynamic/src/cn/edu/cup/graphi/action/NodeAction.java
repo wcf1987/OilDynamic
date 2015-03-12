@@ -20,10 +20,21 @@ public class NodeAction {
 		return "SUCCESS";
 	}
 
+	private int page;
+	private int records;
+	private int rows;
+	private int rowNum;
+	private int total;
 	List<Node> nodes;
 	public String listNodes(){
 		NodeDao dao=new NodeDao();
-		nodes=dao.getNodesByProID(proID);
+		nodes=dao.getNodesByProID(proID,page, rows);
+
+		records = dao.getCounts(proID);
+		total = records / rows;
+		if (records % rows != 0) {
+			total++;
+		}
 		dao.close();
 		return "SUCCESS";
 	}

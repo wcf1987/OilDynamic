@@ -19,14 +19,27 @@ public class GraphiProjectAction {
 		dao.close();
 		return "SUCCESS";
 	}
+
+	private int page;
+	private int records;
+	private int rows;
+	private int rowNum;
+	private int total;
 	List<GraphiProjects> projects;
 	public String listGraphiProjects(){
 		GraphiProjectsDao dao=new GraphiProjectsDao();
-		projects=dao.getProjects();
+		projects=dao.getProjects(page, rows);
+		
+		records = dao.getCounts();
+		total = records / rows;
+		if (records % rows != 0) {
+			total++;
+		}
 		dao.close();
 		return "SUCCESS";
 	}
 	private List<Integer> ids;
+	
 	public String delGraphiProjects(){
 		GraphiProjectsDao dao = new GraphiProjectsDao();
 		// AlgorithmInputDao inputDao=new AlgorithmInputDao();

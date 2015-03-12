@@ -24,9 +24,21 @@ public class EdgeAction {
 		return "SUCCESS";
 	}
 	List<Edge> edges;
+
+	private int page;
+	private int records;
+	private int rows;
+	private int rowNum;
+	private int total;
 	public String listEdges(){
 		EdgeDao dao=new EdgeDao();
-		edges=dao.getedgesByProID(proID);
+		edges=dao.getedgesByProID(proID,page, rows);
+
+		records = dao.getCounts(proID);
+		total = records / rows;
+		if (records % rows != 0) {
+			total++;
+		}
 		dao.close();
 		return "SUCCESS";
 	}

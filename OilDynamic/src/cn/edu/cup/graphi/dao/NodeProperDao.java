@@ -1,5 +1,6 @@
 package cn.edu.cup.graphi.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,13 +38,16 @@ public class NodeProperDao {
 	
 	}
 
-	public List<NodeProper> getBasicPropersByNodeID(int basicNodeID) {
+	public List<NodeProper> getBasicPropersByNodeID(int basicNodeID, int page, int rows) {
 		List<NodeProper> tempList=new ArrayList<NodeProper>();
 		SQLQuery q;
 		
 		 q = session
 				.createSQLQuery("select t2.id,t2.ProperName,t2.ProperDefaultValue,t2.ProperUnit from t_proper t2 where t2.parentID=?");
 		q.setParameter(0, basicNodeID);		
+
+		q.setFirstResult((page - 1) * rows);
+		q.setMaxResults(rows);
 		List l = q.list();
 		
 		for (int i = 0; i < l.size(); i++) {
@@ -63,13 +67,16 @@ public class NodeProperDao {
 		
 		return tempList;
 	}
-	public List<NodeProper> getPropersByNodeID(int nodeID) {
+	public List<NodeProper> getPropersByNodeID(int nodeID, int page, int rows) {
 		List<NodeProper> tempList=new ArrayList<NodeProper>();
 		SQLQuery q;
 		
 		 q = session
 				.createSQLQuery("select t1.id,t1.properID,t1.propervalue,t2.ProperName,t2.ProperUnit from t_nodeproper t1,t_proper t2 where t1.properID=t2.ID and t1.parentID=?");
 		q.setParameter(0, nodeID);		
+
+		q.setFirstResult((page - 1) * rows);
+		q.setMaxResults(rows);
 		List l = q.list();
 		
 		for (int i = 0; i < l.size(); i++) {
@@ -140,5 +147,21 @@ public class NodeProperDao {
 		int re=q.executeUpdate();
 			return re;
 	
+	}
+
+	public int getBasicCounts(int nodeID) {
+		String sql = "select count(*) from t_proper t2 where parentID=?";
+		SQLQuery q = session.createSQLQuery(sql);
+		q.setParameter(0, nodeID);
+		Integer count = ((BigInteger) q.uniqueResult()).intValue();
+		return count;
+	}
+
+	public int getProperCounts(int nodeID) {
+		String sql = "select count(*) from t_nodeproper t2 where parentID=?";
+		SQLQuery q = session.createSQLQuery(sql);
+		q.setParameter(0, nodeID);
+		Integer count = ((BigInteger) q.uniqueResult()).intValue();
+		return count;
 	}
 }

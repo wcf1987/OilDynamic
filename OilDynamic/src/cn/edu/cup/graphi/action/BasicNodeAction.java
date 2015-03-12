@@ -4,6 +4,7 @@ import java.util.List;
 
 import cn.edu.cup.graphi.business.BasicNode;
 import cn.edu.cup.graphi.business.Edge;
+import cn.edu.cup.graphi.business.Node;
 import cn.edu.cup.graphi.business.NodeProper;
 import cn.edu.cup.graphi.dao.BasicNodeDao;
 import cn.edu.cup.graphi.dao.EdgeDao;
@@ -22,10 +23,21 @@ public class BasicNodeAction {
 		dao.close();
 		return "SUCCESS";
 	}
+	private int page;
+	private int records;
+	private int rows;
+	private int rowNum;
+	private int total;
+	List<Node> nodes;
 	List<BasicNode> basicNodes;
 	public String listBasicNodes(){
 		BasicNodeDao dao=new BasicNodeDao();
-		basicNodes=dao.getBasicNodes();
+		basicNodes=dao.getBasicNodes(page, rows);
+		records = dao.getCounts();
+		total = records / rows;
+		if (records % rows != 0) {
+			total++;
+		}
 		dao.close();
 		return "SUCCESS";
 	}
@@ -76,7 +88,12 @@ public class BasicNodeAction {
 	int nodeID;
 	public String listBasicNodesProper(){
 		NodeProperDao dao=new NodeProperDao();
-		nodePropers=dao.getBasicPropersByNodeID(nodeID);
+		nodePropers=dao.getBasicPropersByNodeID(nodeID,page, rows);
+		records = dao.getBasicCounts(nodeID);
+		total = records / rows;
+		if (records % rows != 0) {
+			total++;
+		}
 		dao.close();
 		return "SUCCESS";
 	}

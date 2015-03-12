@@ -1,5 +1,6 @@
 package cn.edu.cup.graphi.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,13 +46,15 @@ public class NodeDao {
 		return re;
 	}
 
-	public List<Node> getNodesByProID(int proID) {
+	public List<Node> getNodesByProID(int proID, int page, int rows) {
 		List<Node> tempList=new ArrayList<Node>();
 		SQLQuery q;
 		
 		 q = session
 				.createSQLQuery("select t1.ID,t1.BasicNodeID,t1.nodeName,t2.TypeName,t1.latitude,t1.longitude,t1.x_location,t1.y_location,t1.x_location_geo,t1.y_location_geo from t_node t1,t_basicnode t2 where t1.BasicNodeID=t2.ID and t1.proID=?");
 		q.setParameter(0, proID);		
+		q.setFirstResult((page - 1) * rows);
+		q.setMaxResults(rows);
 		List l = q.list();
 		
 		for (int i = 0; i < l.size(); i++) {
@@ -100,5 +103,13 @@ public class NodeDao {
 	q.setParameter(2, id);	
 	int re=q.executeUpdate();
 		return re;
+	}
+
+	public int getCounts(int proID) {
+		String sql = "select count(*) from t_node t2 where proID=?";
+		SQLQuery q = session.createSQLQuery(sql);
+		q.setParameter(0, proID);
+		Integer count = ((BigInteger) q.uniqueResult()).intValue();
+		return count;
 	}
 }

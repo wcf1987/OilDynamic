@@ -1,5 +1,6 @@
 package cn.edu.cup.graphi.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,13 +49,16 @@ public class EdgeDao {
 		return re;
 	}
 
-	public List<Edge> getedgesByProID(int proID) {
+	public List<Edge> getedgesByProID(int proID, int page, int rows) {
 		List<Edge> tempList=new ArrayList<Edge>();
 		SQLQuery q;
 		
 		 q = session
 				.createSQLQuery("select t1.ID,t1.BasicNodeID,t1.edgeName,t2.TypeName,t1.sourceID,t1.targetID,t3.nodeName,t4.nodeName from t_edge t1,t_basicnode t2,t_node t3,t_node t4 where t1.BasicNodeID=t2.ID and t1.sourceID=t3.id and t1.targetID=t4.id and t1.proID=?");
-		q.setParameter(0, proID);		
+		q.setParameter(0, proID);	
+		
+		q.setFirstResult((page - 1) * rows);
+		q.setMaxResults(rows);
 		List l = q.list();
 		
 		for (int i = 0; i < l.size(); i++) {
@@ -95,11 +99,19 @@ public class EdgeDao {
 		SQLQuery q;
 	HibernateSessionManager.getThreadLocalTransaction();
 	
-	q = session.createSQLQuery("update t_node set ?=?  where id=?");
+	q = session.createSQLQuery("update t_edge set ?=?  where id=?");
 	q.setParameter(0, proper);
 	q.setParameter(1, value);	
 	q.setParameter(2, id);	
 	int re=q.executeUpdate();
 		return re;
+	}
+
+	public int getCounts(int proID) {
+		String sql = "select count(*) from t_edge t2 where proID=?";
+		SQLQuery q = session.createSQLQuery(sql);
+		q.setParameter(0, proID);
+		Integer count = ((BigInteger) q.uniqueResult()).intValue();
+		return count;
 	}
 }

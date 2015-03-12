@@ -1,5 +1,6 @@
 package cn.edu.cup.graphi.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,13 +46,15 @@ public class BasicNodeDao {
 		return re;
 	}
 
-	public List<BasicNode> getBasicNodes() {
+	public List<BasicNode> getBasicNodes(int page, int rows) {
 		List<BasicNode> tempList=new ArrayList<BasicNode>();
 		SQLQuery q;
 		
 		 q = session
 				.createSQLQuery("select t1.ID,t1.type,t1.iconFile,t1.TypeName from t_basicnode t1 order by id desc");
 			
+			q.setFirstResult((page - 1) * rows);
+			q.setMaxResults(rows);
 		List l = q.list();
 		
 		for (int i = 0; i < l.size(); i++) {
@@ -92,5 +95,12 @@ public class BasicNodeDao {
 		q.setParameter(2, id);	
 		int re=q.executeUpdate();
 			return re;
+	}
+
+	public int getCounts() {
+		String sql = "select count(*) from t_basicnode t2";
+		SQLQuery q = session.createSQLQuery(sql);
+		Integer count = ((BigInteger) q.uniqueResult()).intValue();
+		return count;
 	}
 }
