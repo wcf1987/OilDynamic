@@ -1,0 +1,14 @@
+@charset "utf-8";
+
+.title{
+    font-size: 24px;
+    color:#000;
+}
+.gridTitle{
+    font-size: 20px;
+    color: #FFFFFF;
+    padding: 5px;
+}
+.active{
+    color: #39C2F0;
+}
