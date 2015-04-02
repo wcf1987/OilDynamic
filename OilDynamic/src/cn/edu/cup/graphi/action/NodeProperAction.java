@@ -2,9 +2,10 @@ package cn.edu.cup.graphi.action;
 
 import java.util.List;
 
-
 import cn.edu.cup.graphi.business.NodeProper;
 import cn.edu.cup.graphi.dao.NodeProperDao;
+
+import com.opensymphony.xwork2.Action;
 
 public class NodeProperAction {
 	String properName;
@@ -14,7 +15,7 @@ public class NodeProperAction {
 	String msg;
 	public String addNodeProper(){
 
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	int nodeID;
 	List<NodeProper> nodePropers;
@@ -33,7 +34,7 @@ public class NodeProperAction {
 		}
 		dao.close();
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	public int getNodeID() {
 		return nodeID;
@@ -50,7 +51,7 @@ public class NodeProperAction {
 	private List<Integer> ids;
 	public String delNodePropers(){
 		
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	int id;
 	String properValue;
@@ -64,6 +65,6 @@ public class NodeProperAction {
 		
 		
 		
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 }

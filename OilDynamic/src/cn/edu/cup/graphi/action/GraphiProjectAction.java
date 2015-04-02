@@ -4,7 +4,8 @@ import java.util.List;
 
 import cn.edu.cup.graphi.business.GraphiProjects;
 import cn.edu.cup.graphi.dao.GraphiProjectsDao;
-import cn.edu.cup.graphi.dao.NodeDao;
+
+import com.opensymphony.xwork2.Action;
 
 public class GraphiProjectAction {
 	String proName;
@@ -17,7 +18,7 @@ public class GraphiProjectAction {
 			msg="添加项目失败";
 		}
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 
 	private int page;
@@ -36,8 +37,87 @@ public class GraphiProjectAction {
 			total++;
 		}
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
+	public String getProName() {
+		return proName;
+	}
+	public void setProName(String proName) {
+		this.proName = proName;
+	}
+	public int getAuthorID() {
+		return authorID;
+	}
+	public void setAuthorID(int authorID) {
+		this.authorID = authorID;
+	}
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public int getRecords() {
+		return records;
+	}
+	public void setRecords(int records) {
+		this.records = records;
+	}
+	public int getRows() {
+		return rows;
+	}
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+	public int getRowNum() {
+		return rowNum;
+	}
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
+	}
+	public int getTotal() {
+		return total;
+	}
+	public void setTotal(int total) {
+		this.total = total;
+	}
+	public List<GraphiProjects> getProjects() {
+		return projects;
+	}
+	public void setProjects(List<GraphiProjects> projects) {
+		this.projects = projects;
+	}
+	public List<Integer> getIds() {
+		return ids;
+	}
+	public void setIds(List<Integer> ids) {
+		this.ids = ids;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getValue() {
+		return value;
+	}
+	public void setValue(String value) {
+		this.value = value;
+	}
+	public int getProID() {
+		return proID;
+	}
+	public void setProID(int proID) {
+		this.proID = proID;
+	}
+
 	private List<Integer> ids;
 	
 	public String delGraphiProjects(){
@@ -52,7 +132,7 @@ public class GraphiProjectAction {
 		}
 		// inputDao.close();
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	int id;
 	String value;
@@ -66,10 +146,10 @@ public class GraphiProjectAction {
 		
 		
 		
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	int proID;
 	public String getGraphiByProID(){
-		return "SUCCESS";	
+		return Action.SUCCESS;	
 	}
 }

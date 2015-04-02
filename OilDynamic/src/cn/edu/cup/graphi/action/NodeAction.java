@@ -5,6 +5,8 @@ import java.util.List;
 import cn.edu.cup.graphi.business.Node;
 import cn.edu.cup.graphi.dao.NodeDao;
 
+import com.opensymphony.xwork2.Action;
+
 public class NodeAction {
 	String nodeName;
 	String basicNodeID;
@@ -17,7 +19,7 @@ public class NodeAction {
 			msg="添加属性失败";
 		}
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 
 	private int page;
@@ -36,7 +38,7 @@ public class NodeAction {
 			total++;
 		}
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	private List<Integer> ids;
 	public String delNodes(){
@@ -51,7 +53,7 @@ public class NodeAction {
 		}
 		// inputDao.close();
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	double x_location;
 	double y_location;
@@ -72,6 +74,6 @@ public class NodeAction {
 		
 		
 		
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 }

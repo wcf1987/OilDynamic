@@ -2,6 +2,8 @@ package cn.edu.cup.graphi.action;
 import cn.edu.cup.graphi.business.Graphi;
 import cn.edu.cup.graphi.dao.GraphiProjectsDao;
 
+import com.opensymphony.xwork2.Action;
+
 public class GraphiShowAction {
 	private Graphi graphi;
 	public Graphi getGraphi() {
@@ -13,12 +15,12 @@ public class GraphiShowAction {
 		this.proID=1;
 		if(this.proID==0){
 			msg="你需要打开或新建一个工程";
-			return "SUCCESS";
+			return Action.SUCCESS;
 		}
 		GraphiProjectsDao dao=new GraphiProjectsDao();
 		graphi=dao.getGraphiByProID(proID);
 		
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	public String getMsg() {
 		return msg;

@@ -18,7 +18,7 @@
 		
 	</package>
 	<!--指定action的扩展名json -->
-	<package name="json" extends="json-default">
+	<package name="icejson" extends="json-default">
 
 		<!--节点编辑action -->
 		<action name="addBasicNode" method="addBasicNode" class="cn.edu.cup.graphi.action.BasicNodeAction">
@@ -77,8 +77,7 @@
 			</result>
 		</action>
 		<action name="listGraphiProjects" method="listGraphiProjects" class="cn.edu.cup.graphi.action.GraphiProjectAction">
-			<result type="json">				
-			</result>
+			<result type="json"></result>
 		</action>
 		<action name="delGraphiProjects" method="delGraphiProjects" class="cn.edu.cup.graphi.action.GraphiProjectAction">
 			<result type="json">				

@@ -42,6 +42,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="modules/js/jquery.tipsy.js"></script>
 <script type="text/javascript" src="modules/js/jquery.custom.js"></script>
 <script type="text/javascript" src="modules/js/jquery.search.js"></script>
+<script type="text/javascript" src="modules/js/project.js"></script>
+<script type="text/javascript" src="modules/js/project_edit.js"></script>
 
 
 <script src="js/jqGrid/js/i18n/grid.locale-cn.js" type="text/javascript"></script>

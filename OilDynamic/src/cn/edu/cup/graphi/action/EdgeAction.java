@@ -3,9 +3,9 @@ package cn.edu.cup.graphi.action;
 import java.util.List;
 
 import cn.edu.cup.graphi.business.Edge;
-import cn.edu.cup.graphi.business.Node;
 import cn.edu.cup.graphi.dao.EdgeDao;
-import cn.edu.cup.graphi.dao.NodeDao;
+
+import com.opensymphony.xwork2.Action;
 
 public class EdgeAction {
 	String edgeName;
@@ -21,7 +21,7 @@ public class EdgeAction {
 			msg="添加属性失败";
 		}
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	List<Edge> edges;
 
@@ -40,7 +40,7 @@ public class EdgeAction {
 			total++;
 		}
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	private List<Integer> ids;
 	public String delEdges(){
@@ -55,7 +55,7 @@ public class EdgeAction {
 		}
 		// inputDao.close();
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	int id;
 	String proper;
@@ -70,6 +70,6 @@ public class EdgeAction {
 		
 		
 		
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 }

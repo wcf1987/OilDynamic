@@ -112,7 +112,7 @@ public class GraphiProjectsDao {
 		SQLQuery q;
 		
 		 q = session
-				.createSQLQuery("select t1.ID,t1.proName,'test',t2.CreateDate,t1.modifyDate from t_graphiproject t1 order by modifyDate desc");
+				.createSQLQuery("select t1.ID,t1.proName,'test',t1.CreateDate,t1.modifyDate from t_graphiproject t1 order by modifyDate desc");
 			q.setFirstResult((page - 1) * rows);
 			q.setMaxResults(rows);
 		List l = q.list();

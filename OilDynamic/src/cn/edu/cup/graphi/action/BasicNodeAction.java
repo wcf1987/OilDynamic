@@ -3,12 +3,12 @@ package cn.edu.cup.graphi.action;
 import java.util.List;
 
 import cn.edu.cup.graphi.business.BasicNode;
-import cn.edu.cup.graphi.business.Edge;
 import cn.edu.cup.graphi.business.Node;
 import cn.edu.cup.graphi.business.NodeProper;
 import cn.edu.cup.graphi.dao.BasicNodeDao;
-import cn.edu.cup.graphi.dao.EdgeDao;
 import cn.edu.cup.graphi.dao.NodeProperDao;
+
+import com.opensymphony.xwork2.Action;
 
 public class BasicNodeAction {
 	String TypeName;
@@ -21,7 +21,7 @@ public class BasicNodeAction {
 			msg="添加基本节点失败";
 		}
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	private int page;
 	private int records;
@@ -39,7 +39,7 @@ public class BasicNodeAction {
 			total++;
 		}
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	public String delBasicNodes(){
 		BasicNodeDao dao = new BasicNodeDao();
@@ -53,7 +53,7 @@ public class BasicNodeAction {
 		}
 		// inputDao.close();
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	String proper;
 	String value;
@@ -67,7 +67,7 @@ public class BasicNodeAction {
 		
 		
 		
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	
 	String properName;
@@ -82,7 +82,7 @@ public class BasicNodeAction {
 			msg="添加属性失败";
 		}
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	List<NodeProper> nodePropers;
 	int nodeID;
@@ -95,7 +95,7 @@ public class BasicNodeAction {
 			total++;
 		}
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	private List<Integer> ids;
 	public String delBasicNodesProper(){
@@ -110,7 +110,7 @@ public class BasicNodeAction {
 		}
 		// inputDao.close();
 		dao.close();
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 	int id;
 	public String modifyBasicNodeProper(){
@@ -123,6 +123,6 @@ public class BasicNodeAction {
 		
 		
 		
-		return "SUCCESS";
+		return Action.SUCCESS;
 	}
 }
