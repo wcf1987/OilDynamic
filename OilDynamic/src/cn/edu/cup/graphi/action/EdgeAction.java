@@ -42,6 +42,102 @@ public class EdgeAction {
 		dao.close();
 		return Action.SUCCESS;
 	}
+	public String getEdgeName() {
+		return edgeName;
+	}
+	public void setEdgeName(String edgeName) {
+		this.edgeName = edgeName;
+	}
+	public String getBasicNodeID() {
+		return basicNodeID;
+	}
+	public void setBasicNodeID(String basicNodeID) {
+		this.basicNodeID = basicNodeID;
+	}
+	public int getProID() {
+		return proID;
+	}
+	public void setProID(int proID) {
+		this.proID = proID;
+	}
+	public int getSourceID() {
+		return sourceID;
+	}
+	public void setSourceID(int sourceID) {
+		this.sourceID = sourceID;
+	}
+	public int getTargetID() {
+		return targetID;
+	}
+	public void setTargetID(int targetID) {
+		this.targetID = targetID;
+	}
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+	public List<Edge> getEdges() {
+		return edges;
+	}
+	public void setEdges(List<Edge> edges) {
+		this.edges = edges;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public int getRecords() {
+		return records;
+	}
+	public void setRecords(int records) {
+		this.records = records;
+	}
+	public int getRows() {
+		return rows;
+	}
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+	public int getRowNum() {
+		return rowNum;
+	}
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
+	}
+	public int getTotal() {
+		return total;
+	}
+	public void setTotal(int total) {
+		this.total = total;
+	}
+	public List<Integer> getIds() {
+		return ids;
+	}
+	public void setIds(List<Integer> ids) {
+		this.ids = ids;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getProper() {
+		return proper;
+	}
+	public void setProper(String proper) {
+		this.proper = proper;
+	}
+	public String getValue() {
+		return value;
+	}
+	public void setValue(String value) {
+		this.value = value;
+	}
 	private List<Integer> ids;
 	public String delEdges(){
 		EdgeDao dao = new EdgeDao();

@@ -8,6 +8,12 @@ public class NodeProper {
 	Integer parentID;
 	String properName;
 	String properUnit;
+	public String getProperDefaultValue() {
+		return properDefaultValue;
+	}
+	public void setProperDefaultValue(String properDefaultValue) {
+		this.properDefaultValue = properDefaultValue;
+	}
 	Integer proID;
 	public NodeProper(Integer id, String properName, String properDefaultValue,
 			 String properUnit			) {

@@ -2,7 +2,7 @@ package cn.edu.cup.graphi.business;
 
 public class Node {
 	Integer id ;
-	String nodeName;
+	String nodeNameStr;
 	double x_location;
 	double y_location;
 	double latitude;
@@ -13,11 +13,12 @@ public class Node {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getNodeName() {
-		return nodeName;
+
+	public String getNodeNameStr() {
+		return nodeNameStr;
 	}
-	public void setNodeName(String nodeName) {
-		this.nodeName = nodeName;
+	public void setNodeNameStr(String nodeNameStr) {
+		this.nodeNameStr = nodeNameStr;
 	}
 	public double getX_location() {
 		return x_location;
@@ -75,7 +76,7 @@ public class Node {
 			Integer proID) {
 		super();
 		this.id = id;
-		this.nodeName = nodeName;
+		this.nodeNameStr = nodeName;
 		this.x_location = x_location;
 		this.y_location = y_location;
 		this.latitude = latitude;
@@ -85,6 +86,17 @@ public class Node {
 		BasicNodeID = basicNodeID;
 		this.proID = proID;
 	}
+	public Node(Integer id2, String nodeName) {
+		this.id=id2;
+		this.nodeNameStr=nodeName;
+	}
 	Integer BasicNodeID;
 	Integer proID;
+	String TypeName;
+	public String getTypeName() {
+		return TypeName;
+	}
+	public void setTypeName(String typeName) {
+		TypeName = typeName;
+	}
 }

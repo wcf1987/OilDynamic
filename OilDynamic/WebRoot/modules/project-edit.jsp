@@ -14,6 +14,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta charset="UTF-8">
 <link rel="shortcut icon" href="modules/images/favicon.html" type="image/x-icon">
 <title>拓扑结构后台管理</title>
+<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="bootstrap/css/carousel.css">
+	 
 <link rel="stylesheet" href="modules/css/normalize.css" type="text/css" media="all" />
 <link rel="stylesheet" href="modules/css/960.css" type="text/css" media="all" />
 <link rel="stylesheet" href="modules/css/superfish.css" type="text/css" media="all" />
@@ -30,6 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" media="screen" href="js/jqGrid/css/ui.jqgrid.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="js/jqueryUI/themes/redmond/jquery.ui.theme.css" />
 
+
 <script type="text/javascript" src="modules/js/jquery.min.js"></script>
 <script type="text/javascript" src="modules/js/superfish.js"></script>
 <script type="text/javascript" src="modules/js/supersubs.js"></script>
@@ -42,9 +46,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="modules/js/jquery.tipsy.js"></script>
 <script type="text/javascript" src="modules/js/jquery.custom.js"></script>
 <script type="text/javascript" src="modules/js/jquery.search.js"></script>
-<script type="text/javascript" src="modules/js/project.js"></script>
-<script type="text/javascript" src="modules/js/project_edit.js"></script>
 
+	<script type="text/javascript" src="js/upload/jquery.uploadify.min.js"></script>
+	<script type="text/javascript" src="js/jquery-validation-1.11.1/dist/jquery.validate.js"></script>
+	<script type="text/javascript" src="js/jquery/jquery.message.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<script src="bootstrap/js/holder.min.js"></script>
+<script type="text/javascript" src="modules/js/project_edit.js"></script>
+<script type="text/javascript" src="modules/js/proper.js"></script>
 
 <script src="js/jqGrid/js/i18n/grid.locale-cn.js" type="text/javascript"></script>
 <script src="js/jqGrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>
@@ -117,7 +126,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</a>
 	</div>
 <![endif]-->
-<link rel="stylesheet" href="http://fonts.useso.com/css?family=Philosopher:n,i,b,bi" type="text/css">
 <script type="text/javascript">
 	jQuery(function(){
 		jQuery('ul.sf-menu').supersubs({ 
@@ -240,36 +248,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="blocks patterns">
 				<a href="#" title="pattern1"></a>
 				<a href="#" title="pattern2"></a>
-				<a href="#" title="pattern3"></a>
-				<a href="#" title="pattern4"></a>
-				<a href="#" title="pattern5"></a>
-				<a href="#" title="pattern6"></a>
-				<a href="#" title="pattern7"></a>
-				<a href="#" title="pattern8"></a>
-				<a href="#" title="pattern9"></a>
-				<a href="#" title="pattern10"></a>
-				<a href="#" title="pattern11"></a>
-				<a href="#" title="pattern12"></a>
-				<a href="#" title="pattern13"></a>
-				<a href="#" title="pattern14"></a>
-				<a href="#" title="pattern15"></a>
-				<a href="#" title="pattern16"></a>
-				<a href="#" title="pattern17"></a>
-				<a href="#" title="pattern18"></a>
-				<a href="#" title="pattern19"></a>
-				<a href="#" title="pattern20"></a>
-				<a href="#" title="pattern21"></a>
-				<a href="#" title="pattern22"></a>
-				<a href="#" title="pattern23"></a>
-				<a href="#" title="pattern24"></a>
-				<a href="#" title="pattern25"></a>
-				<a href="#" title="pattern26"></a>
-				<a href="#" title="pattern27"></a>
 				<a href="#" title="nopattern">No Pattern</a>
 			</div>
 		</div>
 	</div>
 	<div class="style-toggle"></div>
 </div>
+	<div class="modal fade" id="list_nodeproper_modal">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title" style="font-weight:bold;font-family:幼圆">节点属性</h4>
+		      </div>
+		      <div class="modal-body">
+		     	 <form id="listnodeproperForm" action="addBasicNodeProper.action" method="post"> 
+		     	 	<div class="grid_6">
+                            <table id="nodeProperList" class="table table-striped table-bordered table-hover datatable " ></table>
+                            <div id="nodeProperPager" ></div>
+						</div>
+				   <div class="modal-footer">
+				       
+				   </div>
+				 </form> 
+		      </div>
+		     
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 </body>
 </html>

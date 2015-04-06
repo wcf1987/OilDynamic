@@ -115,7 +115,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</a>
 	</div>
 <![endif]-->
-<link rel="stylesheet" href="http://fonts.useso.com/css?family=Philosopher:n,i,b,bi" type="text/css">
 <script type="text/javascript">
 	jQuery(function(){
 		jQuery('ul.sf-menu').supersubs({ 

@@ -72,7 +72,7 @@ public class NodeProperDao {
 		SQLQuery q;
 		
 		 q = session
-				.createSQLQuery("select t1.id,t1.properID,t1.propervalue,t2.ProperName,t2.ProperUnit from t_nodeproper t1,t_proper t2 where t1.properID=t2.ID and t1.parentID=?");
+				.createSQLQuery("select t1.id,t1.properID,t1.propervalue,t2.ProperName,t2.ProperUnit from t_nodeproper t1,t_proper t2,t_node t3 where t1.properID=t2.ID and t1.parentID=? and t3.id=t1.parentid and t3.BasicNodeID=t2.ParentID");
 		q.setParameter(0, nodeID);		
 
 		q.setFirstResult((page - 1) * rows);
@@ -136,6 +136,17 @@ public class NodeProperDao {
 	int re=q.executeUpdate();
 		return re;
 	}
+	public int modifyBasicProper(int id, String proper, String value) {
+		SQLQuery q;
+		HibernateSessionManager.getThreadLocalTransaction();
+		String s="update t_proper set "+proper;
+		q = session.createSQLQuery(s+"=?  where id=?");
+
+		q.setParameter(0, value);	
+		q.setParameter(1, id);	
+		int re=q.executeUpdate();
+			return re;
+	}
 
 	public int modifyNodeProper(int id, String properValue) {
 		HibernateSessionManager.getThreadLocalTransaction();
@@ -158,7 +169,7 @@ public class NodeProperDao {
 	}
 
 	public int getProperCounts(int nodeID) {
-		String sql = "select count(*) from t_nodeproper t2 where parentID=?";
+		String sql = "select count(*) from t_nodeproper t1,t_proper t2,t_node t3 where t1.properID=t2.ID and t1.parentID=? and t3.id=t1.parentid and t3.BasicNodeID=t2.ParentID";
 		SQLQuery q = session.createSQLQuery(sql);
 		q.setParameter(0, nodeID);
 		Integer count = ((BigInteger) q.uniqueResult()).intValue();

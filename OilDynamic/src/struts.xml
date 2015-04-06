@@ -45,6 +45,11 @@
 			<result type="json">				
 			</result>
 		</action>
+		<action name="listBasicNodeTypes" method="listBasicNodeTypes" class="cn.edu.cup.graphi.action.BasicNodeAction">
+			<result type="json">				
+			</result>
+		</action>
+		
 		<action name="delBasicNodesProper" method="delBasicNodesProper" class="cn.edu.cup.graphi.action.BasicNodeAction">
 			<result type="json">				
 			</result>
@@ -106,6 +111,11 @@
 			<result type="json">				
 			</result>
 		</action>
+		<action name="listAllNodes" method="listAllNodes" class="cn.edu.cup.graphi.action.NodeAction">
+			<result type="json">				
+			</result>
+		</action>
+		
 		<action name="delNodes" method="delNodes" class="cn.edu.cup.graphi.action.NodeAction">
 			<result type="json">				
 			</result>

@@ -54,7 +54,7 @@ public class EdgeDao {
 		SQLQuery q;
 		
 		 q = session
-				.createSQLQuery("select t1.ID,t1.BasicNodeID,t1.edgeName,t2.TypeName,t1.sourceID,t1.targetID,t3.nodeName,t4.nodeName from t_edge t1,t_basicnode t2,t_node t3,t_node t4 where t1.BasicNodeID=t2.ID and t1.sourceID=t3.id and t1.targetID=t4.id and t1.proID=?");
+				.createSQLQuery("select t1.ID,t1.BasicNodeID,t1.edgeName,t2.TypeName,t1.sourceID,t1.targetID,t3.nodeName as n1,t4.nodeName as n2 from t_edge t1,t_basicnode t2,t_node t3,t_node t4 where t1.BasicNodeID=t2.ID and t1.sourceID=t3.id and t1.targetID=t4.id and t1.proID=?");
 		q.setParameter(0, proID);	
 		
 		q.setFirstResult((page - 1) * rows);
@@ -78,6 +78,7 @@ public class EdgeDao {
 			String sourceName = (String) row[6];
 			String targetName = (String) row[7];
 			Edge temp=new Edge(id, sourceID, targetID, basicNodeID, proID,sourceName,targetName);
+			temp.setEdgeName(edgeName);
 			tempList.add(temp);
 
 		}
@@ -98,11 +99,11 @@ public class EdgeDao {
 	public int modifyEdge(int id, String proper, String value) {
 		SQLQuery q;
 	HibernateSessionManager.getThreadLocalTransaction();
-	
-	q = session.createSQLQuery("update t_edge set ?=?  where id=?");
-	q.setParameter(0, proper);
-	q.setParameter(1, value);	
-	q.setParameter(2, id);	
+	String s="update t_edge set "+proper;
+	q = session.createSQLQuery(s+"=?  where id=?");
+
+	q.setParameter(0, value);	
+	q.setParameter(1, id);	
 	int re=q.executeUpdate();
 		return re;
 	}

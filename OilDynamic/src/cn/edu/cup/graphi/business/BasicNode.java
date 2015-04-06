@@ -10,6 +10,11 @@ public class BasicNode {
 		TypeName = typeName;
 		IconFile = iconFile;
 	}
+	public BasicNode(Integer id2, String typeName2) {
+		// TODO Auto-generated constructor stub
+		this.id=id2;
+		this.TypeName=typeName2;
+	}
 	String TypeName;
 	String IconFile;
 	public Integer getId() {

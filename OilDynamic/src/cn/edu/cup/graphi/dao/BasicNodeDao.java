@@ -76,7 +76,32 @@ public class BasicNodeDao {
 		
 		return tempList;
 	}
+	public List<BasicNode> getBasicNodeTypes() {
+		List<BasicNode> tempList=new ArrayList<BasicNode>();
+		SQLQuery q;
+		
+		 q = session
+				.createSQLQuery("select t1.ID,t1.TypeName from t_basicnode t1 where t1.id>0 order by id desc");
+			
+		List l = q.list();
+		
+		for (int i = 0; i < l.size(); i++) {
+			// TestDb user = (TestDb)l.get(i);
+			// System.out.println(user.getUsername());
 
+			Object[] row = (Object[]) l.get(i);
+			
+			Integer id = ((Integer) row[0]);
+			
+			String typeName = (String) row[1];
+			
+			BasicNode temp=new BasicNode(id, typeName);
+			tempList.add(temp);
+
+		}
+		
+		return tempList;
+	}
 	public void deleteBasicNode(int id) {
 		HibernateSessionManager.getThreadLocalTransaction();
 		SQLQuery q = session
@@ -88,11 +113,11 @@ public class BasicNodeDao {
 	public int modifyBasicNode(int id, String proper, String value) {
 		SQLQuery q;
 		HibernateSessionManager.getThreadLocalTransaction();
-		
-		q = session.createSQLQuery("update t_basicnode set ?=?  where id=?");
-		q.setParameter(0, proper);
-		q.setParameter(1, value);	
-		q.setParameter(2, id);	
+		String s="update t_basicnode set "+proper;
+		q = session.createSQLQuery(s+"=?  where id=?");
+
+		q.setParameter(0, value);	
+		q.setParameter(1, id);	
 		int re=q.executeUpdate();
 			return re;
 	}

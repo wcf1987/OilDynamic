@@ -1,75 +1,35 @@
 
-$(function(){
-		
-	var nodeTypes={};
-	var allNodes={};
-
-
-	loadNodeTypes();
-	loadNodes(5);
-	listnodes(5);
-		
-	listedge(5);
-
-
-function loadNodeTypes(){
-	$.ajax({ 
-        type: "POST", 
-        url: "listBasicNodeTypes.action",  
-      
-        async:false,
-        
-        success: function(data){ 
-			var temp=data.basicNodes;
-			for(var i in temp){				
-		    	  var name=temp[i].typeName;
-		    	  nodeTypes[temp[i].id]=name;
-		    	  
-		    	}
-        } 
-      }); 
+$(
 	
-}
 
-function loadNodes(proid){
-		$.ajax({ 
-	        type: "POST", 
-	        url: "listAllNodes.action",  
-	        data : {
-				proID : proid					
-			}, 
-
-	        async:false,
-	        
-	        success: function(data){ 
-				var temp=data.nodes;
-				for(var i in temp){				
-			    	  var name=temp[i].nodeNameStr;
-			    	  allNodes[temp[i].id]=name;
-			    	  
-			    	}
-	        } 
-	      }); 
+	
+	function() {
 		
-	}
+		
+		
+		
+		list_property();
+		
+
+	
+}//function结束
+);//$()结束
+
 /*
- * 打开节点列表
+ * 打开基础节点列表
  */
-function listnodes(proid){
+function list_property(){
 	/*
 	 * 节点管理列表
 	 */
-	
-	var datagrid = jQuery("#vertexList")
+	var datagrid = jQuery("#propertyList")
 	.jqGrid(
 			{
-				url : "listNodes.action",// 后端的数据交互程序，改为你的
+				url : "listBasicNodes.action",// 后端的数据交互程序，改为你的
 				datatype : "json",// 前后交互的格式是json数据
 				mtype : 'POST',// 交互的方式是发送httpget请求					
-				postData : {
-					proID : proid					
-				}, 
-				colNames : [ '编号','节点类型编号','节点名称','节点类型','经度','纬度','大地坐标X','大地坐标Y','相对坐标x','相对坐标y','打开'],// 表格的列名
+				
+				colNames : [ '编号','类型编号','类型名称','图标名称','编辑属性'],// 表格的列名
 				colModel : [
 						{
 							name : 'id',
@@ -81,18 +41,10 @@ function listnodes(proid){
 							sorttype:'int'
 						},// 每一列的具体信息，index是索引名，当需要排序时，会传这个参数给后端
 						
+						
 						{
-							name : 'basicNodeID',
-							index : 'basicNodeID',
-							width : 50,
-							align : "center",
-							sortable:true,
-							hidden:true,
-							sorttype:'int'
-						},
-						{
-							name : 'nodeNameStr',
-							index : 'nodeNameStr',
+							name : 'type',
+							index : 'type',
 							width : 150,
 							align : "center",
 							 editor:'text',
@@ -105,65 +57,20 @@ function listnodes(proid){
 							width : 50,
 							align : "center",
 							editable:true,
-							 edittype:"select",
-							 editoptions:{value:nodeTypes},
+							 editor:'text',
 							sortable:true
 						},
 						
 						{
-							name : 'latitude',
-							index : 'latitude',
+							name : 'iconFile',
+							index : 'iconFile',
 							width : 150,
 							align : "center",
 							editable:true,
 							 editor:'text',
 							sortable:true
 						},
-						{
-							name : 'longitude',
-							index : 'longitude',
-							width : 150,
-							align : "center",
-							editable:true,
-							 editor:'text',
-							sortable:true
-						},
-						{
-							name : 'x_location_geo',
-							index : 'x_location_geo',
-							width : 150,
-							align : "center",
-							editable:true,
-							 editor:'text',
-							sortable:true
-						},
-						{
-							name : 'y_location_geo',
-							index : 'y_location_geo',
-							width : 150,
-							align : "center",
-							editable:true,
-							 editor:'text',
-							sortable:true
-						},
-						{
-							name : 'x_location',
-							index : 'x_location',
-							width : 150,
-							align : "center",
-							editable:true,
-							 editor:'text',
-							sortable:true
-						},
-						{
-							name : 'y_location',
-							index : 'y_location',
-							width : 150,
-							align : "center",
-							editable:true,
-							 editor:'text',
-							sortable:true
-						},
+						
 						{				
 							name : 'open',
 							index : 'open',
@@ -172,7 +79,7 @@ function listnodes(proid){
 							formatter : function(value, grid, rows,
 									state) {
 //								alert(rows.ID);
-								return "<a href=\"javascript:void(0)\" style=\"color:#798991\" onclick=\"openproper("
+								return "<a href=\"javascript:void(0)\" style=\"color:#798991\" onclick=\"openbasicproper("
 										+ rows.id+ ")\">属性编辑</a>"
 							}
 						}
@@ -184,14 +91,11 @@ function listnodes(proid){
 				rowList:[10,20,30],
 				cellEdit:true,
 				cellsubmit : 'remote',
-				cellurl : 'modifyNodes.action',				
+				cellurl : 'modifyBasicNode.action',				
 				beforeSubmitCell : function(rowid,celname,value,iRow,iCol) { 
-					var index_ID=$("#vertexList").jqGrid("getRowData", iRow).id;
-					var colModels=$("#vertexList").jqGrid('getGridParam','colModel');
+					var index_ID=$("#propertyList").jqGrid("getRowData", iRow).id;
+					var colModels=$("#propertyList").jqGrid('getGridParam','colModel');
 					var p=colModels[iCol].name;
-					if(p=='typeName'){
-						p='basicNodeID'
-					}
 					var z={
 							id:index_ID,				
 							proper:p,
@@ -200,14 +104,14 @@ function listnodes(proid){
 					return  z;
 					
 					} ,
-				pager: '#vertextPager',
-				sortname: 'id',
+				pager: '#propertyPager',
+				sortname: 'ID',
 				viewrecords: true,
 				sortorder: "desc",
 				multiselect: true,  //可多选，出现多选框 
 			    multiselectWidth: 35, //设置多选列宽度 
 				jsonReader: {//读取后端json数据的格式
-					root: "nodes",//保存详细记录的名称
+					root: "basicNodes",//保存详细记录的名称
 					total: "total",//总共有多少页
 					page: "page",//当前是哪一页
 					records: "records",//总共记录数
@@ -217,65 +121,114 @@ function listnodes(proid){
 				
 			});
 	
-	$("#vertexList").jqGrid('navGrid', '#vertextPager', {		
-		add : true,
+	datagrid.jqGrid('navGrid','#propertyPager',{
 		edit : false,
-		del : false
-	},{},{
-		addCaption: "添加属性",
-		url:'addNode.action',
-		width:500,
-		left:500,
-		height:400,
-		top:20,
-		editCaption: "Edit Record",
-		bSubmit: "提交",
-		bCancel: "取消",
-		bClose: "Close",
-		saveData: "Data has been changed! Save changes?",
-		bYes : "Yes",
-		bNo : "No",
-		closeAfterAdd:true,
-		closeOnEscape:true,
-		bExit : "Cancel",
-		onclickSubmit : function(params, posdata) { 
-			
-			data={		
-					basicNodeID:posdata['typeName'],
-					proID:proid,
-					id:1
-			}
-			return data; 
-			},
-			afterSubmit : function(response, postdata) 
-			{ 
-	
-				//alert(/xs/);
-				return [true,"",""] 
-			}
-	});
-	$("#vertexList").jqGrid('navButtonAdd',"#vertextPager",{
+		add : false,
+		search:false,
+		del : false}).jqGrid('navButtonAdd',"#propertyPager",{
 				title:'删除',
 				caption:"删除",	
-				id:"delete_nodes",
-				onClickButton:deleteNodes,
+				id:"delete_propertyList",
+				onClickButton:deleteProperty,
 				position:"first"
+			}).jqGrid('navButtonAdd',"#propertyPager",{
+				title:'新建',
+				caption:"新建",
+				id:"add_propertyList",
+				onClickButton : function addModal(){
+						//createNewProject();	
+						openProjectModal();
+				},
+				position:"first"
+			
+		
 			});
 }
 
+function openbasicproper(id){
+	$('#add_propertyproper_modal').modal();
+	//$('#list_project_modal').modal('hide');
+	listbasicProper(id);
+	$("#propertyProperList").jqGrid("setGridParam", {
+		postData : {
+			nodeID : id		
+		}
+	}).trigger("reloadGrid");
+}
+/*
+ * 添加项目
+ */
+function openProjectModal(){
+	$('#add_property_modal').modal();
+	//$('#list_project_modal').modal('hide');
+	createNewProject();
+}
+function createNewProject(){
+	//loadAuthorOptions();//加载作者选项		
+	$('#add_property_modal').modal();
+	$("#addpropertyForm").validate({
+		debug:true,
+		onsubmit:true,
+		onfocusout:false,
+		onkeyup:true,
+		rules:{
+			name:{
+				required:true
+			}
+		},
+		messages:{
+			type:{
+				required:"名称不能为空！"
+			},
+			typeName:{
+			required:"名称不能为空！"
+		}
+		},
+		submitHandler:function(){
+			add_property();
+		}
+		});
+}
+function add_property() {
 
+	$.ajax({
+		type : 'POST',
+		url : 'addBasicNode.action',
+		data : {
+			FilePath:$("#filePath").val(),
+			TypeName:$("#typeName").val(),
+			Type : $("#type").val()
+		},
+		success : function(data) {
+
+			alert('基本节点添加成功！');			
+			//openProject(data.ID,$("#curAlgID").val());			
+
+			$('#add_property_modal').modal('hide');
+			$("#propertyList").trigger("reloadGrid");			
+		},
+		error:function(msg){
+			alert(msg);
+			$('#add_property_modal').modal('hide');
+			$("#propertyList").trigger("reloadGrid");
+		}
+	});
+
+
+	
+	}
 /*
  * 删除项目
  */
-function deleteNodes() {
-    var sels = $("#vertexList").jqGrid('getGridParam','selarrrow'); 
+function deleteProperty() {
+    var sels = $("#propertyList").jqGrid('getGridParam','selarrrow'); 
     if(sels==""){ 
        //$().message("请选择要删除的项！"); 
        alert("请选择要删除的项!");
     }else{ 
     	var selectedIDs={};
     	for(var i in sels){
-    	  var rowData = $("#vertexList").jqGrid("getRowData", sels[i]);
+    	  var rowData = $("#propertyList").jqGrid("getRowData", sels[i]);
       	   selectedIDs["ids[" + i + "]"]=rowData.id;
     	}
     	
@@ -283,19 +236,29 @@ function deleteNodes() {
        if(confirm("您是否确认删除？")){ 
         $.ajax({ 
           type: "POST", 
-          url: "delNodes.action", 
+          url: "delBasicNodes.action", 
           data: selectedIDs, 
           beforeSend: function() { 
-              
+               $().message("正在请求..."); 
           }, 
           error:function(){ 
-              
+               $().message("请求失败..."); 
           }, 
           
           success: function(msg){ 
         	alert("删除成功！");
-			$("#vertexList").trigger("reloadGrid");
-             
+			$("#propertyList").trigger("reloadGrid");
+               if(msg!=0){ 
+                   var arr = msg.split(','); 
+                   $.each(arr,function(i,n){ 
+                         if(arr[i]!=""){ 
+                             $("#propertyList").jqGrid('delRowData',n);  
+                         } 
+                   }); 
+                   $().message("已成功删除!"); 
+               }else{ 
+                   $().message("操作失败！"); 
+               } 
           } 
         }); 
        } 
@@ -304,21 +267,21 @@ function deleteNodes() {
 
 
 
-function listedge(proid){
+function listbasicProper(nodeid){
 	/*
 	 * 节点管理列表
 	 */
-	var datagrid = jQuery("#edgeList")
+	var datagrid = jQuery("#propertyProperList")
 	.jqGrid(
 			{
-				url : "listEdges.action",// 后端的数据交互程序，改为你的
+				url : "listBasicNodesProper.action",// 后端的数据交互程序，改为你的
 				datatype : "json",// 前后交互的格式是json数据
 				mtype : 'POST',// 交互的方式是发送httpget请求					
 				postData : {
-					proID : proid
+					nodeID : nodeid
 					
 				}, 
-				colNames : [ '编号','基本节点编号','连接名称','源节点名称','目的节点名称','源节点编号','目的节点编号','项目编号'],// 表格的列名
+				colNames : [ '所属节点编号','编号','属性名称','属性单位','属性默认值'],// 表格的列名
 				colModel : [
 						{
 							name : 'id',
@@ -326,21 +289,22 @@ function listedge(proid){
 							width : 50,
 							align : "center",
 							sortable:true,
-						
+							hidden:true,
 							sorttype:'int'
 						},// 每一列的具体信息，index是索引名，当需要排序时，会传这个参数给后端
 						{
-							name : 'basicNodeID',
-							index : 'basicNodeID',
+							name : 'properid',
+							index : 'properid',
 							width : 50,
 							align : "center",
 							sortable:true,
 							hidden:true,
 							sorttype:'int'
 						},
+						
 						{
-							name : 'edgeName',
-							index : 'edgeName',
+							name : 'properName',
+							index : 'properName',
 							width : 100,
 							align : "center",
 							 editor:'text',
@@ -348,50 +312,22 @@ function listedge(proid){
 							sortable:true
 						},
 						{
-							name : 'sourceName',
-							index : 'sourceName',
-							width : 150,
-							align : "center",
-							editable:true,
-							 edittype:"select",
-							 editoptions:{value:allNodes},
-							sortable:true
-						},
-						{
-							name : 'targetName',
-							index : 'targetName',
-							width : 150,
-							align : "center",
-							editable:true,
-							 edittype:"select",
-							 editoptions:{value:allNodes},
-							sortable:true
-						},
-						{
-							name : 'sourceid',
-							index : 'sourceid',
+							name : 'properUnit',
+							index : 'properUnit',
 							width : 100,
 							align : "center",
-
-							hidden:true,
+							editable:true,
+							 editor:'text',
 							sortable:true
 						},
+						
 						{
-							name : 'targetName',
-							index : 'targetName',
-							width : 100,
-							align : "center",
-
-							hidden:true,
-							sortable:true
-						},
-						{
-							name : 'proID',
-							index : 'proID',
+							name : 'properDefaultValue',
+							index : 'properDefaultValue',
 							width : 50,
 							align : "center",
-
-							hidden:true,
+							editable:true,
+							 editor:'text',
 							sortable:true
 						}
 						
@@ -400,22 +336,15 @@ function listedge(proid){
 //				autowidth:true,
 				rowNum:10,//每一页的行数
 				height: 'auto',
-				width:900,
+				width:550,
 				rowList:[10,20,30],
 				cellEdit:true,
 				cellsubmit : 'remote',
-				cellurl : 'modifyEdge.action',				
+				cellurl : 'modifyBasicNodeProper.action',				
 				beforeSubmitCell : function(rowid,celname,value,iRow,iCol) { 
-					var index_ID=$("#edgeList").jqGrid("getRowData", iRow).id;
-					var colModels=$("#edgeList").jqGrid('getGridParam','colModel');
+					var index_ID=$("#propertyProperList").jqGrid("getRowData", iRow).id;
+					var colModels=$("#propertyProperList").jqGrid('getGridParam','colModel');
 					var p=colModels[iCol].name;
-					if(p=='sourceName'){
-						p="sourceID";
-					}
-					if(p=='targetName'){
-						p="targetID";
-					}
-						
 					var z={
 							id:index_ID,				
 							proper:p,
@@ -424,14 +353,14 @@ function listedge(proid){
 					return  z;
 					
 					} ,
-				pager: '#edgePager',
+				pager: '#propertyProperPager',
 				sortname: 'ID',
 				viewrecords: true,
 				sortorder: "desc",
 				multiselect: true,  //可多选，出现多选框 
 			    multiselectWidth: 35, //设置多选列宽度 
 				jsonReader: {//读取后端json数据的格式
-					root: "edges",//保存详细记录的名称
+					root: "nodePropers",//保存详细记录的名称
 					total: "total",//总共有多少页
 					page: "page",//当前是哪一页
 					records: "records",//总共记录数
@@ -442,14 +371,14 @@ function listedge(proid){
 			});
 	
 	
-	$("#edgeList").jqGrid('navGrid', '#edgePager', {
+	$("#propertyProperList").jqGrid('navGrid', '#propertyProperPager', {
 		
 		add : true,
 		edit : false,
 		del : false
 	},{},{
 		addCaption: "添加属性",
-		url:'addEdge.action',
+		url:'addBasicNodeProper.action',
 		width:500,
 		left:500,
 		height:200,
@@ -467,10 +396,10 @@ function listedge(proid){
 		onclickSubmit : function(params, posdata) { 
 			
 			data={
-					sourceID:posdata['sourceName'],
-					targetID:posdata['targetName'],
-					basicNodeID:0,
-					proID:proid,
+					properName:posdata['properName'],
+					properUnit:posdata['properUnit'],
+					properDefaultValue:posdata['properDefaultValue'],
+					ParentID:nodeid,
 					id:1
 			}
 			return data; 
@@ -481,7 +410,7 @@ function listedge(proid){
 				//alert(/xs/);
 				return [true,"",""] 
 			}
-	}).jqGrid('navButtonAdd',"#edgePager",{
+	}).jqGrid('navButtonAdd',"#propertyProperPager",{
 				title:'删除',
 				caption:"删除",	
 				id:"delete_propertyProper",
@@ -492,14 +421,14 @@ function listedge(proid){
 
 
 function deletePropertyProper() {
-    var sels = $("#edgeList").jqGrid('getGridParam','selarrrow'); 
+    var sels = $("#propertyProperList").jqGrid('getGridParam','selarrrow'); 
     if(sels==""){ 
        //$().message("请选择要删除的项！"); 
        alert("请选择要删除的项!");
     }else{ 
     	var selectedIDs={};
     	for(var i in sels){
-    	  var rowData = $("#edgeList").jqGrid("getRowData", sels[i]);
+    	  var rowData = $("#propertyProperList").jqGrid("getRowData", sels[i]);
       	   selectedIDs["ids[" + i + "]"]=rowData.id;
     	}
     	
@@ -518,12 +447,12 @@ function deletePropertyProper() {
           
           success: function(msg){ 
         	alert("删除成功！");
-			$("#edgeList").trigger("reloadGrid");
+			$("#propertyProperList").trigger("reloadGrid");
                if(msg!=0){ 
                    var arr = msg.split(','); 
                    $.each(arr,function(i,n){ 
                          if(arr[i]!=""){ 
-                             $("#edgeList").jqGrid('delRowData',n);  
+                             $("#propertyProperList").jqGrid('delRowData',n);  
                          } 
                    }); 
                    $().message("已成功删除!"); 
@@ -535,4 +464,27 @@ function deletePropertyProper() {
        } 
     } 
 }
-})
+/*
+ * 加载算法下拉列表
+ */
+function loadAlgorithmOptions(){
+	$.ajax({
+		url:'listAlgorithmsCycle.action',
+		type:'post',
+		dataType:'json',
+		data : {
+			sidx: 'id',
+			sord: "desc"
+		},
+		success:function(data){
+			var items="";
+			$.each(data.dataList,function(i,algorithm){
+				items+= "<option value=\"" + algorithm.ID + "\">" + algorithm.name+" </option>"; 
+			});
+			$("#algorithmID").html(items);			
+		}
+	});
+	}
+
+
+
