@@ -1,4 +1,3 @@
-
 var qj = new BMap.Icon("editor/icons/qijing.png", new BMap.Size(50, 50), {
 	anchor : new BMap.Size(20, 20)
 });
@@ -43,32 +42,6 @@ function showMapSimIn(data, proid, algid, Inorout) {
 	drawLines(data);
 	mapGis.markerClusterer.addMarkers(mapGis.markers);
 };
-function showMapSimOut(data, proid, algid, Inorout) {
-	clearMap();
-	showWhiteLayer();
-	drawPointsGis(data, proid, algid, Inorout);
-	drawLines(data);
-	mapGis.markerClusterer.addMarkers(mapGis.markers);
-};
-function showMapOptIn(data, proid, algid, Inorout) {
-	clearMap();
-	showWhiteLayer();
-	drawPointsGis(data,proid,algid,"In");
-	showObstacle();
-	mapGis.markerClusterer.addMarkers(mapGis.markers);
-
-};
-function showMapOptOut(data, proid, algid, Inorout) {
-	clearMap();
-	showWhiteLayer();
-	drawPointsGis(data, proid, algid, Inorout);
-	showObstacle();
-	showPath();
-	//drawPointsGis(data, proid, algid, Inorout);
-	drawLines(data);
-	mapGis.markerClusterer.addMarkers(mapGis.markers);
-
-};
 function getMapSimIn(proid, algid, Inorout) {
 	$.ajax({
 		type : 'POST',
@@ -82,113 +55,19 @@ function getMapSimIn(proid, algid, Inorout) {
 			if (data['graphi']['GISReal'] == 0) {
 				mapGis.GISReal = false;
 				// showMapSimIn(data,proid,algid,Inorout);
-				TranslateGPS(data, proid, algid, Inorout, showMapSimIn);
+				TranslateGPS(data, proid, showMapSimIn);
 			} else {
 
 				mapGis.GISReal = true;
-				TranslateGPS(data, proid, algid, Inorout, showMapSimIn);
+				TranslateGPS(data, proid,showMapSimIn);
 			}
 		}
 
 	});
 
 };
-function getMapSimOut(proid, algid, Inorout) {
-	$.ajax({
-		type : 'POST',
-		url : 'viewExcelMap.action',
-		data : {
-			proID : proid,
-			algID : algid,
-			InOrOut : "In"
-		},
-		success : function(data) {
-			if (data['graphi']['GISReal'] == 0) {
-				mapGis.GISReal = false;
-				// showMapSimOut(data,proid,algid,Inorout);
-				TranslateGPS(data, proid, algid, Inorout, showMapSimOut);
-			} else {
-
-				mapGis.GISReal = true;
-				TranslateGPS(data, proid, algid, Inorout, showMapSimOut);
-			}
-
-		}
-
-	});
-
-};
-function getMapOptIn(proid, algid, Inorout) {
-
-	$.ajax({
-		type : 'POST',
-		url : 'viewExcelMap.action',
-		data : {
-			proID : proid,
-			algID : algid,
-			InOrOut : "In"
-		},
-		success : function(data) {
-			if (data['graphi']['GISReal'] == 0) {
-				mapGis.GISReal = false;
-				// showMapSimIn(data,proid,algid,Inorout);
-				TranslateGPS(data, proid, algid, Inorout, showMapOptIn);
-			} else {
-
-				mapGis.GISReal = true;
-				TranslateGPS(data, proid, algid, Inorout, showMapOptIn);
-			}
-
-		}
-
-	});
-};
-
-function getMapOptOut(proid, algid, Inorout) {
-
-	$.ajax({
-		type : 'POST',
-		url : 'viewExcelMap.action',
-		data : {
-			proID : proid,
-			algID : algid,
-			InOrOut : "Out"
-		},
-		success : function(data) {
-			if (data['graphi']['GISReal'] == 0) {
-				mapGis.GISReal = false;
-				// showMapSimIn(data,proid,algid,Inorout);
-				//drawPointsPath(data);
-				TranslateGPS(data, proid, algid, Inorout, showMapOptOut);
-			} else {
-
-				mapGis.GISReal = true;				
-				TranslateGPS(data, proid, algid, Inorout, showMapOptOut);
-			}
-		
-		}
-	});
-};
-function showMap(proid, algid, Inorout) {
-	if (Inorout == "In") {
-		mapGis = mapIn;
-
-		if (algid > 4) {
-			getMapOptIn(proid, algid, Inorout);
-
-		} else {
-			getMapSimIn(proid, algid, Inorout);
-		}
-	} else {
-		mapGis = mapOut;
-		if (algid > 4) {
-			getMapOptOut(proid, algid, Inorout);
-		} else {
-			getMapSimOut(proid, algid, Inorout);// 如果是查看输出地图，则先加载输入
-			// showMapIn(proid,algid,Inorout);
-		}
-	}
-
+function showMap(proid) {		
+	getMapSimIn(proid);
 	mapGis.markerClusterer.addMarkers(mapGis.markers);
 }
 function clearMap() {
@@ -199,37 +78,25 @@ function clearMap() {
 }
 var mapGis;
 var mapIn;
-var mapOut;
-function initMapGis(Inorout) {
+function initMapGis() {
 
-	if (Inorout == "In") {
-		mapIn = new BMap.Map("mapgis" + Inorout, {
-			mapType : BMAP_HYBRID_MAP
-		});
-		mapGis = mapIn;
-	} else {
-		mapOut = new BMap.Map("mapgis" + Inorout, {
-			mapType : BMAP_HYBRID_MAP
-		});
-		mapGis = mapOut;
-	}
-	mapGis.pointMap = {};
-	mapGis.markers = [];
-	mapGis.Inorout = Inorout;
-	var point = new BMap.Point(116.404, 39.915); // 
-	mapGis.centerAndZoom(point, 8); // 
-	mapGis.enableScrollWheelZoom();
+	mapGis = new BMap.Map("mapDyn", {
+		mapType : BMAP_HYBRID_MAP
+	}); // 创建Map实例
+	var point = new BMap.Point(116.404, 39.915); // 创建点坐标
+	mapGis.centerAndZoom(point, 8); // 初始化地图,设置中心点坐标和地图级别。
+	mapGis.enableScrollWheelZoom(); // 启用滚轮放大缩小
+
 	mapGis.addControl(new BMap.MapTypeControl({
 		anchor : BMAP_ANCHOR_TOP_RIGHT
-	}));
+	})); // 左上角，默认地图控件
+	mapGis.setCurrentCity("北京"); // 由于有3D图，需要设置城市哦
 	mapGis.addControl(new BMap.NavigationControl({
 		anchor : BMAP_ANCHOR_TOP_LEFT
-	}));
+	})); // 添加默认缩放平移控件
+
 	mapGis.addControl(new BMap.ScaleControl());
-	var marker1 = new BMap.Marker(new BMap.Point(116.384, 39.925));
-	// mapGis.mapWforGPS = new BMapLib.MapWrapper(mapGis,
-	// BMapLib.COORD_TYPE_GPS);
-	mapGis.addOverlay(marker1);
+
 	var point = new BMap.Point(116.404, 39.915);
 	addSwith();
 	mapGis.markerClusterer = new BMapLib.MarkerClusterer(mapGis, {
@@ -240,43 +107,43 @@ function initMapGis(Inorout) {
 	});
 
 };
-function sumTransGPS(dataAll,data,start,len,callback1){
-	
-	var pMap=dataAll['graphi']['points'];
-	var dataIndex=0;
+function sumTransGPS(dataAll, data, start, len, callback1) {
+
+	var pMap = dataAll['graphi']['points'];
+	var dataIndex = 0;
 	var index = 0;
 	for ( var i in pMap) {
-		
+
 		var p = pMap[i];// 一个point
-		
-		if(index>=start&&index<start+len){
-			
+
+		if (index >= start && index < start + len) {
+
 			p.longitude = data.result[dataIndex].x;
 			p.latitude = data.result[dataIndex].y;
 			dataIndex++;
 		}
-			
+
 		index++;
-		if(index>=start+len){
-				break;
+		if (index >= start + len) {
+			break;
 		}
-		
 
-	}	
+	}
 
-	dataAll.GPSSum=dataAll.GPSSum-len;
-	//alert(dataAll.pathSum);
-	if(dataAll.GPSSum==0){
-		callback1(dataAll, dataAll['proID'], dataAll['algID'], dataAll['inOrOut']);
+	dataAll.GPSSum = dataAll.GPSSum - len;
+	// alert(dataAll.pathSum);
+	if (dataAll.GPSSum == 0) {
+		callback1(dataAll, dataAll['proID'], dataAll['algID'],
+				dataAll['inOrOut']);
 	}
 }
 function TranslateGPS(dataAll, proid, algid, Inorout, callback1) {
-	dataAll.GPSSum = Object.keys(dataAll['graphi']['points']).length ;
+	dataAll.GPSSum = Object.keys(dataAll['graphi']['points']).length;
 
 	var xy = ''
 	var listp = dataAll['graphi']['points'];
-	var start=0;
-	var len=0;
+	var start = 0;
+	var len = 0;
 	for ( var i in listp) {
 		if (xy != '') {
 			xy = xy + ';';
@@ -284,73 +151,33 @@ function TranslateGPS(dataAll, proid, algid, Inorout, callback1) {
 		xy = xy + listp[i].longitude + "," + listp[i].latitude;
 		len++;
 		start++;
-		if(len>=90){
-			TransGPSNet(xy,start-len,dataAll, proid, algid, Inorout, callback1);
-			xy='';
-			len=0;
+		if (len >= 90) {
+			TransGPSNet(xy, start - len, dataAll, proid, algid, Inorout,
+					callback1);
+			xy = '';
+			len = 0;
 		}
 	}
-	if(len>0){
-		TransGPSNet(xy,start-len,dataAll, proid, algid, Inorout, callback1);		
-	}	
+	if (len > 0) {
+		TransGPSNet(xy, start - len, dataAll, proid, algid, Inorout, callback1);
+	}
 };
-function TransGPSNet(xy,start,dataAll, proid, algid, Inorout, callback1){
-	var cb=(function(i,dataall) {
-		
-		return function(data){
+function TransGPSNet(xy, start, dataAll, proid, algid, Inorout, callback1) {
+	var cb = (function(i, dataall) {
+
+		return function(data) {
 			if (data.status != 0) {
-				
-				sumTransGPS(dataall, data,i,0,callback1);
-			}else{
-				
-				sumTransGPS(dataall, data,i,data.result.length,callback1);
-			}			
-		}
-	})(start,dataAll);
-	$.ajax({
-		crossOrigin: true,
-		type : 'POST',
-		url : 'http://api.map.baidu.com/geoconv/v1/',
-		data : {
-			coords : xy,
-			from : 1,
-			to : 5,
-			ak : '4bfe7b8632739c89a1b8e95529da1d97'
-		},
-		dataType : "jsonp",
-		// 传递给请求处理程序，用以获得jsonp回调函数名的参数名(默认为:callback)
-		jsonp : "callback",
-		// 自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
-		callback : "success",
-		// 成功获取跨域服务器上的json数据后,会动态执行这个callback函数		
-		success : cb
-	});
-}
 
-function TranslateGPSObs(dataAll, proid, algid, Inorout, callback1) {
+				sumTransGPS(dataall, data, i, 0, callback1);
+			} else {
 
-	var jsonObject = dataAll;
-	// var pointArray = new Array();
-	var pMap = jsonObject['obs'];
-	var xy = '';
-	for ( var i in pMap) {
-
-		ps = pMap[i];// 一个障碍
-		var tempPoints = new Array();
-
-		for ( var k = 0; k < ps.length; k++) {
-			p = ps[k];
-			// var bp=new BMap.Point(p['longitude'], p['latitude']);
-			if (xy != '') {
-				xy = xy + ';';
+				sumTransGPS(dataall, data, i, data.result.length, callback1);
 			}
-			xy = xy + p.longitude + "," + p.latitude;
 		}
-
-	}
-
+	})(start, dataAll);
 	$.ajax({
-		type : 'GET',
+		crossOrigin : true,
+		type : 'POST',
 		url : 'http://api.map.baidu.com/geoconv/v1/',
 		data : {
 			coords : xy,
@@ -364,33 +191,9 @@ function TranslateGPSObs(dataAll, proid, algid, Inorout, callback1) {
 		// 自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
 		callback : "success",
 		// 成功获取跨域服务器上的json数据后,会动态执行这个callback函数
-		success : function(data) {
-
-			if (data.status != 0) {
-				callback1(dataAll, proid, algid, Inorout);
-			}
-			var xyResult = new Array();
-			var index = 0;
-
-			for ( var i in pMap) {
-
-				ps = pMap[i];// 一个障碍
-				var tempPoints = new Array();
-
-				for ( var k = 0; k < ps.length; k++) {
-					p = ps[k];
-					p.longitude = data.result[index].x;
-					p.latitude = data.result[index].y;
-					index++;
-				}
-
-			}
-			callback1(dataAll, proid, algid, Inorout);
-
-		}
+		success : cb
 	});
-
-};
+}
 
 function addSwith() {
 
@@ -398,7 +201,7 @@ function addSwith() {
 	function SwithControl() {
 		// 默认停靠位置和偏移量
 		this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
-		this.defaultOffset = new BMap.Size(400, 10);
+		this.defaultOffset = new BMap.Size(500, 20);
 
 	}
 	;
@@ -438,26 +241,26 @@ function addSwith() {
 
 function showWhiteLayer() {
 
-	if (mapGis.tileLayer == null) {
-		mapGis.tileLayer = new BMap.TileLayer();
-		mapGis.tileLayer.getTilesUrl = function(tileCoord, zoom) {
+	if (map.tileLayer == null) {
+		map.tileLayer = new BMap.TileLayer();
+		map.tileLayer.getTilesUrl = function(tileCoord, zoom) {
 			var url = 'images/white.png'; // 根据当前坐标，选取合适的瓦片图
 			return url;
 		}
-		mapGis.tileLayer.whiteShow = false;
+		map.tileLayer.whiteShow = false;
 	}
 
-	if (mapGis.tileLayer.whiteShow) {
-		if (!mapGis.GISReal) {
+	if (map.tileLayer.whiteShow) {
+		if (!map.GISReal) {
 			alert("本组数据未包含大地坐标，无法显示地理坐标");
 			return;
 		}
-		mapGis.removeTileLayer(mapGis.tileLayer);
-		mapGis.tileLayer.whiteShow = false;
+		map.removeTileLayer(map.tileLayer);
+		map.tileLayer.whiteShow = false;
 
 	} else {
-		mapGis.addTileLayer(mapGis.tileLayer);
-		mapGis.tileLayer.whiteShow = true;
+		map.addTileLayer(map.tileLayer);
+		map.tileLayer.whiteShow = true;
 	}
 
 }
@@ -475,7 +278,7 @@ function drawPointsGis(data, proid, algid, Inorout) {
 		if (p['type'] == '管道') {
 			continue;
 		}
-		
+
 		mapGis.pointMap[i] = new BMap.Point(p['longitude'], p['latitude']);
 		if (p['type'] == '设备连接点') {
 			continue;
@@ -600,7 +403,7 @@ function getDeviceProper(markPoi) {
 
 			var s = "";
 			s = "类别:" + markPoi.type + "<br>";
-			for ( var k2 = 0; k2 < Prop.length; k2++) {
+			for (var k2 = 0; k2 < Prop.length; k2++) {
 				s = s + Prop[k2]['name'] + " : " + Prop[k2]['value'] + "<br>";
 			}
 			if (this.long != undefined) {
@@ -624,7 +427,7 @@ function getDeviceProper(markPoi) {
 function drawLines(data) {
 	var jsonObject = data;
 	var pLine = jsonObject['graphi']['lines'];
-	for ( var i = 0; i < pLine.length; i++) {
+	for (var i = 0; i < pLine.length; i++) {
 		var l = pLine[i];
 		var pointemp = new Array();
 		var polyline;
@@ -718,61 +521,11 @@ function drawLines(data) {
 	}
 	// mapGis.markerClusterer.addMarkers(mapGis.markers);
 }
-function showObstacle() {
-	var proid = $("#proID").val();
-	var algid = $("#curAlgID").val();
-	var Inorout = "In";
-	$.ajax({
-		type : 'POST',
-		url : 'viewObstacle.action',
-		data : {
-			proID : proid,
-			algID : algid,
-			InOrOut : Inorout
-		},
-		success : function(data) {
-			TranslateGPSObs(data, proid, algid, Inorout, drawPointsDiked);
-			// drawPointsDiked(data);
-			// drawLines(data);
-		}
-
-	});
-
-}
-
-function drawPointsDiked(data) {
-
-	for ( var obsName in data['obs']) {
-		var xyResults = data['obs'][obsName];
-		var k = -1;
-		var pointsTemp = new Array();
-		for ( var index in xyResults) {
-			k++;
-			
-			var point = new BMap.Point(xyResults[index].longitude,
-					xyResults[index].latitude);
-			pointsTemp.push(point);
-			if (k == 0) {
-				var secRingCenter = point;
-				var secRingLabel2 = new BMap.Label(obsName, {
-					offset : new BMap.Size(10, -20),
-					position : secRingCenter
-				});
-				secRingLabel2.setStyle({
-					"padding" : "2px"
-				});
-				mapGis.addOverlay(secRingLabel2);
-			}
-		}
-		var polygon = new BMap.Polygon(pointsTemp, styleOptions);
-		mapGis.addOverlay(polygon);
-	}
-};
 function showPath() {
 	var proid = $("#proID").val();
 	var algid = $("#curAlgID").val();
 	var Inorout = "Out";
-	
+
 	$.ajax({
 		type : 'POST',
 		url : 'viewPath.action',
@@ -781,41 +534,40 @@ function showPath() {
 			algID : algid,
 			InOrOut : Inorout
 		},
-		success : function(data) {	
-			var len=0;
-			var pMap=data['path'];
+		success : function(data) {
+			var len = 0;
+			var pMap = data['path'];
 			for ( var i in pMap) {
-				
+
 				var ps = pMap[i];// 一个障碍
-				
-				for ( var k = 0; k < ps.length; k++) {
+
+				for (var k = 0; k < ps.length; k++) {
 					len++;
 				}
 			}
-			data.pathSum=len;
-			TranslateGPSPath(data, proid, algid, Inorout, sumTrans);			
+			data.pathSum = len;
+			TranslateGPSPath(data, proid, algid, Inorout, sumTrans);
 		}
 
 	});
 
 }
 function TranslateGPSPath(dataAll, proid, algid, Inorout, callback1) {
-	
 
 	var jsonObject = dataAll;
 	// var pointArray = new Array();
 	var pMap = jsonObject['path'];
 	var xy = '';
-	var start=0;
-	var len=0;
-	//alert(dataAll.pathSum);
-	len=0;
+	var start = 0;
+	var len = 0;
+	// alert(dataAll.pathSum);
+	len = 0;
 	for ( var i in pMap) {
-		
+
 		ps = pMap[i];// 一个障碍
 		var tempPoints = new Array();
-		
-		for ( var k = 0; k < ps.length; k++) {
+
+		for (var k = 0; k < ps.length; k++) {
 			p = ps[k];
 			// var bp=new BMap.Point(p['longitude'], p['latitude']);
 			if (xy != '') {
@@ -824,35 +576,35 @@ function TranslateGPSPath(dataAll, proid, algid, Inorout, callback1) {
 			xy = xy + p.longitude + "," + p.latitude;
 			len++;
 			start++;
-			if(len>=90){
-				TransGPSPathNet(xy,start-len,dataAll, proid, algid, Inorout, callback1);
-				xy='';
-				len=0;
+			if (len >= 90) {
+				TransGPSPathNet(xy, start - len, dataAll, proid, algid,
+						Inorout, callback1);
+				xy = '';
+				len = 0;
 			}
 		}
-		
-		
-		
+
 	}
-	if(len>0){
-		TransGPSPathNet(xy,start-len,dataAll, proid, algid, Inorout, callback1);		
+	if (len > 0) {
+		TransGPSPathNet(xy, start - len, dataAll, proid, algid, Inorout,
+				callback1);
 	}
 }
-function TransGPSPathNet(xy,start,dataAll, proid, algid, Inorout, callback1){
-	var cb=(function(i,dataall) {
-		
-		return function(data){
+function TransGPSPathNet(xy, start, dataAll, proid, algid, Inorout, callback1) {
+	var cb = (function(i, dataall) {
+
+		return function(data) {
 			if (data.status != 0) {
-				
-				callback1(dataall, data,i,0);
-			}else{
-				
-				callback1(dataall, data,i,data.result.length);
-			}			
+
+				callback1(dataall, data, i, 0);
+			} else {
+
+				callback1(dataall, data, i, data.result.length);
+			}
 		}
-	})(start,dataAll);
+	})(start, dataAll);
 	$.ajax({
-		crossOrigin: true,
+		crossOrigin : true,
 		type : 'POST',
 		url : 'http://api.map.baidu.com/geoconv/v1/',
 		data : {
@@ -866,43 +618,40 @@ function TransGPSPathNet(xy,start,dataAll, proid, algid, Inorout, callback1){
 		jsonp : "callback",
 		// 自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
 		callback : "success",
-		// 成功获取跨域服务器上的json数据后,会动态执行这个callback函数		
+		// 成功获取跨域服务器上的json数据后,会动态执行这个callback函数
 		success : cb
 	});
 
 }
-	//console.log(length(xy));
+// console.log(length(xy));
 
+function sumTrans(dataAll, data, start, len, mapgis) {
 
-
-
-function sumTrans(dataAll,data,start,len,mapgis){
-	
 	var xyResult = new Array();
 	var index = 0;
-	var pMap=dataAll['path'];
-	var dataIndex=0;
+	var pMap = dataAll['path'];
+	var dataIndex = 0;
 	for ( var i in pMap) {
-		
+
 		ps = pMap[i];// 一个path
-		for ( var k = 0; k < ps.length; k++) {
-			if(index>=start&&index<start+len){
+		for (var k = 0; k < ps.length; k++) {
+			if (index >= start && index < start + len) {
 				p = ps[k];
 				p.longitude = data.result[dataIndex].x;
 				p.latitude = data.result[dataIndex].y;
 				dataIndex++;
 			}
-			
+
 			index++;
-			if(index>=start+len){
+			if (index >= start + len) {
 				break;
 			}
 		}
 
 	}
-	dataAll.pathSum=dataAll.pathSum-len;
-	//alert(dataAll.pathSum);
-	if(dataAll.pathSum==0){
+	dataAll.pathSum = dataAll.pathSum - len;
+	// alert(dataAll.pathSum);
+	if (dataAll.pathSum == 0) {
 		drawPointsPath(dataAll);
 	}
 }
@@ -914,7 +663,7 @@ function drawPointsPath(data) {
 		var pointsTemp = new Array();
 		for ( var index in xyResults) {
 			k++;
-			
+
 			var point = new BMap.Point(xyResults[index].longitude,
 					xyResults[index].latitude);
 			pointsTemp.push(point);
@@ -927,10 +676,10 @@ function drawPointsPath(data) {
 				secRingLabel2.setStyle({
 					"padding" : "2px"
 				});
-				//mapGis.addOverlay(secRingLabel2);
+				// mapGis.addOverlay(secRingLabel2);
 			}
 		}
-		var polygon = new BMap.Polygon(pointsTemp,  {
+		var polygon = new BMap.Polygon(pointsTemp, {
 			strokeColor : "black",
 			strokeWeight : 3,
 			strokeOpacity : 0.5
@@ -949,7 +698,7 @@ var styleOptions = {
 function addArrow2(polyline, length, angleValue) { // 绘制箭头的函数
 	var linePoint = polyline.getPath();// 线的坐标串
 	var arrowCount = linePoint.length;
-	for ( var i = 1; i < arrowCount; i++) { // 在拐点处绘制箭头
+	for (var i = 1; i < arrowCount; i++) { // 在拐点处绘制箭头
 		var pixelStart = mapGis.pointToPixel(linePoint[i - 1]);
 		var pixelEnd = mapGis.pointToPixel(linePoint[i]);
 		var angle = angleValue;// 箭头和主线的夹角
@@ -1005,7 +754,7 @@ function addArrow2(polyline, length, angleValue) { // 绘制箭头的函数
 function addArrow1(polyline, length, angleValue) { // 绘制箭头的函数
 	var linePoint = polyline.getPath();// 线的坐标串
 	var arrowCount = linePoint.length;
-	for ( var i = 1; i < arrowCount; i++) { // 在拐点处绘制箭头
+	for (var i = 1; i < arrowCount; i++) { // 在拐点处绘制箭头
 		var pixelStart = mapGis.pointToPixel(linePoint[i - 1]);
 		var pixelEnd = mapGis.pointToPixel(linePoint[i]);
 		var angle = angleValue;// 箭头和主线的夹角
