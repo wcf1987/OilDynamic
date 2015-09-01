@@ -175,8 +175,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <div class="grid_6">
                             <table id="projectList" class="table table-striped table-bordered table-hover datatable " >这里是项目列表</table>
                             <div id="projectPager" ></div>
-                            <a href="modules/project-edit.jsp">点击编辑项目</a>
-                        </div>
+                                 </div>
 
 					</div>
 

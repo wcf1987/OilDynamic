@@ -183,8 +183,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <table id="edgeList" class="table table-striped table-bordered table-hover datatable " >这里是边列表</table>
                             <div id="edgePager" ></div>
 
-                            <a href="modules/project-element-edit.jsp">点我进入属性编辑页面</a>
-                            <a href="modules/project-visual.jsp">点我进入图形化展示页面</a>
+                            <a href="modules/map.jsp">点我进入图形化展示页面</a>
                         </div>
 					</div>
 

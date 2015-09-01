@@ -179,7 +179,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div class="grid_6">
                             <table id="propertyList" class="table table-striped table-bordered table-hover datatable " >这里是点/边列表</table>
                             <div id="propertyPager" ></div>
-                            <a href="modules/element-edit.jsp">点击编辑元件</a>
+                            
 						</div>
 					</div>
 
