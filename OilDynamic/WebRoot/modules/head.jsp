@@ -19,41 +19,7 @@
                     <ul id="main-nav" class="sf-menu">
                         <li id="projectli">
                             <a href="modules/project.jsp">拓扑图前台管理模块</a>
-                            <ul>
-                                <li>
-                                    <a href="home-2.html">Home 2</a>
-                                </li>
-                                <li>
-                                    <a href="home-3.html">Home 3</a>
-                                </li>
-                                <li>
-                                    <a href="home-4.html">Home 4</a>
-                                </li>
-                                <li>
-                                    <a href="home-5.html">Home 5</a>
-                                </li>
-                                <li>
-                                    <a href="home-6.html">Home 6</a>
-                                </li>
-                                <li>
-                                    <a href="home-7.html">Home 7</a>
-                                </li>
-                                <li>
-                                    <a href="home-8.html">Home 8</a>
-                                </li>
-                                <li>
-                                    <a href="home-9.html">Home 9</a>
-                                </li>
-                                <li>
-                                    <a href="home-10.html">Home 10</a>
-                                </li>
-                                <li>
-                                    <a href="home-1-block.html">Home 1 block</a>
-                                </li>
-                                <li>
-                                    <a href="home-2-block.html">Home 2 block</a>
-                                </li>
-                            </ul>
+                           
                         </li>
                         <li id="elementli">
                             <a href="modules/element-manage.jsp">拓扑结构后台管理模块</a>

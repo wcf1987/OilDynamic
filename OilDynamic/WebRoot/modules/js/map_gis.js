@@ -1,6 +1,9 @@
 
+$(function(){
+	
+})
 
-
+var proid;
 
 /*var qj = new BMap.Icon("editor/icons/qijing.png", new BMap.Size(50, 50), {
 	anchor : new BMap.Size(20, 20)
@@ -16,7 +19,18 @@ var jqzyz = new BMap.Icon("images/icons/jiqizengyazhan.png", new BMap.Size(50,
 var icons={};
 var mapGis;
 var mapIn;
-function initMapGis(proid) {
+function getCookie(name) 
+{ 
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+ 
+    if(arr=document.cookie.match(reg))
+ 
+        return unescape(arr[2]); 
+    else 
+        return null; 
+} 
+function initMapGis() {
+	proid=getCookie("proid");
 	getMapICON();
 	mapGis = new BMap.Map("mapDyn", {
 		mapType : BMAP_HYBRID_MAP

@@ -171,7 +171,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<h3>项目管理<span class="line"></span></h3>
 							</div>
 						</div>
-
+						<input type="text" id="proid"  style="display:none;"/>
+						<input type="text" id="proname"  style="display:none;"/>
                         <div class="grid_6">
                             <table id="projectList" class="table table-striped table-bordered table-hover datatable " >这里是项目列表</table>
                             <div id="projectPager" ></div>
