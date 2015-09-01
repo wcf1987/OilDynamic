@@ -1,85 +1,23 @@
-var qj = new BMap.Icon("editor/icons/qijing.png", new BMap.Size(50, 50), {
+
+
+
+
+/*var qj = new BMap.Icon("editor/icons/qijing.png", new BMap.Size(50, 50), {
 	anchor : new BMap.Size(20, 20)
 });
 
-var zyclc = new BMap.Icon("editor/icons/zhongyangchulichang.png",
-		new BMap.Size(50, 50), {
-			anchor : new BMap.Size(20, 20)
-		});
-
-var qy = new BMap.Icon("editor/icons/waiyuanjiedian.png",
-		new BMap.Size(50, 50), {
-			anchor : new BMap.Size(20, 20)
-		});
-var glq = new BMap.Icon("editor/icons/guolvqi.png", new BMap.Size(50, 50), {
-	anchor : new BMap.Size(20, 20)
-});
-var fsd = new BMap.Icon("editor/icons/waifenshudian.png",
-		new BMap.Size(50, 50), {
-			anchor : new BMap.Size(20, 20)
-		});
-
-var zdzyd = new BMap.Icon("editor/icons/zhudongzengyadian.png", new BMap.Size(
-		50, 50), {
-	anchor : new BMap.Size(20, 20)
-});
-var qzyhd = new BMap.Icon("editor/icons/qiaozhuangyehuadian.png",
-		new BMap.Size(50, 50), {
-			anchor : new BMap.Size(20, 20)
-		});
-var fz = new BMap.Icon("editor/icons/fazu.png", new BMap.Size(50, 50), {
-	anchor : new BMap.Size(20, 20)
-});
 var jqzyz = new BMap.Icon("images/icons/jiqizengyazhan.png", new BMap.Size(50,
 		50), {
 	anchor : new BMap.Size(25, 25)
-});
+});*/
 
-function showMapSimIn(data, proid, algid, Inorout) {
-	clearMap();
-	showWhiteLayer();
-	drawPointsGis(data, proid, algid, Inorout);
-	drawLines(data);
-	mapGis.markerClusterer.addMarkers(mapGis.markers);
-};
-function getMapSimIn(proid, algid, Inorout) {
-	$.ajax({
-		type : 'POST',
-		url : 'viewExcelMap.action',
-		data : {
-			proID : proid,
-			algID : algid,
-			InOrOut : Inorout
-		},
-		success : function(data) {
-			if (data['graphi']['GISReal'] == 0) {
-				mapGis.GISReal = false;
-				// showMapSimIn(data,proid,algid,Inorout);
-				TranslateGPS(data, proid, showMapSimIn);
-			} else {
 
-				mapGis.GISReal = true;
-				TranslateGPS(data, proid,showMapSimIn);
-			}
-		}
 
-	});
-
-};
-function showMap(proid) {		
-	getMapSimIn(proid);
-	mapGis.markerClusterer.addMarkers(mapGis.markers);
-}
-function clearMap() {
-	mapGis.markerClusterer.clearMarkers();
-	mapGis.pointMap = {};
-	mapGis.markers = [];
-	mapGis.clearOverlays();
-}
+var icons={};
 var mapGis;
 var mapIn;
-function initMapGis() {
-
+function initMapGis(proid) {
+	getMapICON();
 	mapGis = new BMap.Map("mapDyn", {
 		mapType : BMAP_HYBRID_MAP
 	}); // 创建Map实例
@@ -105,39 +43,72 @@ function initMapGis() {
 		girdSize : 120,
 		maxZoom : 14
 	});
+	showMap(proid)
+};
+function getMapICON() {
+	$.ajax({
+		type : 'POST',
+		url : 'getMapICON.action',
+		success : function(data) {
+			var list=data.icons;
+			for ( var i in data.icons) {
+
+				var p = list[i];// 一个point
+				
+				var newIC=new BMap.Icon("uploadICONS/"+p.iconFile, new BMap.Size(50, 50), {
+					anchor : new BMap.Size(20, 20)
+				});
+				
+				newIC.names=p.typeName;
+				icons[p.id]=newIC;
+				
+			}
+			
+		}
+
+	});
 
 };
-function sumTransGPS(dataAll, data, start, len, callback1) {
-
-	var pMap = dataAll['graphi']['points'];
-	var dataIndex = 0;
-	var index = 0;
-	for ( var i in pMap) {
-
-		var p = pMap[i];// 一个point
-
-		if (index >= start && index < start + len) {
-
-			p.longitude = data.result[dataIndex].x;
-			p.latitude = data.result[dataIndex].y;
-			dataIndex++;
-		}
-
-		index++;
-		if (index >= start + len) {
-			break;
-		}
-
-	}
-
-	dataAll.GPSSum = dataAll.GPSSum - len;
-	// alert(dataAll.pathSum);
-	if (dataAll.GPSSum == 0) {
-		callback1(dataAll, dataAll['proID'], dataAll['algID'],
-				dataAll['inOrOut']);
-	}
+function clearMap() {
+	mapGis.markerClusterer.clearMarkers();
+	mapGis.pointMap = {};
+	mapGis.markers = [];
+	mapGis.clearOverlays();
 }
-function TranslateGPS(dataAll, proid, algid, Inorout, callback1) {
+function showMap(proid) {		
+	getMapData(proid);
+	mapGis.markerClusterer.addMarkers(mapGis.markers);
+}
+function getMapData(proid) {
+	$.ajax({
+		type : 'POST',
+		url : 'viewMap.action',
+		data : {
+			proID : proid
+		},
+		success : function(data) {
+			if (data['graphi']['GISReal'] == 0) {
+				mapGis.GISReal = false;
+				// showMapSimIn(data,proid,algid,Inorout);
+				TranslateGPS(data, proid, showMapData);
+			} else {
+
+				mapGis.GISReal = true;
+				TranslateGPS(data, proid,showMapData);
+			}
+		}
+
+	});
+
+};
+function showMapData(data, proid) {
+	clearMap();
+	//showWhiteLayer();
+	drawPointsGis(data, proid);
+	drawLines(data);
+	mapGis.markerClusterer.addMarkers(mapGis.markers);
+};
+function TranslateGPS(dataAll, proid, callback1) {
 	dataAll.GPSSum = Object.keys(dataAll['graphi']['points']).length;
 
 	var xy = ''
@@ -152,17 +123,16 @@ function TranslateGPS(dataAll, proid, algid, Inorout, callback1) {
 		len++;
 		start++;
 		if (len >= 90) {
-			TransGPSNet(xy, start - len, dataAll, proid, algid, Inorout,
-					callback1);
+			TransGPSNet(xy, start - len, dataAll, proid, callback1);
 			xy = '';
 			len = 0;
 		}
 	}
 	if (len > 0) {
-		TransGPSNet(xy, start - len, dataAll, proid, algid, Inorout, callback1);
+		TransGPSNet(xy, start - len, dataAll, proid,  callback1);
 	}
 };
-function TransGPSNet(xy, start, dataAll, proid, algid, Inorout, callback1) {
+function TransGPSNet(xy, start, dataAll, proid,callback1) {
 	var cb = (function(i, dataall) {
 
 		return function(data) {
@@ -194,6 +164,37 @@ function TransGPSNet(xy, start, dataAll, proid, algid, Inorout, callback1) {
 		success : cb
 	});
 }
+
+function sumTransGPS(dataAll, data, start, len, callback1) {
+
+	var pMap = dataAll['graphi']['points'];
+	var dataIndex = 0;
+	var index = 0;
+	for ( var i in pMap) {
+
+		var p = pMap[i];// 一个point
+
+		if (index >= start && index < start + len) {
+
+			p.longitude = data.result[dataIndex].x;
+			p.latitude = data.result[dataIndex].y;
+			dataIndex++;
+		}
+
+		index++;
+		if (index >= start + len) {
+			break;
+		}
+
+	}
+
+	dataAll.GPSSum = dataAll.GPSSum - len;
+	// alert(dataAll.pathSum);
+	if (dataAll.GPSSum == 0) {
+		callback1(dataAll, dataAll['proID']);
+	}
+}
+
 
 function addSwith() {
 
@@ -244,7 +245,7 @@ function showWhiteLayer() {
 	if (map.tileLayer == null) {
 		map.tileLayer = new BMap.TileLayer();
 		map.tileLayer.getTilesUrl = function(tileCoord, zoom) {
-			var url = 'images/white.png'; // 根据当前坐标，选取合适的瓦片图
+			var url = 'modules/images/white.png'; // 根据当前坐标，选取合适的瓦片图
 			return url;
 		}
 		map.tileLayer.whiteShow = false;
@@ -275,71 +276,17 @@ function drawPointsGis(data, proid, algid, Inorout) {
 		p = pMap[i];
 
 		// BMap.Convertor.translate(pointMap[i],0,translateCallback);
-		if (p['type'] == '管道') {
-			continue;
-		}
-
+		
 		mapGis.pointMap[i] = new BMap.Point(p['longitude'], p['latitude']);
-		if (p['type'] == '设备连接点') {
-			continue;
-		}
+		
 		if (id == 0) {
 			mapGis.centerAndZoom(mapGis.pointMap[i], 15);
 			id = 1;
 		}
-		myicon = qj;
-		if (p['type'] == '井数据' || p['type'] == '井位置' || p['type'] == '气井') {
-			myicon = qj;
-		}
-		if (p['type'] == '气源') {
-			myicon = qy;
-		}
-		if (p['type'] == '分输点') {
-			myicon = fsd;
-		}
-		if (p['type'] == '阀') {
-			myicon = fz;
-		}
-		if (p['type'] == '过滤器') {
-			myicon = glq;
-		}
-		if (p['type'] == '阀组数据' || p['type'] == '阀组位置' || p['type'] == '阀') {
-			myicon = fz;
-		}
-		if (p['type'] == '集气站数据' || p['type'] == '集气站位置'
-				|| p['type'] == '集气增压站') {
-			myicon = jqzyz;
-
-		}
-
-		if (p['type'] == '离心压缩机' || p['type'] == '往复式压缩机') {
-			if (p['attribute']['设备位置'] != null
-					&& p['attribute']['设备位置'].indexOf('JQZYZ') > -1) {
-				myicon = jqzyz;
-				;
-			}
-			if (p['attribute']['设备位置'] != null
-					&& p['attribute']['设备位置'].indexOf('ZDZYD') > -1) {
-				myicon = zdzyd;
-			}
-			if (p['attribute']['设备位置'] != null
-					&& p['attribute']['设备位置'].indexOf('ZYCLC') > -1) {
-				myicon = zyclc;
-			}
-		}
-
-		if (p['type'] == '中央处理厂数据' || p['type'] == '中央处理厂位置'
-				|| p['type'] == '中央处理厂') {
-			myicon = zyclc;
-		}
-		if (p['type'] == '主动增压点数据' || p['type'] == '主动增压点位置'
-				|| p['type'] == '主动增压点') {
-			myicon = zdzyd;
-		}
-		if (p['type'] == '撬装液化点数据' || p['type'] == '撬装液化点位置'
-				|| p['type'] == '撬装液化点') {
-			myicon = qzyhd;
-		}
+		myicon = icons[p['basicid']]
+		
+		
+		
 
 		var markertemp = new BMap.Marker(mapGis.pointMap[i], {
 			icon : myicon
@@ -357,14 +304,9 @@ function drawPointsGis(data, proid, algid, Inorout) {
 		// map.openInfoWindow(infoWindow,pointArray[i]); //开启信息窗口
 		markertemp.contStr = s;
 		markertemp.proID = proid;
-		markertemp.algID = algid;
-
-		markertemp.InOrOut = Inorout;
-		if (p['type'] == '井数据') {
-			markertemp.InOrOut = 'In';
-		}
-		markertemp.type = p['type'];
-		markertemp.point_name = p['name'];
+		markertemp.id=p['id']
+		markertemp.typeName = p['typeName'];
+		markertemp.point_name = p['nodeName'];
 		markertemp.long = p['longitude'];
 		markertemp.lati = p['latitude'];
 		markertemp.addEventListener("click", function(data) {
@@ -372,13 +314,9 @@ function drawPointsGis(data, proid, algid, Inorout) {
 			getDeviceProper(this);
 
 		});
-		if (p['type'] == '设备连接点') {
-
-		} else {
-			// mapGis.mapWforGPS.addOverlay(markertemp);
-			mapGis.addOverlay(markertemp);
-		}
-		mapGis.enableScrollWheelZoom(false);
+	
+		mapGis.addOverlay(markertemp);
+		
 		mapGis.markers.push(markertemp);
 	}
 
@@ -391,25 +329,24 @@ function getDeviceProper(markPoi) {
 		type : 'post',
 		async : true, // 异步请求
 		data : {
-			algID : markPoi.algID,
-			InOrOut : markPoi.InOrOut,
-			proID : markPoi.proID,
-			type : markPoi.type,// 元素点的类型
-			name : markPoi.point_name
+			nodeid:markPoi.id
 		},
 		dataType : 'json',
 		success : function(data) {
 			var Prop = data['deviceKV'];
 
 			var s = "";
-			s = "类别:" + markPoi.type + "<br>";
+			s = "编号:" + markPoi.id + "<br>";
+			s = s+"名称:" + markPoi.point_name + "<br>";
+			s = s+"类别:" + markPoi.typeName + "<br>";
+			if (markPoi.long!= undefined) {
+				s = s + "经度:" + markPoi.long + "<br>"
+				s = s + "纬度:" + markPoi.lati + "<br>"
+			}
 			for (var k2 = 0; k2 < Prop.length; k2++) {
-				s = s + Prop[k2]['name'] + " : " + Prop[k2]['value'] + "<br>";
+				s = s + Prop[k2]['properName'] + " : " + Prop[k2]['properValue']+ Prop[k2]['properUnit'] + "<br>";
 			}
-			if (this.long != undefined) {
-				s = s + "经度:" + this.long + "<br>"
-				s = s + "纬度:" + this.lati + "<br>"
-			}
+			
 
 			var opts = {
 				width : 300, // 信息窗口宽度
@@ -431,10 +368,10 @@ function drawLines(data) {
 		var l = pLine[i];
 		var pointemp = new Array();
 		var polyline;
-		if (l['type'] == '连接') {
+		
 			// alert(pointMap[l['start']]);
-			pointemp[0] = mapGis.pointMap[l['start']];
-			pointemp[1] = mapGis.pointMap[l['end']];
+			pointemp[0] = mapGis.pointMap[l['sourceid']];
+			pointemp[1] = mapGis.pointMap[l['targetid']];
 			polyline = new BMap.Polyline(pointemp, {
 				strokeColor : "red",
 				strokeWeight : 3,
@@ -442,51 +379,8 @@ function drawLines(data) {
 			});
 			// map.addOverlay(polyline);
 			// addArrow1(polyline, 5, Math.PI / 7);
-		}
-		if (l['type'] == '井阀组连接') {
-			// alert(pointMap[l['start']]);
-			pointemp[0] = mapGis.pointMap[l['start']];
-			pointemp[1] = mapGis.pointMap[l['end']];
-			polyline = new BMap.Polyline(pointemp, {
-				strokeColor : "red",
-				strokeWeight : 3,
-				strokeOpacity : 0.5
-			});
-			// map.addOverlay(polyline);
-			// addArrow1(polyline, 5, Math.PI / 7);
-		}
-		if (l['type'] == '阀组集气站连接') {
-			pointemp[0] = mapGis.pointMap[l['start']];
-			pointemp[1] = mapGis.pointMap[l['end']];
-			polyline = new BMap.Polyline(pointemp, {
-				strokeColor : "blue",
-				strokeWeight : 6,
-				strokeOpacity : 0.5
-			});
-			// map.addOverlay(polyline);
-			// addArrow2(polyline, 5, Math.PI / 7)
-		}
-		if (l['type'] == '集气站中央处理厂连接') {
-			pointemp[0] = mapGis.pointMap[l['start']];
-			pointemp[1] = mapGis.pointMap[l['end']];
-			polyline = new BMap.Polyline(pointemp, {
-				strokeColor : "yellow",
-				strokeWeight : 9,
-				strokeOpacity : 0.5
-			});
-			// map.addOverlay(polyline);
-			// addArrow2(polyline, 5, Math.PI / 7)
-		}
-		if (l['type'] == '管段连接') {
-			pointemp[0] = mapGis.pointMap[l['start']];
-			pointemp[1] = mapGis.pointMap[l['end']];
-			polyline = new BMap.Polyline(pointemp, {
-				strokeColor : "red",
-				strokeWeight : 3,
-				strokeOpacity : 0.5
-			});
-			// addArrow2(polyline, 5, Math.PI / 7)
-		}
+		
+		
 		var s = "<span style='font-size:14px;font-weight:bold'>管道信息</span><br>";
 		s = s + "类别:" + p['type'] + "<br>";
 		var attr = p['attribute'];
@@ -505,90 +399,13 @@ function drawLines(data) {
 				"left" : x,
 				"z-index" : 101
 			});
-			// var opts = {
-			// width : 300, // 信息窗口宽度
-			// height : 200, // 信息窗口高度
-			// title : "管道信息", // 信息窗口标题
-			// enableMessage : true,// 设置允许信息窗发送短息
-			// message : ""
-			// };
-			// var infoWindow = new BMap.InfoWindow(this.contStr, opts);
-			// this.openInfoWindow(infoWindow);
+
 		});
 		mapGis.addOverlay(polyline);
 		mapGis.enableScrollWheelZoom(false);
 		mapGis.markers.push(polyline);
 	}
 	// mapGis.markerClusterer.addMarkers(mapGis.markers);
-}
-function showPath() {
-	var proid = $("#proID").val();
-	var algid = $("#curAlgID").val();
-	var Inorout = "Out";
-
-	$.ajax({
-		type : 'POST',
-		url : 'viewPath.action',
-		data : {
-			proID : proid,
-			algID : algid,
-			InOrOut : Inorout
-		},
-		success : function(data) {
-			var len = 0;
-			var pMap = data['path'];
-			for ( var i in pMap) {
-
-				var ps = pMap[i];// 一个障碍
-
-				for (var k = 0; k < ps.length; k++) {
-					len++;
-				}
-			}
-			data.pathSum = len;
-			TranslateGPSPath(data, proid, algid, Inorout, sumTrans);
-		}
-
-	});
-
-}
-function TranslateGPSPath(dataAll, proid, algid, Inorout, callback1) {
-
-	var jsonObject = dataAll;
-	// var pointArray = new Array();
-	var pMap = jsonObject['path'];
-	var xy = '';
-	var start = 0;
-	var len = 0;
-	// alert(dataAll.pathSum);
-	len = 0;
-	for ( var i in pMap) {
-
-		ps = pMap[i];// 一个障碍
-		var tempPoints = new Array();
-
-		for (var k = 0; k < ps.length; k++) {
-			p = ps[k];
-			// var bp=new BMap.Point(p['longitude'], p['latitude']);
-			if (xy != '') {
-				xy = xy + ';';
-			}
-			xy = xy + p.longitude + "," + p.latitude;
-			len++;
-			start++;
-			if (len >= 90) {
-				TransGPSPathNet(xy, start - len, dataAll, proid, algid,
-						Inorout, callback1);
-				xy = '';
-				len = 0;
-			}
-		}
-
-	}
-	if (len > 0) {
-		TransGPSPathNet(xy, start - len, dataAll, proid, algid, Inorout,
-				callback1);
-	}
 }
 function TransGPSPathNet(xy, start, dataAll, proid, algid, Inorout, callback1) {
 	var cb = (function(i, dataall) {
@@ -655,38 +472,6 @@ function sumTrans(dataAll, data, start, len, mapgis) {
 		drawPointsPath(dataAll);
 	}
 }
-function drawPointsPath(data) {
-
-	for ( var pathName in data['path']) {
-		var xyResults = data['path'][pathName];
-		var k = -1;
-		var pointsTemp = new Array();
-		for ( var index in xyResults) {
-			k++;
-
-			var point = new BMap.Point(xyResults[index].longitude,
-					xyResults[index].latitude);
-			pointsTemp.push(point);
-			if (k == 0) {
-				var secRingCenter = point;
-				var secRingLabel2 = new BMap.Label(pathName, {
-					offset : new BMap.Size(10, -20),
-					position : secRingCenter
-				});
-				secRingLabel2.setStyle({
-					"padding" : "2px"
-				});
-				// mapGis.addOverlay(secRingLabel2);
-			}
-		}
-		var polygon = new BMap.Polygon(pointsTemp, {
-			strokeColor : "black",
-			strokeWeight : 3,
-			strokeOpacity : 0.5
-		});
-		mapGis.addOverlay(polygon);
-	}
-};
 var styleOptions = {
 	strokeColor : "red", // 边线颜色。
 	fillColor : "red", // 填充颜色。当参数为空时，圆形将没有填充效果。

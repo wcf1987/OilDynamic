@@ -26,10 +26,10 @@ public class Point {
 	 * 纬度
 	 */
 	double latitude;
-
+	int basicid;
 	public Point(Integer id, String nodeName, Integer type, String typeName,
 			Double x_location, Double y_location, Double x_location_geo,
-			Double y_location_geo, double longitude, double latitude) {
+			Double y_location_geo, double longitude, double latitude,int basicid) {
 		super();
 		this.id = id;
 		this.nodeName = nodeName;
@@ -41,6 +41,13 @@ public class Point {
 		this.y_location_geo = y_location_geo;
 		this.longitude = longitude;
 		this.latitude = latitude;
+		this.basicid=basicid;
+	}
+	public int getBasicid() {
+		return basicid;
+	}
+	public void setBasicid(int basicid) {
+		this.basicid = basicid;
 	}
 	public void getLatLonFromGeo(){
 		double a[]=CoordinateConversion.GaussProjInvCal(this.x_location_geo,this.y_location_geo);

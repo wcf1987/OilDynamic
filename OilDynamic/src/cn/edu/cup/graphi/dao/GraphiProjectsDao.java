@@ -1,9 +1,11 @@
 package cn.edu.cup.graphi.dao;
 
 import java.math.BigInteger;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +13,8 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
+import cn.edu.cup.graphi.business.BasicNode;
+import cn.edu.cup.graphi.business.DeviceKV;
 import cn.edu.cup.graphi.business.Graphi;
 import cn.edu.cup.graphi.business.GraphiProjects;
 import cn.edu.cup.graphi.business.Line;
@@ -41,10 +45,10 @@ public class GraphiProjectsDao {
 	public Graphi getGraphiByProID(int proID) {
 		SQLQuery q;
 		Graphi a=new Graphi();
-		Map<String,Point> points=new HashMap<String, Point>();
+		Map<Integer,Point> points=new HashMap<Integer, Point>();
 		List<Line> lines=new ArrayList<Line>();
 		 q = session
-				.createSQLQuery("select t1.ID,t1.nodeName,t2.Type,t2.TypeName,t1.latitude,t1.longitude,t1.x_location,t1.y_location,t1.x_location_geo,t1.y_location_geo from t_node t1,t_basicnode t2 where t1.BasicNodeID=t2.ID and t1.proID=?");
+				.createSQLQuery("select t1.ID,t1.nodeName,t2.Type,t2.TypeName,t1.latitude,t1.longitude,t1.x_location,t1.y_location,t1.x_location_geo,t1.y_location_geo,t1.BasicNodeID from t_node t1,t_basicnode t2 where t1.BasicNodeID=t2.ID and t1.proID=?");
 		q.setParameter(0, proID);		
 		List l = q.list();
 		
@@ -64,8 +68,9 @@ public class GraphiProjectsDao {
 			Double y_location = (Double) row[7];
 			Double x_location_geo = (Double) row[8];
 			Double y_location_geo = (Double) row[9];
-			Point tempNode=new Point(id, nodeName, type, typeName, x_location, y_location, x_location_geo, y_location_geo, latitude, longitude);
-			points.put(nodeName, tempNode);
+			Integer bid = (Integer) row[10];
+			Point tempNode=new Point(id, nodeName, type, typeName, x_location, y_location, x_location_geo, y_location_geo, latitude, longitude,bid);
+			points.put(id, tempNode);
 
 		}
 		
@@ -164,4 +169,11 @@ public class GraphiProjectsDao {
 		Integer count = ((BigInteger) q.uniqueResult()).intValue();
 		return count;
 	}
+
+	public List<BasicNode> getMapICON() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }

@@ -14,7 +14,7 @@ public class Graphi {
 	public void setGISReal(int gISReal) {
 		GISReal = gISReal;
 	}
-	Map<String,Point> points;
+	Map<Integer,Point> points;
 	List<Line> lines;
 	/*public List getJSON(){
 		List temp=new ArrayList();
@@ -22,13 +22,13 @@ public class Graphi {
 		temp.addAll(lines);
 		return temp;
 	}*/
-	public void setPoints(Map<String, Point> points) {
+	public void setPoints(Map<Integer, Point> points) {
 		this.points = points;
 	}
 	public void setLines(List<Line> lines) {
 		this.lines = lines;
 	}
-	public Map<String, Point> getPoints() {
+	public Map<Integer, Point> getPoints() {
 		return points;
 	}
 	public List<Line> getLines() {
@@ -36,12 +36,12 @@ public class Graphi {
 	}
 	public Graphi(){
 		lines=new ArrayList<Line>();
-		points=new HashMap<String, Point>();
+		points=new HashMap<Integer, Point>();
 
 	}
 	public Boolean addPoint(Point temp){
 		if(!points.containsValue(temp)){
-			points.put(temp.getNodeName(), temp);			
+			points.put(temp.getId(), temp);			
 			return true;
 		}
 		return false;
