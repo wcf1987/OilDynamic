@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*,cn.edu.cup.manage.business.*" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <div id="running-container" >
 	<div><span>运行输出台</span><button onclick="loadOutput(0)">查看输出</button></div>
 	<textarea  id="outputarea" name="outputarea" disabled="">
