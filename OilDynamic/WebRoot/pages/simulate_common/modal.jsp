@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*,cn.edu.cup.manage.business.*" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <!--载入选择框 -->  
 <div class="modal fade" id="load_modal" ><!-- width="155" style="margin: 250px 200 0 -280px;" -->
   <div class="modal-dialog">

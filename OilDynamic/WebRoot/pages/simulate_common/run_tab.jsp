@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*,cn.edu.cup.manage.business.*" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 
 	<script src="js/Highcharts-4.0.1/highcharts.js"></script>
 	<script src="js/Highcharts-4.0.1/js/modules/exporting.js"></script>

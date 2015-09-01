@@ -1,4 +1,4 @@
-<<%@ page language="java" import="java.util.*,cn.edu.cup.*" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*,cn.edu.cup.*" pageEncoding="UTF-8"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -32,7 +32,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" media="screen" href="js/jqueryUI/css/jquery-ui-1.10.3.custom.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="js/jqGrid/css/ui.jqgrid.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="js/jqueryUI/themes/redmond/jquery.ui.theme.css" />
-
+<link rel="stylesheet" type="text/css" media="screen" href="css/tabs.css" />
 
 <script type="text/javascript" src="modules/js/jquery.min.js"></script>
 <script type="text/javascript" src="modules/js/superfish.js"></script>
@@ -52,6 +52,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="js/jquery/jquery.message.js"></script>
 	<script src="bootstrap/js/bootstrap.min.js"></script>
 	<script src="bootstrap/js/holder.min.js"></script>
+	
+	<script src="js/easytabs/jquery.hashchange.min.js" type="text/javascript"></script>
+	<script src="js/easytabs/jquery.ba-hashchange.js" type="text/javascript"></script>
+	<script src="js/easytabs/jquery.easing.1.3.js" type="text/javascript"></script>
+	
+	<script src="js/easytabs/jquery.easytabs.js" type="text/javascript"></script>
+	<script src="js/easytabs/jquery.raptorize.1.0.js" type="text/javascript"></script>
+	
+
 <script type="text/javascript" src="modules/js/project_edit.js"></script>
 <script type="text/javascript" src="modules/js/proper.js"></script>
 
@@ -159,6 +168,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			randomStart:false,
 			manualAdvance:false
 		});
+		$('#tab-container').easytabs();
 	});
 </script>
 </head>
@@ -177,12 +187,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</div>
 						</div>
 
-                        <div class="grid_6">
-                            <table id="vertexList" class="table table-striped table-bordered table-hover datatable " >这里是点列表</table>
-                            <div id="vertextPager" ></div>
-                            <table id="edgeList" class="table table-striped table-bordered table-hover datatable " >这里是边列表</table>
-                            <div id="edgePager" ></div>
-
+                        <div class="grid_6" style="width: 920px;">
+                        	<div id="tab-container" class='tab-container'>
+							  <ul class='etabs'>
+							    <li class='tab'><a href="#tab-vertexList">点列表</a></li>
+							    <li class='tab'><a href="#tab-edgeList">边列表</a></li>					
+							  </ul>
+							  <div id="tab-vertexList">
+							    <table id="vertexList" class="table table-striped table-bordered table-hover datatable " ></table>
+                            	<div id="vertextPager" ></div>
+							  </div>
+							    <div id="tab-edgeList">
+							    <table id="edgeList" class="table table-striped table-bordered table-hover datatable " ></table>
+                            	<div id="edgePager" ></div>
+							  </div>					
+							</div>
                             <a href="modules/map.jsp">点我进入图形化展示页面</a>
                         </div>
 					</div>
