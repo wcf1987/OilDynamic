@@ -1,61 +1,69 @@
 
 var graphiCharts=new GraphiCharts();
 graphiCharts.init(26,7);
-
+function getParam()
+{
+	var aQuery = window.location.href.split("?");  //取得Get参数
+    var aGET = new Array();
+    if(aQuery.length > 1)
+    {
+        var aBuf = aQuery[1].split("&");
+        for(var i=0, iLoop = aBuf.length; i<iLoop; i++)
+        {
+            var aTmp = aBuf[i].split("=");  //分离key与Value
+            aGET[aTmp[0]] = aTmp[1];
+        }
+     }
+     return aGET;
+ }
 function GraphiCharts(){
-	
-	this.init=function (algID,pro_id){
-		this.algID=algID
-		this.pro_id=pro_id;
+	var id=getParam()["id"];
+	this.init=function (){
+
 		this.graphiArray=new Array;
 		$.ajax({
-			url:'listGraphiByAlgID.action',
+			url:'ProGraphiByGraphID.action',
 			type:'post',
 			dataType:'json',
 			data : {
-				CycleID:algID
+				id:id
 			},
 			success:function(data){
 				//alert(data['listGraphi'].length);
-				var listGraphi=data['listGraphi'];
+				if(data.msg!="OK"){
+					alert(data.msg);
+					return
+				}
+				var Graphi=data['graphi'];
 				
-				for (var i=0;i<listGraphi.length;i++){
-					var temp=listGraphi[i];
+					
 					 
 					var drawnew= document.createElement('div');
 					//drawnew.innerHTML = "test";
-					drawnew.id="graphi"+i;
-					drawnew.style="width:50%; height:400px;margin-top:10px;margin-left:200px;";
+					drawnew.id="graphi"+Graphi.GraphiName;
+					drawnew.style="width:50%; height:400px;margin-top:10px;margin-left:300px;";
 					$("#graphiDraw").append(drawnew)
 					
 					//alert(temp.graphiType);
-					if (temp.graphiType==0){
-						graphiCharts.loadLines(pro_id,temp.id,i,drawnew.id);
+					if (Graphi.type==1){
+						graphiCharts.loadLines(Graphi,drawnew.id);
 					}
-					if (temp.graphiType==2){
-						graphiCharts.loadBars(pro_id,temp.id,i,drawnew.id);
+					if (Graphi.type==2){
+						graphiCharts.loadPies(Graphi,drawnew.id);
 					}
-					if (temp.graphiType==1){
-						graphiCharts.loadPies(pro_id,temp.id,i,drawnew.id);
+					if (Graphi.type==3){
+						graphiCharts.loadBars(Graphi,drawnew.id);
 					}
 					
 					
 					
-				}
+					
 			}
 		});
 	}
-	this.loadLines=function(pro_id,graphid,index,container){
-		$.ajax({
-			url:'getProGraphi.action',
-			type:'post',
-			dataType:'json',
-			data : {
-				pro_id:pro_id,
-				graphID:graphid
-			},
-			success:function(data){				
-					var graphitemp=data['graphi'];
+	this.loadLines=function(Graphi,container){
+			
+					var graphitemp=Graphi;
 					var chart=graphiCharts.drawLines(graphitemp['y'][0].messure,container);
 					//alert(1);
 					var X=graphitemp['x'];
@@ -68,16 +76,19 @@ function GraphiCharts(){
 					var Y=graphitemp['y'];
 					
 					chart.setTitle({text:graphitemp.graphiName});
+					chart.yAxis[0].setTitle({
+			                text: Graphi.yName+"  "+Y[0].messure
+					},true); 
 					for(var k=0;k<Y.length;k++){
+						var yname=Y[k].display;
 						chart.addSeries({
 		                    id:k,
-		                    name: Y[k].display,
+		                    name: yname,
 		                    data: Y[k].value		
 		                    }); 
 					}
 					
-			}
-			});
+			
 	}
 	this.drawLines=function(tip,container){
 		  var	chart = new Highcharts.Chart({
@@ -113,23 +124,76 @@ function GraphiCharts(){
 		                layout: 'vertical',
 		                align: 'right',
 		                verticalAlign: 'middle',
-		                borderWidth: 0
+		                borderWidth: 1
 		            },
 		            series: []
 		        });
 		     return  chart;
 		}
-	this.loadBars=function(pro_id,graphid,index,container){
-		$.ajax({
-			url:'getProGraphi.action',
-			type:'post',
-			dataType:'json',
-			data : {
-				pro_id:pro_id,
-				graphID:graphid
-			},
-			success:function(data){				
-				var graphitemp=data['graphi'];
+	this.loadPies=function(Graphi,container){
+		
+		var graphitemp=Graphi;
+		if(graphitemp['points']==null){
+			return;
+		}
+		var temp=graphitemp['points'][0];
+		var chart=graphiCharts.drawPies(temp.messure,container);					
+		temp=graphitemp['points']
+		
+		chart.setTitle({text:graphitemp.graphiName});
+		
+		var tempArr=new Array;
+		for(var k=0;k<temp.length;k++){
+			tempArr[k]=new Array(temp[k].display,temp[k].value);
+		}
+		chart.addSeries({
+                type: 'pie',
+                name: '占比',
+                data:tempArr
+        }); 
+		/*chart.addSeries( {
+            name: 'London',
+            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+        })*/
+
+}
+
+this.drawPies=function(tip,container){
+var	chart = new Highcharts.Chart({
+  chart: {
+        plotBackgroundColor: null,
+        renderTo: container,
+        plotBorderWidth: null,
+        plotShadow: false
+    },
+    title: {
+        text: 'Browser market shares at a specific website, 2014'
+    },
+    tooltip: {
+	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                color: '#6699ff',
+                connectorColor: '#6699ff',
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            },
+            showInLegend: true
+        }
+    },
+
+});
+ return  chart;
+}
+
+
+	this.loadBars=function(Graphi,container){
+					
+				var graphitemp=Graphi;
 				var chart=graphiCharts.drawBars(graphitemp['y'][0].messure,container);
 				//alert(1);
 				var X=graphitemp['x'];
@@ -140,7 +204,9 @@ function GraphiCharts(){
 					},true); 
 				
 				var Y=graphitemp['y'];
-				
+				chart.yAxis[0].setTitle({
+	                text: Graphi.yName+"  "+Y[0].messure
+				},true); 
 				chart.setTitle({text:graphitemp.graphiName});
 				for(var k=0;k<Y.length;k++){
 					chart.addSeries({
@@ -150,50 +216,14 @@ function GraphiCharts(){
 	                    }); 
 				}
 				
-			}
-			});
-	}
-	this.loadPies=function(pro_id,graphid,index,container){
-		$.ajax({
-			url:'getProGraphi.action',
-			type:'post',
-			dataType:'json',
-			data : {
-				pro_id:pro_id,
-				graphID:graphid
-			},
-			success:function(data){				
-					var graphitemp=data['graphi'];
-					if(graphitemp['points']==null){
-						return;
-					}
-					var temp=graphitemp['points'][0];
-					var chart=graphiCharts.drawPies(temp.messure,container);					
-					temp=graphitemp['points']
-					
-					chart.setTitle({text:graphitemp.graphiName});
-					var tempArr=new Array;
-					for(var k=0;k<temp.length;k++){
-						tempArr[k]=new Array(temp[k].display,temp[k].value);
-					}
-					chart.addSeries({
-			                type: 'pie',
-			                name: '占比',
-			                data:tempArr
-		            }); 
-					/*chart.addSeries( {
-		                name: 'London',
-		                data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-		            })*/
-			}
-			});
+			
 	}
 	
 	this.drawBars=function(tip,container){
 		  var	chart = new Highcharts.Chart({
 			  		chart: {
 			  			renderTo: container,
-				        type: 'bar'
+				        type: 'column'
 				                      },
 		            title: {
 		                text: '',
@@ -224,48 +254,17 @@ function GraphiCharts(){
 		                valueSuffix: tip
 		            },
 		            legend: {
-		                layout: 'vertical',
 		                align: 'right',
-		                verticalAlign: 'middle',
 		                borderWidth: 0
 		            },
 		            series: []
 		        });
 		     return  chart;
 		}
-	this.drawPies=function(tip,container){
-		  var	chart = new Highcharts.Chart({
-			  chart: {
-	                plotBackgroundColor: null,
-	                renderTo: container,
-	                plotBorderWidth: null,
-	                plotShadow: false
-	            },
-	            title: {
-	                text: 'Browser market shares at a specific website, 2014'
-	            },
-	            tooltip: {
-	        	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-	            },
-	            plotOptions: {
-	                pie: {
-	                    allowPointSelect: true,
-	                    cursor: 'pointer',
-	                    dataLabels: {
-	                        enabled: false
-	                    },
-	                    showInLegend: true
-	                }
-	            },
 
-	        });
-		     return  chart;
-		}
-		
+
+
 }
-
-
-
 $(function () { 
 		   /* $('#container0').highcharts({
 		        chart: {

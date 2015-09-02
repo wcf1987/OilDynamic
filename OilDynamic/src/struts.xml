@@ -109,6 +109,13 @@
 			<result type="json">				
 			</result>
 		</action>
+		<!--线形图展示action -->
+		<action name="ProGraphiByGraphID" method="ProGraphiByGraphID" class="cn.edu.cup.graphi.action.DiagramAction">
+			<result type="json">				
+			</result>
+		</action>
+		
+
 		<!--节点编辑action -->
 		<action name="addNode" method="addNode" class="cn.edu.cup.graphi.action.NodeAction">
 			<result type="json">				

@@ -113,10 +113,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <%@ include file="head.jsp"%>
 		<!-- end of #header -->
 		<div id="main">
+		<div id="graphiDraw" style="width:100%; height:auto;margin-left:200px;" onclick="graphiDraw();"></div> 		
+  
 			<div id="sub-main" class="container_12">
 				<div id="content">
-					 <div id="graphiDraw" style="width:100%; height:auto;margin-left:200px;" onclick="graphiDraw();"></div> 		
-  
+					 
 
 				</div>
 				<!-- end of #content -->

@@ -11,8 +11,22 @@ public class GraphOutput {
 	}
 	int type;
 	String typeS;
+	String xName;
+	String yName;
 	GraphiLine X;
 	List<GraphiLine> Y;
+	public String getxName() {
+		return xName;
+	}
+	public void setxName(String xName) {
+		this.xName = xName;
+	}
+	public String getyName() {
+		return yName;
+	}
+	public void setyName(String yName) {
+		this.yName = yName;
+	}
 	List<GraphiPoint> points;
 	List<GraphiLine> histogram ;
 	public List<GraphiLine> getHistogram() {
