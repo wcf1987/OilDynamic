@@ -84,7 +84,7 @@ function list_project(nodeid){
 									state) {
 //								alert(rows.ID);
 								return "<a href=\"javascript:void(0)\" style=\"color:#798991\" onclick=\"openProject("
-										+ rows.id+ ")\">打开</a>"
+										+ rows.id+ ","+rows.proName+")\">打开</a>"
 							},
 							sortable:true
 						}
@@ -223,7 +223,9 @@ function deleteProject2() {
     } 
 }
 
-function openProject(proid){
-	location.href="modules/project-edit.jsp?proid="+proid;
+function openProject(proid,proname){
+	$.cookie('proid',proid);
+	$.cookie('proname',proname);
+	location.href="modules/project-edit.jsp?proid="+proid+"&proname="+proname;
 	proID=proid;
 }

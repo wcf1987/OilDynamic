@@ -78,7 +78,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
     
   
-  <body  id="body" onload="initMapGis(5);">
+  <body  id="body" onload="initMapGis();">
 
 	<div id="head">
 		
@@ -101,12 +101,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 	<script type="text/javascript">
-	 /* $('#load_modal').modal({
-		     backdrop:'static',
-		     keyboard:false,
-		     show:true
-		 }); */ 
-		 	
+
 	</script>
 
 			   

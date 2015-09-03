@@ -4,13 +4,13 @@ $(function(){
 	var nodeTypes={};
 	var allNodes={};
 
-
+	//alert($.cookie('proname'));
+	$("#h3proname").html($.cookie('proname')+"项目");
 	loadNodeTypes();
-	loadNodes(5);
-	listnodes(5);
+	loadNodes($.cookie('proid'));
+	listnodes($.cookie('proid'));
 		
-	listedge(5);
-
+	listedge($.cookie('proid'));
 
 function loadNodeTypes(){
 	$.ajax({ 
