@@ -1,5 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-
 <script type="text/javascript" src="js/map_diked.js"></script>
 	
 <div id="dikedAreaMap"  class="popdiv" style="display:none;width:700px;height:600px;">
