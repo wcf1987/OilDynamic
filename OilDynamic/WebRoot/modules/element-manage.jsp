@@ -50,7 +50,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="js/upload/jquery.uploadify.min.js"></script>
 	<script type="text/javascript" src="js/jquery-validation-1.11.1/dist/jquery.validate.js"></script>
 	<script type="text/javascript" src="js/jquery/jquery.message.js"></script>
-	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<script src="bootstrap/js/bootstrap.modified.min.js"></script>
 	<script src="bootstrap/js/holder.min.js"></script>
 <script type="text/javascript" src="modules/js/basicnode.js"></script>
 
@@ -286,7 +286,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div><!-- /.modal -->
 		
 		   	<!-- 添加basicnode的属性 -->   	
-		<div class="modal fade" id="add_propertyproper_modal">
+		<div class="modal fade" id="add_propertyproper_modal" style="z-index:900;">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-header">
