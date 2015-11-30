@@ -14,6 +14,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta charset="UTF-8">
 <link rel="shortcut icon" href="modules/images/favicon.html" type="image/x-icon">
 <title>拓扑结构后台管理</title>
+<link rel="stylesheet" type="text/css" media="screen" href="Flat-UI-master/css/flat-ui.css" />
 <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="bootstrap/css/carousel.css">
 	 
@@ -29,9 +30,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" href="modules/css/options.css" type="text/css" media="all" />
 
 <link rel="stylesheet" href="modules/css/oil_style.css" type="text/css" media="all"/>
+
 <link rel="stylesheet" type="text/css" media="screen" href="js/jqueryUI/css/jquery-ui-1.10.3.custom.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="js/jqGrid/css/ui.jqgrid.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="js/jqueryUI/themes/redmond/jquery.ui.theme.css" />
+
+
 <link rel="stylesheet" type="text/css" media="screen" href="css/tabs.css" />
 
 <script type="text/javascript" src="modules/js/jquery.min.js"></script>
@@ -188,22 +192,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</div>
 
                         <div class="grid_6" style="width: 920px;">
-                        	<div id="tab-container" class='tab-container'>
+                        	<div id="tab-container" class='tab-container'>  
 							  <ul class='etabs'>
 							    <li class='tab'><a href="#tab-vertexList">点列表</a></li>
-							    <li class='tab'><a href="#tab-edgeList">边列表</a></li>					
-							  </ul>
-							  <div id="tab-vertexList">
-							    <table id="vertexList" class="table table-striped table-bordered table-hover datatable " ></table>
-                            	<div id="vertextPager" ></div>
-							  </div>
-							    <div id="tab-edgeList">
-							    <table id="edgeList" class="table table-striped table-bordered table-hover datatable " ></table>
-                            	<div id="edgePager" ></div>
-							  </div>					
+							    <li class='tab'><a href="#tab-edgeList">边列表</a></li>	
+							  </ul>  
+							  <div class="panel-container">
+								  <div id="tab-vertexList">
+								    <table id="vertexList" class="table table-striped table-bordered table-hover datatable " ></table>
+	                            	<div id="vertextPager" ></div>
+								  </div>
+								    <div id="tab-edgeList">
+								    <table id="edgeList" class="table table-striped table-bordered table-hover datatable " ></table>
+	                            	<div id="edgePager" ></div>
+								  </div>
+							  </div>		
 							</div>
-                            <a href="modules/map.jsp">点我进入图形化展示页面</a>
+							
+            				  <div>
+								<a href="#" class="btn btn-large btn-block btn-primary" style="width:100px;float:left;margin-left:5px;margin-top:5px">导入项目</a>		
+								<a href="#" class="btn btn-large btn-block btn-primary" style="width:100px;float:left;margin-left:5px;">导出项目</a>
+								<a href="modules/map.jsp" class="btn btn-large btn-block btn-primary" style="width:100px;float:left;margin-left:5px;">图形化展示</a>					
+						 	 </div>	
                         </div>
+                        
+                        
 					</div>
 
 					<div class="clear mb20"></div>
