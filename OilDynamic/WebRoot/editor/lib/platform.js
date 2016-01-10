@@ -315,9 +315,7 @@ var Platform=function(){
 		left.platform=this;
 		for (var k in left.polyGroups)
 		{
-			if(checkLinked(left.polyGroups[k])){
-				continue;
-			}
+			
 			this.leftlayer.add(left.polyGroups[k]);
 		
 		
@@ -440,14 +438,13 @@ var Platform=function(){
 	}
 	this.paintingArray=new Array;
 	
-	this.addLoadPainting=function(newone,scalN,proID,algid,name,data) {
+	this.addLoadPainting=function(newone,scalN,proID,name,data) {
 		var paintings=new Paintings();
 		paintings.init();
 		paintings.p=newone;
 		paintings.initPoint();
 		paintings.scaleN=scalN;
 		paintings.proID=proID;//项目ID,t_guipro的id列
-		paintings.algID=algid;
 		paintings.name=name;//项目名称,t_guipro的proname列
 		this.addPainting(paintings);
 		this.paintingArray.push(paintings);

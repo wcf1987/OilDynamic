@@ -2,6 +2,7 @@ package cn.edu.cup.graphi.business;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public class Graphi {
 	public void setGISReal(int gISReal) {
 		GISReal = gISReal;
 	}
-	Map<Integer,Point> points;
+	Map<String,Point> points;
 	List<Line> lines;
 	/*public List getJSON(){
 		List temp=new ArrayList();
@@ -22,13 +23,14 @@ public class Graphi {
 		temp.addAll(lines);
 		return temp;
 	}*/
-	public void setPoints(Map<Integer, Point> points) {
+	public void setPoints(Map<String, Point> points) {
 		this.points = points;
 	}
 	public void setLines(List<Line> lines) {
 		this.lines = lines;
 	}
-	public Map<Integer, Point> getPoints() {
+
+	public Map<String, Point> getPoints() {
 		return points;
 	}
 	public List<Line> getLines() {
@@ -36,12 +38,12 @@ public class Graphi {
 	}
 	public Graphi(){
 		lines=new ArrayList<Line>();
-		points=new HashMap<Integer, Point>();
+		points=new HashMap<String, Point>();
 
 	}
 	public Boolean addPoint(Point temp){
 		if(!points.containsValue(temp)){
-			points.put(temp.getId(), temp);			
+			points.put(String.valueOf(temp.getId()), temp);			
 			return true;
 		}
 		return false;

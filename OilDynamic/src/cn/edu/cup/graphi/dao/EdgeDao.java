@@ -45,7 +45,10 @@ public class EdgeDao {
 		q.setParameter(3, sourceID);
 		q.setParameter(4, targetID);
 		int re=q.executeUpdate();
-	
+		q = session
+				.createSQLQuery("SELECT LAST_INSERT_ID()");	
+		re = ((BigInteger)q.uniqueResult()).intValue();
+		
 		return re;
 	}
 
@@ -114,5 +117,30 @@ public class EdgeDao {
 		q.setParameter(0, proID);
 		Integer count = ((BigInteger) q.uniqueResult()).intValue();
 		return count;
+	}
+
+	public int updateEdge(int id, int sourceID, int targetID) {
+		SQLQuery q;
+		int re=0;
+		HibernateSessionManager.getThreadLocalTransaction();
+		
+		if(sourceID!=-1){
+			String s="update t_edge set sourceid=?";
+			q = session.createSQLQuery(s+" where id=?");
+
+			q.setParameter(0, sourceID);	
+			q.setParameter(1, id);	
+			 re=q.executeUpdate();
+		}
+		if(targetID!=-1){
+			String s="update t_edge set targetID=?";
+			q = session.createSQLQuery(s+" where id=?");
+
+			q.setParameter(0, targetID);	
+			q.setParameter(1, id);	
+			 re=q.executeUpdate();
+		}
+		
+		return re;
 	}
 }

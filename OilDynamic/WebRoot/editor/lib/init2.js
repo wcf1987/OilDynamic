@@ -6,6 +6,13 @@ var tabtools;
 
 function initLight() {
 	
+			
+		
+	
+
+
+	$("inputDcMap").show();
+	
 	platform=new Platform();
 	platform.init();
 	leftpoly=new Leftpolys();
@@ -17,6 +24,7 @@ function initLight() {
 	tabtools=new TabTools(); 
 	
 	initMouseWheel();
+	tabtools.load();
 //	var curl=window.location.pathname;
 //	if(curl=="/OilManage/pages/simulate_wellbore.jsp"){
 //		listProjectModal();	 

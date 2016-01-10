@@ -23,6 +23,15 @@ public class EdgeAction {
 		dao.close();
 		return Action.SUCCESS;
 	}
+	public String addEdgeByGUI(){
+		EdgeDao dao=new EdgeDao();
+		int re=dao.addEdge(edgeName,"0",proID,0,0);
+		if(re==-1){
+			msg="添加连接边失败";
+		}
+		dao.close();
+		return Action.SUCCESS;
+	}
 	List<Edge> edges;
 
 	private int page;
@@ -153,6 +162,16 @@ public class EdgeAction {
 		dao.close();
 		return Action.SUCCESS;
 	}
+	public String delEdge(){
+		EdgeDao dao = new EdgeDao();
+		// AlgorithmInputDao inputDao=new AlgorithmInputDao();
+		
+				dao.deleteEdge(id);
+			
+		// inputDao.close();
+		dao.close();
+		return Action.SUCCESS;
+	}
 	int id;
 	String proper;
 	String value;
@@ -161,6 +180,18 @@ public class EdgeAction {
 		int re=dao.modifyEdge(id,proper,value);
 		if(re==-1){
 			msg="修改属性失败";
+		}
+		dao.close();
+		
+		
+		
+		return Action.SUCCESS;
+	}
+	public String updateEdge(){
+		EdgeDao dao = new EdgeDao();
+		int re=dao.updateEdge(id,sourceID,targetID);
+		if(re==-1){
+			msg="修改失败";
 		}
 		dao.close();
 		

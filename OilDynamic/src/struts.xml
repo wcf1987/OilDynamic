@@ -64,6 +64,11 @@
 			<result type="json">				
 			</result>
 		</action>
+	
+		<action name="addEdgeByGUI" method="addEdgeByGUI" class="cn.edu.cup.graphi.action.EdgeAction">
+			<result type="json">				
+			</result>
+		</action>
 		<action name="listEdges" method="listEdges" class="cn.edu.cup.graphi.action.EdgeAction">
 			<result type="json">				
 			</result>
@@ -72,10 +77,19 @@
 			<result type="json">				
 			</result>
 		</action>
+		<action name="delEdge" method="delEdge" class="cn.edu.cup.graphi.action.EdgeAction">
+			<result type="json">				
+			</result>
+		</action>
 		<action name="modifyEdge" method="modifyEdge" class="cn.edu.cup.graphi.action.EdgeAction">
 			<result type="json">				
 			</result>
 		</action>
+		<action name="updateEdge" method="updateEdge" class="cn.edu.cup.graphi.action.EdgeAction">
+			<result type="json">				
+			</result>
+		</action>
+		
 		<!--项目管理action -->
 		<action name="addGraphiProject" method="addGraphiProject" class="cn.edu.cup.graphi.action.GraphiProjectAction">
 			<result type="json">				
@@ -97,6 +111,10 @@
 			</result>
 		</action>
 		<!--图展示action -->
+		<action name="viewGUI" class="cn.edu.cup.graphi.action.GraphiShowAction"  method="viewGUI">
+			<result type="json">				
+			</result>
+		</action>
 		<action name="viewMap" method="viewMap" class="cn.edu.cup.graphi.action.GraphiShowAction">
 			<result type="json">				
 			</result>
@@ -121,6 +139,11 @@
 			<result type="json">				
 			</result>
 		</action>
+		<action name="addNodeByGUI" method="addNodeByGUI" class="cn.edu.cup.graphi.action.NodeAction">
+			<result type="json">				
+			</result>
+		</action>
+		
 		<action name="listNodes" method="listNodes" class="cn.edu.cup.graphi.action.NodeAction">
 			<result type="json">				
 			</result>
@@ -131,6 +154,12 @@
 		</action>
 		
 		<action name="delNodes" method="delNodes" class="cn.edu.cup.graphi.action.NodeAction">
+			<result type="json">				
+			</result>
+		</action>
+		
+		
+		<action name="delNode" method="delNode" class="cn.edu.cup.graphi.action.NodeAction">
 			<result type="json">				
 			</result>
 		</action>

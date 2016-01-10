@@ -1,7 +1,6 @@
 package cn.edu.cup.graphi.dao;
 
 import java.math.BigInteger;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,7 +44,7 @@ public class GraphiProjectsDao {
 	public Graphi getGraphiByProID(int proID) {
 		SQLQuery q;
 		Graphi a=new Graphi();
-		Map<Integer,Point> points=new HashMap<Integer, Point>();
+		Map<String,Point> points=new HashMap<String, Point>();
 		List<Line> lines=new ArrayList<Line>();
 		 q = session
 				.createSQLQuery("select t1.ID,t1.nodeName,t2.Type,t2.TypeName,t1.latitude,t1.longitude,t1.x_location,t1.y_location,t1.x_location_geo,t1.y_location_geo,t1.BasicNodeID from t_node t1,t_basicnode t2 where t1.BasicNodeID=t2.ID and t1.proID=?");
@@ -70,7 +69,7 @@ public class GraphiProjectsDao {
 			Double y_location_geo = (Double) row[9];
 			Integer bid = (Integer) row[10];
 			Point tempNode=new Point(id, nodeName, type, typeName, x_location, y_location, x_location_geo, y_location_geo, latitude, longitude,bid);
-			points.put(id, tempNode);
+			points.put(String.valueOf(id), tempNode);
 
 		}
 		
@@ -169,10 +168,25 @@ public class GraphiProjectsDao {
 		Integer count = ((BigInteger) q.uniqueResult()).intValue();
 		return count;
 	}
-
+	public String getProName(int proid) {
+		String sql = "select proName from t_graphiproject t2 where id=?";
+		
+		SQLQuery q = session.createSQLQuery(sql);
+		q.setParameter(0, proid);
+		String name =q.uniqueResult().toString();
+		return name;
+	}
 	public List<BasicNode> getMapICON() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public String getBlankData() {
+		String sql="select jsonData from t_guijson t where id=178";
+		SQLQuery q = session.createSQLQuery(sql);
+		
+		String json=((String)q.uniqueResult());
+		return json;
 	}
 
 

@@ -127,7 +127,7 @@ function resizePoint(g){
 	rc=getRightPoint(g);
 	// rch=getRightPointHide(g);
 	// poly=getPoly(g);
-	if(checkSpecial(g)||checkLinked(g)){
+	if(checkSpecial(g)){
 		if(lc!=null){
 			lc.x(leftpoly.polywidth+leftpoly.polylineLengthPainting);
 			lc.y(leftpoly.polyhight/2);
@@ -298,32 +298,28 @@ function imgLoadA(url){
 	return img;
 };
 function getPolyByType(p){
-	var type=p['type'];
+	var type=p['basicid'];
 	for(var i=0;i<leftpoly.polyGroups.length;i++){
 		if (leftpoly.polyGroups[i].TYPE==type){
 			return leftpoly.polyGroups[i];
 		}
-		if (type=='离心压缩机'||type=='往复式压缩机'){
-			if(leftpoly.polyGroups[i].TYPE=='集气增压站'&&p['attribute']['设备位置']!=null&&p['attribute']['设备位置'].indexOf('JQZYZ')>-1){
-				return leftpoly.polyGroups[i];
-			}
-			if(leftpoly.polyGroups[i].TYPE=='主动增压点'&&p['attribute']['设备位置']!=null&&p['attribute']['设备位置'].indexOf('ZDZYD')>-1){
-				return leftpoly.polyGroups[i];
-			}
-			if(leftpoly.polyGroups[i].TYPE=='中央处理厂'&&p['attribute']['设备位置']!=null&&p['attribute']['设备位置'].indexOf('ZYCLC')>-1){
-				return leftpoly.polyGroups[i];
-			}
-		}
 		
+		
+	}
+	return null;
+}
+function getPolyPipe(){
+	var type=0;
+	for(var i=0;i<leftpoly.polyGroups.length;i++){
+		if (leftpoly.polyGroups[i].TYPE==type){
+			return leftpoly.polyGroups[i];
+		}
 	}
 	return null;
 }
 function getPolyByYSJ(p){
 	var type=p['type'];
 	
-	if (type=='离心压缩机'||type=='往复式压缩机'){
-		return type;
-		}
 		return "";
 	}
 function rotateSpesail(p){
@@ -334,14 +330,14 @@ function rotateSpesail(p){
 		}
 }
 function checkSpecial(p){
-	if(p.TYPE=='气井'||p.TYPE=='气源'||p.TYPE=='分输点')
+	if(p.basicid>0)
 	{
 		return true;
 	}
 	return false;
 }
 function checkLinked(p){
-	if(p.TYPE=='设备连接点')
+	if(p.basicid==0)
 	{
 		return true;
 	}
@@ -496,17 +492,14 @@ function searchGrid(grid1,colname,colvalue){
 	return -1;
 }
 function setConned(g,cir){
-	if(checkLinked(g)){
-		g.lock=true;
-		return ;
-	}
-	if(checkSpecial(g)||checkLinked(g)){
+
+	if(checkSpecial(g)){
 		var	rc=getRightPoint(g);
-		var	lc=getLeftPoint(g);
+		
 		rc.show();
-		lc.show();
+		
 		rc.fill('yellow');
-		lc.fill('yellow');
+	
 		
 	}else{
 		cir.show();
@@ -532,6 +525,21 @@ function setDisConned(g){
 	}
 	g.lock=false;
 }
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+    if (r != null) return unescape(r[2]); return null; //返回参数值
+}
+function getCookie(name) 
+{ 
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+ 
+    if(arr=document.cookie.match(reg))
+ 
+        return unescape(arr[2]); 
+    else 
+        return null; 
+} 
 function optimizeInit(){
 //	listProjectModal();
 }

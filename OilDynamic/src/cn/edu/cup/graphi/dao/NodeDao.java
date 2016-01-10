@@ -54,6 +54,12 @@ public class NodeDao {
 		q.setParameter(0, proID);
 		q.setParameter(1, basicNodeID);
 		re = q.executeUpdate();
+		
+		q = session
+				.createSQLQuery("SELECT LAST_INSERT_ID()");	
+		re = ((BigInteger)q.uniqueResult()).intValue();
+		
+		
 		return re;
 	}
 

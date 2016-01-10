@@ -8,96 +8,7 @@ var TabTools=function (){
 	/*
 	 * 图形项目列表
 	 */
-	this.datagrid = jQuery("#GUIProList")
-	.jqGrid(
-			{
-				url : "listGUIPro.action",// 后端的数据交互程序，改为你的
-				datatype : "json",// 前后交互的格式是json数据
-				mtype : 'POST',// 交互的方式是发送httpget请求						
-				colNames : [ '编号', '项目名称', '作者','描述','添加时间','操作'],// 表格的列名
-				colModel : [
-						{
-							name : 'id',
-							index : 'ID',
-							width : 50,
-							align : "center",
-							sortable:true,
-							sorttype:'int'
-						},// 每一列的具体信息，index是索引名，当需要排序时，会传这个参数给后端
-						{
-							name : 'proname',
-							index : 'proname',
-							width : 100,
-							align : "center",
-							sortable:true
-						},
-						{
-							name:'author',
-							index:'author',
-							width:100,
-							align:'center',
-							sortable:true
-						},
-						{
-							name:'description',
-							index:'description',
-							width:100,
-							align:'center',
-							sortable:false,
-							formatter : function(value, grid, rows,
-									state) {
-								return "<a title=\""+rows.description+"\" href=\"javascript:void(0)\" style=\"color:#798991\">"+rows.description+"</a>"
-							}
-						},
-						{
-							name:'addTime',
-							index:'addTime',
-							width:100,
-							align:'center',
-							sortable:true,
-							formatter : function(value, grid, rows,
-									state) {
-								return rows.addTime.replace("T"," ");
-							}
-						},
-						{
-							name : 'load',
-							index : 'load',
-							width : 100,
-							align : "center",
-							formatter : function(value, grid, rows,
-									state) {
-//								alert(rows.id);
-								return "<a href=\"javascript:void(0)\" style=\"color:#798991\" onclick=\"tabtools.load('"
-										+ rows.id + "')\">加载</a>"
-							}
-						}					
-	
-						],
-//				autowidth:true,
-				rowNum:10,//每一页的行数
-				height: 'auto',
-				width:1000,
-				rowList:[10,20,30],
-				pager: '#GUIProPager',
-				sortname: 'ID',
-				viewrecords: true,
-				sortorder: "desc",
-				multiselect: true,  //可多选，出现多选框 
-			    multiselectWidth: 35, //设置多选列宽度 
-				jsonReader: {//读取后端json数据的格式
-					root: "dataList",//保存详细记录的名称
-					total: "total",//总共有多少页
-					page: "page",//当前是哪一页
-					records: "records",//总共记录数
-					repeatitems: false
-				},
-				caption: "模型列表"//表格名称       
-				
-			});
-	$('#GUIProList').trigger("reloadGrid");
 
-	
 
 	
 	this.listGUIProGrid=function(isFirst){
@@ -299,19 +210,18 @@ var TabTools=function (){
 	this.load=function() {
 		
 
-
-		var proID=$("#proID").val();
-		  var algID=$("#curAlgID").val();
+		var proID=getUrlParam("proid");
+		var proID=getCookie("proid");
+		$("#proID").val(proID);
 			$.ajax({
 				type : 'POST',
 				url : 'viewGUI.action',
+				dataType:"json",
 				data : {
 					proID:proID,
-					algID:algID,
-					InOrOut:"In"
 				},
-				success : function(data) {
-//					
+				success:function(data) {
+					
 					try{
 						saveData=data['graphi']['points'];
 					}catch(err){
@@ -323,17 +233,16 @@ var TabTools=function (){
 					platform.clearPainting();
 					var scalN=1;
 					var proid=proID;
-					var algid=algID;
 					var name=data['proName'];
-					var index=platform.addLoadPainting(newone,scalN,proID,algid,name,data);				
+					var index=platform.addLoadPainting(newone,scalN,proID,name,data);				
 					//createTab(name,index,null,proID,algid,null,"pro");
 					//createNewTab(data['dataView']['proname']);
 					
 					platform.stage.draw();
 					log('项目'+name+'已打开！');		
 				},
-				error:function(msg){
-					alert(msg);
+				error:function(){
+					alert(arguments[1]);
 				}
 			});
 	
@@ -389,21 +298,5 @@ var TabTools=function (){
 		
 	}
 
-	/*
-	 * 加载作者下拉列表
-	 */
-	function loadAuthorOptions(){
-		$.ajax({
-			url:'listUser.action',
-			type:'post',
-			dataType:'json',
-			success:function(data){
-				var items="";
-				$.each(data.dataList,function(i,user){
-					items+= "<option value=\"" + user.userid + "\">" + user.username + "</option>"; 
-				});
-				$("#authorID").html(items);
-			}
-		});
-		}
+
 }

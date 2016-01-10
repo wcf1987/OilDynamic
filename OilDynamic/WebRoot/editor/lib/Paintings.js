@@ -9,6 +9,12 @@ var Paintings = function() {
 	this.name;//项目名称
 	this.index=-1;//初始化序列号为-1
 	this.connects=new Array;
+	this.addGraphi=function(data){
+		this.connects=new Array;
+		var pline=this.drawPoints(data);
+		this.drawLines(pline);
+		this.p.draw();
+	}
 	this.drawPoints=function(data){
 		
 		var jsonObject = data;
@@ -27,18 +33,15 @@ var Paintings = function() {
 				continue;
 			}
 			point=ptemp.clone();
-			point.nameStr=p['name'];
-			point.id(p['name']);
-			point.TYPE=p['type'];
-			var types=getPolyByYSJ(p);
-			if(types!=""){
-				point.TYPE=types;
-			}
-		
+			point.nameStr=p['nodeName'];
+			point.ids=p['id'];
+			point.id(p['id']);
+			point.basicid=p['basicid'];			
+			
 			this.p.add(point);
-			setPointText(point,p['name']);
-			point.x(p.draw2DX);
-			point.y(p.draw2DY);	
+			setPointText(point,p['nodeName']);
+			point.x(p.x_location);
+			point.y(p.y_location);	
 			rotateSpesail(point);		
 			resizePoint(point);
 
@@ -46,6 +49,138 @@ var Paintings = function() {
 		return pLine;
 
 	}
+	this.drawLines=function(pLine){
+		//var jsonObject = data;
+		//var pLine = jsonObject['graphi']['lines'];	
+		for ( var i=0;i<pLine.length;i++) {
+			var l = pLine[i];
+			
+			
+			var ptemp=getPolyPipe();
+			if(ptemp==null){
+				continue;
+			}
+			linep=ptemp.clone();
+			linep.nameStr=l['edgeName'];
+			linep.ids=l['id'];
+			linep.id(l['id']);
+			linep.basicid=0;			
+			
+			this.p.add(linep);
+			setPointText(linep,l['edgeName']);
+				
+			
+			
+			
+			
+			
+			var start=l['sourceid'];
+			var end=l['targetid'];
+			var pname=l['edgeName'];
+			var startP=this.getPointByID(start);
+			var endP=this.getPointByID(end);
+			if(startP!=null&&endP!=null&&startP!=endP){
+				var	lc=getRightPoint(startP);
+				var	rc=getRightPoint(endP);
+
+				var dis={
+						x:(rc.getAbsolutePosition().x-lc.getAbsolutePosition().x)/this.scaleN,
+						y:(rc.getAbsolutePosition().y-lc.getAbsolutePosition().y)/this.scaleN
+					}
+				
+				linep.x(startP.x()+dis.x/2-leftpoly.polylineLength);
+				linep.y(startP.y()+dis.y/2+leftpoly.polyhight);
+				resizePoint(linep);
+				//连接管道左边点与原件
+				var	llp=getLeftPoint(linep);
+				var	rlp=getRightPoint(linep);
+				
+				var  ll=getLeftLine(linep);	
+				
+				dis={
+						x:-(llp.getAbsolutePosition().x-lc.getAbsolutePosition().x)/this.scaleN,
+						y:-(llp.getAbsolutePosition().y-lc.getAbsolutePosition().y)/this.scaleN
+					}
+			
+				movePoint(llp,dis,linep.rotation());	
+			
+				drawLine(ll,dis,linep.rotation());
+			
+				
+				setConned(linep,llp);
+				setConned(startP,lc);
+				//连接管道右边点与原件
+				var  rl=getRightLine(linep);	
+				
+				dis={
+						x:(rc.getAbsolutePosition().x-rlp.getAbsolutePosition().x)/this.scaleN,
+						y:(rc.getAbsolutePosition().y-rlp.getAbsolutePosition().y)/this.scaleN
+					}
+				
+				
+				movePoint(rlp,dis,linep.rotation());	
+				
+				drawLine(rl,dis,linep.rotation());
+				
+				
+				
+				setConned(endP,rc);
+				setConned(linep,rlp);
+				
+				
+					
+					
+				/*else{
+					var dis={
+							x:(rc.getAbsolutePosition().x-lc.getAbsolutePosition().x)/this.scaleN,
+							y:(rc.getAbsolutePosition().y-lc.getAbsolutePosition().y)/this.scaleN
+						}
+					var  l=getLeftLine(endP);						
+					movePoint(lc,dis,endP.rotation());							
+					drawLine(l,dis,endP.rotation());
+				
+				}*/
+				//this.addConnect(startP,endP,pname);
+				
+				
+			}				
+		}		
+	}
+	
+	this.addConnect=function(a,b,pname){
+		var name='';
+		if(a==b){
+			return ;
+		}
+		var name=pname;
+		var	rc=getRightPoint(a);
+		var	lc=getRightPoint(b);
+		setConned(a,rc);
+		setConned(b,lc)
+
+		this.addConnectByName(name,a,b);
+		
+	}
+	
+	this.addConnectByName=function(name,a,b){
+		for(var l3=0;l3<this.connects.length;l3++){
+			if(this.connects[l3].name==name&&this.connects[l3].name==a.nameStr){
+				this.connects[l3].right=b.nameStr;
+				return;
+			}
+			if(this.connects[l3].name==name&&this.connects[l3].name==b.nameStr){
+				this.connects[l3].left=a.nameStr;
+				return;
+			}	
+		}
+			var temp=new connectC;
+			temp.name=name;
+			temp.left=a.nameStr;
+			temp.right=b.nameStr;
+			this.connects.push(temp);
+		
+	}
+	
 	this.getPointByName=function(name){
 		var points = this.p.getChildren();
 		for (var i1 = 0; i1 < points.length; i1++) {
@@ -55,92 +190,18 @@ var Paintings = function() {
 		}
 		return null;
 	}
-/*	function delLinesInDraw(pLine,pointName){
-		var endOver=new Array();
-		var startOver=new Array();
-		var startKey=null;
-		var endKey=null;
-		for(var i=pLine.length-1;i>=0;i--){
-			var l= pLine[i];
-			var start=l['start'];
-			var end=l['end'];
-			if(end==pointName){
-				
-				if(startKey==null){
-					startKey=start;
-					pLine.splice(i,1);
-				}else{
-					startOver.push(pLine[i]);
-					pLine.splice(i,1);
-				}
-				
-				
+	this.getPointByID=function(id){
+		var points = this.p.getChildren();
+		for (var i1 = 0; i1 < points.length; i1++) {
+			if(points[i1].ids==id){
+				return points[i1];
 			}
 		}
-		for(var i=pLine.length-1;i>=0;i--){
-			var l= pLine[i];
-			//if(i!=0) continue;
-			var start=l['start'];
-			var end=l['end'];
-			if(start==pointName){
-				endOver.push(end);				
-				l['start']=startKey;	
-				endKey=end;
-			}			
-		}
-		for(var i=0;i<startOver.length;i++){
-			var l= startOver[i];
-			//if(i!=0) continue;
-						
-			l['end']=endKey;				
-			pLine.push(l);			
-		}
-	}*/
-	this.drawLines=function(pLine){
-		//var jsonObject = data;
-		//var pLine = jsonObject['graphi']['lines'];	
-		for ( var i=0;i<pLine.length;i++) {
-			var l = pLine[i];
-			//if(i!=0) continue;
-			var start=l['start'];
-			var end=l['end'];
-			var startP=this.getPointByName(start);
-			var endP=this.getPointByName(end);
-			if(startP!=null&&endP!=null&&startP!=endP){
-				var	rc=getRightPoint(startP);
-				var	lc=getLeftPoint(endP);
+		return null;
+	}
 
-				if(checkSpecial(endP)||checkLinked(endP))
-				{var dis={
-						x:-(rc.getAbsolutePosition().x-lc.getAbsolutePosition().x)/this.scaleN,
-						y:-(rc.getAbsolutePosition().y-lc.getAbsolutePosition().y)/this.scaleN
-					}
-					var  r=getRightLine(startP);						
-					movePoint(rc,dis,startP.rotation());							
-					drawLine(r,dis,startP.rotation());	
-					
-				}else{
-					var dis={
-							x:(rc.getAbsolutePosition().x-lc.getAbsolutePosition().x)/this.scaleN,
-							y:(rc.getAbsolutePosition().y-lc.getAbsolutePosition().y)/this.scaleN
-						}
-					var  l=getLeftLine(endP);						
-					movePoint(lc,dis,endP.rotation());							
-					drawLine(l,dis,endP.rotation());
-				
-				}
-				this.addConnect(startP,endP);
-				
-				
-			}				
-		}		
-	}
-	this.addGraphi=function(data){
-		this.connects=new Array;
-		var pline=this.drawPoints(data);
-		this.drawLines(pline);
-		this.p.draw();
-	}
+	
+
 	this.hasChange=function(){
 		this.changed=true;
 		var $index=this.index;
@@ -226,45 +287,8 @@ var Paintings = function() {
 	}
 		
 	}*/
-	this.addConnectByName=function(name,a,b){
-		for(var l3=0;l3<this.connects.length;l3++){
-			if(this.connects[l3].name==name&&this.connects[l3].name==a.nameStr){
-				this.connects[l3].right=b.nameStr;
-				return;
-			}
-			if(this.connects[l3].name==name&&this.connects[l3].name==b.nameStr){
-				this.connects[l3].left=a.nameStr;
-				return;
-			}	
-		}
-			var temp=new connectC;
-			temp.name=name;
-			temp.left=a.nameStr;
-			temp.right=b.nameStr;
-			this.connects.push(temp);
-		
-	}
-	this.addConnect=function(a,b){
-		var name='';
-		if(a==b){
-			return ;
-		}
-		if(checkAllPipe(a)&&checkAllPipe(b)){
-			return ;
-		}
-		if (checkSpecial(a)||checkLinked(a)) {
-			name=b.nameStr;				
-		}else{
-			name=a.nameStr;				
-		}
-		var	rc=getRightPoint(a);
-		var	lc=getLeftPoint(b);
-		setConned(a,rc);
-		setConned(b,lc)
 
-		this.addConnectByName(name,a,b);
-		
-	}
+
 	this.delConnect=function(a){
 		for(var i=this.connects.length-1;i>=0;i--){
 			var temp=this.connects[i];

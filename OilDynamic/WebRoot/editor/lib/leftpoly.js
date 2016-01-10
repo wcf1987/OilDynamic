@@ -35,62 +35,10 @@ function() {
 			cellurl : 'editDevice.action',
 			formatCell : function(rowid, cellname, value, iRow, iCol){
 				var proper=jQuery("#PointPraList").jqGrid("getRowData", iRow).name;
-				if(proper=='控制模式'){
-					//this.edittype="select";
-					//this.editoptions={"value":{'Flow':'Flow','Pressure':Pressure}};
-					
-					jQuery("#PointPraList").setColProp('value',{edittype:'select', editoptions:{value:{'Flow':'Flow','Pressure':'Pressure'}} });
-					return value;
-				}
 				
-				if(proper=='节点压力(MPa)'){
-					var rowC=searchGrid(jQuery("#PointPraList"),'name','控制模式');
-					if(rowC!=-1){
-						var tempC=jQuery("#PointPraList").jqGrid("getRowData", rowC).value;
-						if(tempC=='Flow'){
-							jQuery("#PointPraList").setColProp('value',{edittype:'text',editoptions:{maxlength:0,value:""}});
-						}else{
-							jQuery("#PointPraList").setColProp('value',{edittype:'text',editoptions:{maxlength:20,value:value}});
-						}
-					}
-					return value;
-				}
-				if(proper=='节点流量(m3/d)'){
-						var rowC=searchGrid(jQuery("#PointPraList"),'name','控制模式');
-						if(rowC!=-1){
-							var tempC=jQuery("#PointPraList").jqGrid("getRowData", rowC).value;
-							if(tempC=='Pressure'){
-								jQuery("#PointPraList").setColProp('value',{edittype:'text',editoptions:{maxlength:0,value:""}});
-								
-							
-							}else{
-								jQuery("#PointPraList").setColProp('value',{edittype:'text',editoptions:{maxlength:20,value:value}});
-								
-							}	
-						}
-						return value;
-					}
-				if(proper=='隶属关系'){
-					//this.edittype="select";
-					//"气井","气源","分输点","设备连接点";
-					
-					jQuery("#PointPraList").setColProp('value',{edittype:'select', editoptions:{value:{'气井':'气井','气源':'气源','分输点':'分输点','设备连接点':'设备连接点'}} });
-					return value;
-				}
-				if(proper=='气体方程'){
-					//this.edittype="select";
-					//this.editoptions={"value":{'Flow':'Flow','Pressure':Pressure}};
-					
-					jQuery("#PointPraList").setColProp('value',{edittype:'select', editoptions:{value:{'Colebrook':'Colebrook','FormerSU':'FormerSU','PanA':'PanA','PanB':'PanB','Weymouth':'Weymouth'}} });
-					return value;
-				}
-				if(proper=='压缩机类型'){
-					//this.edittype="select";
-					//this.editoptions={"value":{'Flow':'Flow','Pressure':Pressure}};
-					
-					jQuery("#PointPraList").setColProp('value',{edittype:'select', editoptions:{value:{'离心压缩机':'离心压缩机','往复式压缩机':'往复式压缩机'}} });
-					return value;
-				}
+				
+			
+			
 				jQuery("#PointPraList").setColProp('value',{editable:true,edittype:'text',editoptions:{value:value,maxlength:20} });
 				return value;
 			},
@@ -102,48 +50,8 @@ function() {
 				var nrcolor="#FFFFFF";
 				var proper=jQuery("#PointPraList").jqGrid("getRowData", iRow).name;
 				var propervalue=value;
-				if(proper=='控制模式'){
-					if(propervalue=='Flow'){
-						var rowC=searchGrid(jQuery("#PointPraList"),'name','节点压力(MPa)');						
-						jQuery("#PointPraList").setCell (rowC,'value',' ',{background:bkcolor});  
-						rowC=searchGrid(jQuery("#PointPraList"),'name','节点流量(m3/d)');						
-						jQuery("#PointPraList").setCell (rowC,'value',' ',{background:nrcolor});  
-					}
-					if(propervalue=='Pressure'){
-						var	rowC=searchGrid(jQuery("#PointPraList"),'name','节点流量(m3/d)');						
-						jQuery("#PointPraList").setCell (rowC,'value',' ',{background:bkcolor});  
-						rowC=searchGrid(jQuery("#PointPraList"),'name','节点压力(MPa)');						
-						jQuery("#PointPraList").setCell (rowC,'value',' ',{background:nrcolor});
-					}
-					
-				}
-				if(proper=='压缩机类型'){
-					if(propervalue=='离心压缩机'){
-						var rowC=searchGrid(jQuery("#PointPraList"),'name','相对余隙容积α');							
-						jQuery("#PointPraList").setCell (rowC,'value',' ',{background:bkcolor});  						
-						jQuery("#PointPraList").setCell (rowC+1,'value',' ',{background:bkcolor});  						
-						jQuery("#PointPraList").setCell (rowC+2,'value',' ',{background:bkcolor});  					
-						jQuery("#PointPraList").setCell (rowC+3,'value',' ',{background:bkcolor});  					
-						jQuery("#PointPraList").setCell (rowC+4,'value',' ',{background:bkcolor});  
-						rowC=searchGrid(jQuery("#PointPraList"),'name','特性曲线参数a');						
-						jQuery("#PointPraList").setCell (rowC,'value',' ',{background:nrcolor});  						
-						jQuery("#PointPraList").setCell (rowC+1,'value',' ',{background:nrcolor});
-						leftpoly.clickshape.TYPE='离心压缩机';
-					}
-					if(propervalue=='往复式压缩机'){
-						var	rowC=searchGrid(jQuery("#PointPraList"),'name','特性曲线参数a');						
-						jQuery("#PointPraList").setCell (rowC,'value',' ',{background:bkcolor});						
-						jQuery("#PointPraList").setCell (rowC+1,'value',' ',{background:bkcolor}); 
-						rowC=searchGrid(jQuery("#PointPraList"),'name','相对余隙容积α');							
-						jQuery("#PointPraList").setCell (rowC,'value',' ',{background:nrcolor});  						
-						jQuery("#PointPraList").setCell (rowC+1,'value',' ',{background:nrcolor});  						
-						jQuery("#PointPraList").setCell (rowC+2,'value',' ',{background:nrcolor});  					
-						jQuery("#PointPraList").setCell (rowC+3,'value',' ',{background:nrcolor});  					
-						jQuery("#PointPraList").setCell (rowC+4,'value',' ',{background:nrcolor}); 
-						leftpoly.clickshape.TYPE='往复式压缩机';
-					}
-					
-				}
+			
+				
 				if(proper=='名称'){
 					
 					setPointText(leftpoly.clickshape,value);
@@ -200,19 +108,19 @@ function() {
 		closed : true
 	});
 */  
-	this.imgLoad = function (url,type,i){
+	this.imgLoad = function (url,type,id,i){
 	
 		this.imgobj[i] = new Image();
 	
 	    if (this.imgobj[i].complete) {
-	        this.createIMG(this.imgobj[i],type,i);
+	        this.createIMG(this.imgobj[i],type,id,i);
 	        platform.leftDraw();
 	   } else {
 	    	
 	    	this.imgobj[i].onload = function () {	    		
 	    		 //alert('get');
 	    		//leftpoly.imgobj[i].src = url;
-	    		leftpoly.createIMG(leftpoly.imgobj[i],type,i);
+	    		leftpoly.createIMG(leftpoly.imgobj[i],type,id,i);
 	 	        leftpoly.imgobj[i].onload = null;
 	        	//alert('in');
 	 	       
@@ -221,7 +129,7 @@ function() {
 	    //setTimeout("leftpoly.imgobj["+i+"].src = "+url+";",1000); 
 	    this.imgobj[i].src = url;
 	};
-	this.createIMG = function (img,type,i){
+	this.createIMG = function (img,type,id,i){
 		
 		leftpoly.polys[i] = new Kinetic.Image({
 		    x: 35,
@@ -231,7 +139,8 @@ function() {
 		    name : type,
 		    height:this.polyhight
 		  });
-		 platform.leftDraw();
+		leftpoly.polys[i].nameid=id;
+		
 	}
 
 	this.getImgage=function (g){
@@ -243,53 +152,24 @@ function() {
 		for ( var k=0;k<this.polys.length;k++) {
 		this.polys[k].setImage(this.imgobj[k]);
 		}
-		platform.drawLeft();
+		
 	}
-	this.updateLines=function(){
-		platform.selectPainting.updateConnects();
-		s=JSON.stringify(platform.selectPainting.connects);
-		var proID=$("#proID").val();
-		var algID=$("#curAlgID").val();			
-        $.ajax({ 
-            type: "POST", 
-            url: "updateConn.action",
-            data: {
-            	proID:proID,
-				algID:algID,
-				InOrOut:"In",
-				conn:s
-			 }, 
-			 success : function(data) {
-            		if(data['msg']==null||data['msg']==""){
-            			
-            		}else{
-            			alert(data['msg']);
-            			p.destroy();
-            		}
-            } 
-          }); 
-	}	
+	
 	this.addPoint=function(type,name,p){
 		var proID=$("#proID").val();
-		  var algID=$("#curAlgID").val();	
-		  var ysjls=p.YSJLS;
-		  if (ysjls==null){
-			  ysjls=0;
-		  }
+		 
+		 
         $.ajax({ 
             type: "POST", 
-            url: "addPoint.action",
+            url: "addNodeByGUI.action",
             data: {
-            	proID:proID,
-				algID:algID,
-				InOrOut:"In",
-				type:type,
-				YSJLS:ysjls,
-				name:name
+            	proID:proID,				
+            	basicNodeID:type,
+            	nodeNameStr:name
 			 }, 
 			 success : function(data) {
             		if(data['msg']==null||data['msg']==""){
-            			
+            			p.ids=data['re'];
             		}else{
             			alert(data['msg']);
             			p.destroy();
@@ -297,18 +177,41 @@ function() {
             } 
           }); 
 	}	
-	this.delPoint=function(type,name,p){
+	
+	this.addConnect=function(type,name,p){
 		var proID=$("#proID").val();
-		  var algID=$("#curAlgID").val();			
+		 
+		 
         $.ajax({ 
             type: "POST", 
-            url: "delPoint.action",
+            url: "addEdgeByGUI.action",
+            data: {
+            	proID:proID,		
+            	edgeName:name
+			 }, 
+			 success : function(data) {
+            		if(data['msg']==null||data['msg']==""){
+            			p.ids=data['re'];
+            		}else{
+            			alert(data['msg']);
+            			p.destroy();
+            		}
+            } 
+          }); 
+	}	
+	
+	this.delPoint=function(id){
+		var proID=$("#proID").val();	
+		
+        $.ajax({ 
+            type: "POST", 
+            url: "delNode.action",
             data: {
             	proID:proID,
-				algID:algID,
-				InOrOut:"In",
-				type:type,
-				name:name
+				
+				
+				
+				id:id
 			 }, 
 			 success : function(data) {
             		if(data['msg']==null||data['msg']==""){
@@ -320,30 +223,127 @@ function() {
             } 
           }); 
 	}	
+	this.delConnect=function(id){
+		var proID=$("#proID").val();	
+		
+        $.ajax({ 
+            type: "POST", 
+            url: "delNode.action",
+            data: {
+            	proID:proID,
+				
+				
+				
+				id:id
+			 }, 
+			 success : function(data) {
+            		if(data['msg']==null||data['msg']==""){
+            			//p.destroy();
+            		}else{
+            			alert(data['msg']);
+            			
+            		}
+            } 
+          }); 
+	}	
+	this.updateLines=function(g){
+		var proID=$("#proID").val();
+		var tid=-1;
+		var sid=-1
+		if(checkSpecial(g)){
+			for(var i=0;i<g.rightConnArray;i++){
+				 rline=g.rightConnArray[i];
+				 this.updateConnect(rline.ids,g.ids,-1);
+				}
+			for(var i=0;i<g.leftConnArray;i++){
+				 lline=g.leftConnArray[i];
+				 this.updateConnect(lline.ids,-1,g.ids);
+				}
+			
+		}
+		if(checkLinked(g)){
+			rg=g.rightConnArray.pop();
+			lg=g.leftConnArray.pop();
+			if(rg!=null&&rg.ids!=0){
+				tid=rg.ids;
+			}
+			if(lg!=null&&lg.ids!=0){
+				sid=lg.ids;
+			}
+			this.updateConnect(g.ids,sid,tid);
+			
+		}
+		
+         
+	}
+	this.releaseLines=function(g){
+		var tid=-1;
+		var sid=-1
+		if(checkSpecial(g)){
+			for(var i=0;i<g.rightConnArray;i++){
+				 rline=g.rightConnArray[i];
+				 this.updateConnect(rline.ids,0,-1);
+				}
+			for(var i=0;i<g.leftConnArray;i++){
+				 lline=g.leftConnArray[i];
+				 this.updateConnect(lline.ids,-1,0);
+				}
+			
+		}
+		if(checkLinked(g)){			
+			this.updateConnect(g.ids,0,0);			
+		}
+		
+         
+	}
+	this.updateConnect=function(id,sid,tid){		
+		$.ajax({ 
+            type: "POST", 
+            url: "updateEdge.action",
+            data: {
+            	id:id,
+            	sourceID:sid,
+            	targetID:tid,
+			 }, 
+			 success : function(data) {
+            		if(data['msg']==null||data['msg']==""){
+            			
+            		}else{
+            			alert(data['msg']);
+            			p.destroy();
+            		}
+            } 
+          });		
+	}
 	this.init = function() {
 		var urllist=[];
 		var typelist=[];
+		var idlist=[];
         $.ajax({ 
             type: "POST", 
-            url: "listPointType.action",
+            url: "listBasicNodeTypes.action",
             async: false, //改成同步的，也就是Ajax请求完毕，将urllist填充完了再执行下面的程序。
             success: function(data){ 
-            		pointTypeList=data.pointTypeList;
+            		pointTypeList=data.basicNodes;
             		$.each(pointTypeList, function( index, pointType ) {         			
             			//leftpoly.imgLoad(pointType.path,index); //这里用this.imgLoad会提示不存在，改成这样也不行，可能imgLoad里面包含的函数无法调用，但全部改成具体对象.方法 还是不行，浏览器不报错。
-            			url=pointType.path;          				
+            			url="../uploadICONS/"+pointType.iconFile;          				
             			urllist.push(url);
-            			typelist.push(pointType.type);
+            			typelist.push(pointType.typeName);
+            			idlist.push(pointType.id);
             	    	 }); 
             } 
           }); 
-  
-  /*      $.each(urllist,function(i,url){//each里面放this.imgLoad跟Ajax方法一样，程序找不到改方法。但for循环可以。
-        	alert(url);
-        	this.imgLoad(url,i);
-        });*/
+
+        /*
+         * 管道
+         * */
+      
+        urllist.push("../uploadICONS/guandao.png");
+		typelist.push("管道");
+		idlist.push(0);
         for(var j = 0, l = urllist.length; j < l; j++ ){
-        	this.imgLoad( urllist[j],typelist[j],j);
+        	this.imgLoad( urllist[j],typelist[j],idlist[j],j);
         }
 	/*	for(var i=0;i<6;i++){
 			this.imgLoad('editor/icons/type'+i+'.svg',i);
@@ -358,7 +358,7 @@ function() {
 				draggable : true
 
 			});
-			this.polyGroups[k].TYPE=this.polys[k].name();
+			this.polyGroups[k].TYPE=this.polys[k].nameid;
 			var lineLeft = new Kinetic.Line({
 				x : 0,
 				y : this.polyhight/2,
@@ -382,17 +382,6 @@ function() {
 				name : 'lineRight',
 				closed : true
 			});
-			var lineLeftSp = new Kinetic.Line({
-				x : this.polywidth,
-				y : this.polyhight/2,
-				 points : this.rpoints.concat(),
-				
-				 stroke : 'black',
-				strokeWidth : 3,
-
-				name : 'lineLeft',
-				closed : true
-			});
 			var connPointsLeft = new Kinetic.Circle({
 				x : 0-this.polylineLength,
 				y : this.polyhight/2,
@@ -403,20 +392,10 @@ function() {
 				name : 'connPointsLeft',
 				strokeWidth : 2
 			});
-			
 			var connPointsRight = new Kinetic.Circle({
 				x : this.polywidth+this.polylineLength,
 				y : this.polyhight/2,
 				name : 'connPointsRight',
-				radius : this.radiusL,
-				fill : 'red',
-				stroke : 'black',
-				strokeWidth : 2
-			});
-			var connPointsLeftSp = new Kinetic.Circle({
-				x : this.polywidth+this.polylineLength,
-				y : this.polyhight/2,
-				name : 'connPointsLeft',
 				radius : this.radiusL,
 				fill : 'red',
 				stroke : 'black',
@@ -439,92 +418,33 @@ function() {
 			this.polys[k].y(0);
 			this.polyGroups[k].add(this.polys[k]);
 			this.polyGroups[k].add(text);
+			this.polyGroups[k].basicid=this.polys[k].nameid;
 			this.lock=false;
 			
-			/*//起点
-			if(){
-				this.polyGroups[k].add(lineRight);
-				this.polyGroups[k].add(connPointsRight);
-				//this.polyGroups[k].add(PointRight);
-				
-				connPointsRight.hide();	
-				this.initPoint(this.polyGroups[k]);
-				continue;
-			}*/
-			//终点
+		
+	
 			if(checkSpecial(this.polyGroups[k])){
 				this.polyGroups[k].add(lineRight);
 				this.polyGroups[k].add(connPointsRight);
-				//this.polyGroups[k].add(PointRight);
 				
-				connPointsRight.hide();	
-				
-				this.polyGroups[k].add(lineLeftSp);
-				this.polyGroups[k].add(connPointsLeftSp);
-				//this.polyGroups[k].add(PointRight);
-				
-				connPointsLeft.hide();	
 				this.initPoint(this.polyGroups[k]);
 				continue;
 			}
 			if(checkLinked(this.polyGroups[k])){
 				this.polyGroups[k].add(lineRight);
 				this.polyGroups[k].add(connPointsRight);
-				//this.polyGroups[k].add(PointRight);
-				
-				
-				
-				this.polyGroups[k].add(lineLeftSp);
-				this.polyGroups[k].add(connPointsLeftSp);
-				//this.polyGroups[k].add(PointRight);
-				
-				this.polys[k].hide();
-				connPointsRight.hide();		
-				lineRight.hide();
-				
-				lineLeftSp.hide();
-				connPointsLeftSp.hide();
-				text.hide();
-				
-				//connPointsLeft.hide();
-				//connPointsRight.hide();
+				this.polyGroups[k].add(lineLeft);
+				this.polyGroups[k].add(connPointsLeft);	
 				this.initPoint(this.polyGroups[k]);
 				continue;
 			}
 			
-			//终点
-		/*	if(k==1){
-				this.polyGroups[k].add(lineLeft);
-				this.polyGroups[k].add(connPointsLeft);	
-				//this.polyGroups[k].add(PointLeft);
-				connPointsLeft.hide();
-				this.initPoint(this.polyGroups[k]);
-				continue;
-			}*/
 			
-			this.polyGroups[k].add(lineRight);
-			this.polyGroups[k].add(lineLeft);
-			this.polyGroups[k].add(connPointsLeft);
-			//this.polyGroups[k].add(PointLeft);
-			this.polyGroups[k].add(connPointsRight);
-			//this.polyGroups[k].add(PointRight);
-			
-			connPointsLeft.hide();
-			
-			
-			connPointsRight.hide();	
-			this.initPoint(this.polyGroups[k]);
-			
-	
 		}
-		pipeInit();
+		//pipeInit();
 	}
 	this.initPoint = function(point){
-		var algID=$("#curAlgID").val();
-		if(algID==4&&checkQY(point)){
-			point.draggable(false);
-			return;
-		}
+		
 		point.dragBoundFunc(this.dragFun);
 		
 		point.on('click', this.clickFunc);
@@ -578,12 +498,11 @@ function() {
 				r=getRightLine(this);
 				rc=getRightPoint(this);
 				poly=getPoly(this);	
-				if(checkSpecial(this)||checkLinked(this)){
+				if(checkSpecial(this)){
 					this.setAbsolutePosition(pos);					
 					movePoint(rc,dis,this.rotation());					
 					drawLine(r,dis,this.rotation());	
-					movePoint(lc,dis,this.rotation());					
-					drawLine(l,dis,this.rotation());
+								
 				}else{
 				if(l!=null&&lc.fill()!='red'){
 					this.setAbsolutePosition(pos);	
@@ -615,7 +534,7 @@ function() {
 			y : this.getAbsolutePosition().y
 		};
 	};
-	this.addPointByInput=function(po,name){
+/*	this.addPointByInput=function(po,name){
 		if(name==null||name==''){
 			po.destroy();
 		}
@@ -623,10 +542,14 @@ function() {
 		po.id(name);
 		setPointText(po,name);
 		po.moveTo(platform.selectPainting.p);
-		if(checkSpecial(po)||checkLinked(po)){
+		if(checkSpecial(po)){
 			po.rotate(90);
+			leftpoly.addPoint(po.TYPE,name,po);
+			
+		}else{
+			leftpoly.addConnect(po.TYPE,name,po);
 		}
-		leftpoly.addPoint(po.TYPE,name,po);
+		
 		platform.selectPainting.hasChange();
 		poss = checkConn(po);
 		if (poss != null) {
@@ -639,7 +562,7 @@ function() {
 		}
 		
 		platform.draw();
-	}
+	}*/
 	this.cloneFun = function(e) {
 
 		var userPos = platform.stage.getPointerPosition();
@@ -672,20 +595,25 @@ function() {
 					po.id(name);
 					setPointText(po,name);
 					po.moveTo(platform.selectPainting.p);
-					if(checkSpecial(po)||checkLinked(po)){
+					
+					if(checkSpecial(po)){
 						po.rotate(90);
+						leftpoly.addPoint(po.TYPE,name,po);
+						
+					}else{
+						leftpoly.addConnect(po.TYPE,name,po);
 					}
-					leftpoly.addPoint(po.TYPE,name,po);
+					
 					platform.selectPainting.hasChange();
 					
 			}
 			
 			poss = checkConn(this);
 			if (poss != null) {
-				this.lock=true;
-				this.x((this.x() - (poss.x/platform.selectPainting.scaleN)));
-				this.y((this.y() - (poss.y/platform.selectPainting.scaleN)));
-				leftpoly.updateLines();
+				//this.lock=true;
+				//this.x((this.x() - (poss.x/platform.selectPainting.scaleN)));
+				//this.y((this.y() - (poss.y/platform.selectPainting.scaleN)));
+				
 				
 				
 			}
@@ -696,7 +624,7 @@ function() {
 			}
 
 		}
-		checkConn(this);
+		//checkConn(this);
 		//leftpoly.showALLConnedPoints();
 		platform.draw();
 
@@ -754,12 +682,12 @@ function() {
 	this.flag = 0;
 	this.clickFunc = function(e) {
 		if (e.type == 'click') {
+
 			// 取消上次延时未执行的方法
 		    clearTimeout(TimeFn);
 		    var clickshape = e.target.getParent();
 			var point_name=clickshape.id();
 			var point_type=clickshape.TYPE;
-			var algID=$("#curAlgID").val();
 			var proID=$("#proID").val();
 			leftpoly.clickshape=clickshape;
 			// 当前位置弹出菜单（div）
@@ -790,14 +718,17 @@ function() {
 							clickshape.lock=false;	
 							platform.selectPainting.hasChange();	
 							$("#contextmenu").hide();	
-							platform.selectPainting.delConnect(clickshape);
+							platform.selectPainting.releaseLines(clickshape);
 							platform.selectPainting.p.draw();
 						} else	if (text == '删除该节点') {
-							leftpoly.delPoint(clickshape.TYPE,clickshape.nameStr,clickshape);
+							leftpoly.releaseLines(clickshape);
+							if(checkSpecial(clickshape)){
+								leftpoly.delPoint(clickshape.ids);
+							}else{
+								leftpoly.delConnect(clickshape.ids);
+							}
 							platform.selectPainting.hasChange();		
 							clickshape.destroy();
-							//leftpoly.showALLConnedPoints();
-							platform.selectPainting.delConnect(clickshape);
 							$("#contextmenu").hide();		
 							platform.draw();
 						} else if (text == '更改颜色') {
@@ -873,12 +804,7 @@ function() {
 			});
 		    //执行延时
 		    TimeFn = setTimeout(function(clickshape){
-		        //do function在此处写单击事件要执行的代码
-		    	if(leftpoly.clickshape.TYPE=='管道'){
-		    	$("#pipiShowText").show();
-		    	}else{
-		    		$("#pipiShowText").hide();
-		    	}
+		        //do function在此处写单击事件要执行的代码		    	
 				$("#contextmenu").show();
 		    },300);
 		}
@@ -949,63 +875,78 @@ function() {
 	 * 检查控件之间连接关系
 	 */
 	checkConn = function(g) {
-		var leftCir=getLeftPoint(g);
-		var rightCir=getRightPoint(g);
-		var points = platform.getAllChildren();
-		var re=null;
-		g.leftConnArray=new Array();
-		g.rightConnArray=new Array();
-		for (li = 0; li < points.length; li++) {
-			var tempL=getLeftPoint(points[li]);
-		
-			if (points[li]!=g&&checkCircle(rightCir, tempL,
-					leftpoly.radiusL*platform.selectPainting.scaleN * 2)) {
-				g.lock=true;
-				g.rightConnArray.push(points[li]);
-				points[li].lock=true;
-				
-				platform.selectPainting.addConnect(g,points[li]);
-				re= {
-					g : points[li],
-					right : 0,
-					left : tempL,
-					x : rightCir.getAbsolutePosition().x
-							- tempL.getAbsolutePosition().x,
-					y : rightCir.getAbsolutePosition().y
-							- tempL.getAbsolutePosition().y,
+		var flag=0;
+		if(checkLinked(g)){
+			var leftCir=getLeftPoint(g);
+			var rightCir=getRightPoint(g);
+			var points = platform.getAllChildren();
+			var re=null;
+			g.leftConnArray=new Array();
+			g.rightConnArray=new Array();			
+			var points = platform.getAllChildren();
+			
+			for (li = 0; li < points.length; li++) {
+				if(checkLinked(points[li])){
+					continue;
 				}
-				if(checkSpecial(g)||checkLinked(g)){
+				var tempR=getRightPoint(points[li]);
+				if (leftCir.fill()=="red"&&checkCircle(leftCir, tempR,leftpoly.radiusL*platform.selectPainting.scaleN*2)) {
+					g.lock=true;
+					g.leftConnArray.push(points[li]);
+					points[li].lock=true;
+					tempR.fill('yellow');
 					leftCir.fill('yellow');
+					flag=1;
+				}
+				if (rightCir.fill()=="red"&&checkCircle(rightCir, tempR,leftpoly.radiusL*platform.selectPainting.scaleN*2)) {
+					g.lock=true;
+					g.rightConnArray.push(points[li]);
+					points[li].lock=true;
+					tempR.fill('yellow');
+					rightCir.fill('yellow');
+					flag=1;
 				}
 			}
+			if(flag==1){
+				leftpoly.updateLines(g);
+			}
 		}
-		addLinked(g,re,'Right');
-		var points = platform.getAllChildren();
-		for (li = 0; li < points.length; li++) {
-			var tempR=getRightPoint(points[li]);
-			if (points[li]!=g&&checkCircle(leftCir, tempR,
-					leftpoly.radiusL*platform.selectPainting.scaleN  * 2)) {
-				g.lock=true;
-				g.leftConnArray.push(points[li]);
-				points[li].lock=true;
-				platform.selectPainting.addConnect(points[li],g);
-				re= {
-						g : points[li],
-						right : tempR,
-						left : 0,
-						x : leftCir.getAbsolutePosition().x
-								- tempR.getAbsolutePosition().x,
-						y : leftCir.getAbsolutePosition().y
-								- tempR.getAbsolutePosition().y,
-					}
-				if(checkSpecial(g)||checkLinked(g)){
-					rightCir.fill('yellow');
+		if(checkSpecial(g)){
+			var rightCir=getRightPoint(g);
+			var points = platform.getAllChildren();
+			var re=null;
+			g.leftConnArray=new Array();
+			g.rightConnArray=new Array();
+			for (li = 0; li < points.length; li++) {
+				if(checkSpecial(points[li])){
+					continue;
 				}
+				var tempL=getLeftPoint(points[li]);
+				var tempR=getRightPoint(points[li]);
+				
+				if (rightCir.fill()=="red"&&checkCircle(rightCir, tempL,leftpoly.radiusL*platform.selectPainting.scaleN * 2)) {
+					g.lock=true;
+					g.rightConnArray.push(points[li]);
+					points[li].lock=true;
+					tempL.fill('yellow');
+					rightCir.fill('yellow');	
+					flag=1;
+				}
+				if (rightCir.fill()=="red"&&checkCircle(rightCir, tempR,leftpoly.radiusL*platform.selectPainting.scaleN * 2)) {
+					g.lock=true;
+					g.leftConnArray.push(points[li]);
+					points[li].lock=true;
+					tempL.fill('yellow');
+					rightCir.fill('yellow');	
+					flag=1;
+				}
+			}
+			if(flag==1){
+				leftpoly.updateLines(g);
 			}
 			
 		}
-		addLinked(g,re,'Left');
-		return re;
+		return null;
 	}
 
 

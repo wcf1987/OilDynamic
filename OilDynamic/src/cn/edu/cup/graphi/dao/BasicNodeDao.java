@@ -81,7 +81,7 @@ public class BasicNodeDao {
 		SQLQuery q;
 		
 		 q = session
-				.createSQLQuery("select t1.ID,t1.TypeName from t_basicnode t1 where t1.id>0 order by id desc");
+				.createSQLQuery("select t1.ID,t1.TypeName,t1.iconfile,t1.type from t_basicnode t1 where t1.id>0 order by id desc");
 			
 		List l = q.list();
 		
@@ -94,8 +94,11 @@ public class BasicNodeDao {
 			Integer id = ((Integer) row[0]);
 			
 			String typeName = (String) row[1];
-			
+			String file= (String) row[2];
+			Integer type=(Integer)row[3];
 			BasicNode temp=new BasicNode(id, typeName);
+			temp.setIconFile(file);
+			temp.setType(type);
 			tempList.add(temp);
 
 		}

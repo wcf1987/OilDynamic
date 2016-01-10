@@ -12,6 +12,7 @@ public class NodeAction {
 	String basicNodeID;
 	int proID;
 	String msg;
+	int re;
 	public String addNode(){
 		NodeDao dao=new NodeDao();
 		int re=dao.addNode(nodeNameStr,basicNodeID,proID,latitude,longitude,x_location,y_location,x_location_geo,y_location_geo);
@@ -20,6 +21,25 @@ public class NodeAction {
 		}
 		dao.close();
 		return Action.SUCCESS;
+	}
+	
+	public String addNodeByGUI(){
+		NodeDao dao=new NodeDao();
+		re=dao.addNode(nodeNameStr,basicNodeID,proID,0,0,0,0,0,0);
+		if(re==-1){
+			msg="添加元件失败";
+		}
+		
+		dao.close();
+		return Action.SUCCESS;
+	}
+	
+	public int getRe() {
+		return re;
+	}
+
+	public void setRe(int re) {
+		this.re = re;
 	}
 
 	private int page;
@@ -182,6 +202,16 @@ public class NodeAction {
 				dao.deleteNode(id);
 			}
 		}
+		// inputDao.close();
+		dao.close();
+		return Action.SUCCESS;
+	}
+	public String delNode(){
+		NodeDao dao = new NodeDao();
+		// AlgorithmInputDao inputDao=new AlgorithmInputDao();
+		
+		dao.deleteNode(id);
+		
 		// inputDao.close();
 		dao.close();
 		return Action.SUCCESS;
