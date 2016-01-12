@@ -51,9 +51,7 @@
 	<li><a>放大</a></li>
 	<li><a>缩小</a></li>	-->		
 	<li><a>删除该节点</a></li>
-	<li><a>输入属性</a></li>
-	<li><a>输出属性</a></li>
-	<li id="pipiShowText"><a>管道图示</a></li>
+	<li><a>属性</a></li>
 	
    </ul>
    <!-- 属性框 -->
@@ -93,6 +91,10 @@
 $('#pipecontainer').easytabs({
 	animate: false
 	 }); 
+	 function closePraList(){
+			$("#pointPra").hide();
+
+		}
 /* $('#pipecontainer')
   .bind('easytabs:after', function(event, clicked, targetPanel, settings) {
    
