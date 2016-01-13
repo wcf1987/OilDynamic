@@ -104,52 +104,7 @@ function() {
 		closed : true
 	});
 */  
-	this.imgLoad = function (url,type,id,i){
-	
-		this.imgobj[i] = new Image();
-	
-	    if (this.imgobj[i].complete) {
-	        this.createIMG(this.imgobj[i],type,id,i);
-	        platform.leftDraw();
-	   } else {
-	    	
-	    	this.imgobj[i].onload = function () {	    		
-	    		 //alert('get');
-	    		//leftpoly.imgobj[i].src = url;
-	    		leftpoly.createIMG(leftpoly.imgobj[i],type,id,i);
-	 	        leftpoly.imgobj[i].onload = null;
-	        	//alert('in');
-	 	       
-	        };
-	    };
-	    //setTimeout("leftpoly.imgobj["+i+"].src = "+url+";",1000); 
-	    this.imgobj[i].src = url;
-	};
-	this.createIMG = function (img,type,id,i){
-		
-		leftpoly.polys[i] = new Kinetic.Image({
-		    x: 35,
-		    y: 10+i*60,
-		    image: img,
-		    width: this.polywidth,
-		    name : type,
-		    height:this.polyhight
-		  });
-		leftpoly.polys[i].nameid=id;
-		
-	}
 
-	this.getImgage=function (g){
-		name=g.name();
-		index=name.substr(4,1);
-		return this.imgobj[index];
-	}
-	this.reloadIMG=function(){
-		for ( var k=0;k<this.polys.length;k++) {
-		this.polys[k].setImage(this.imgobj[k]);
-		}
-		
-	}
 	
 	this.addPoint=function(type,name,p){
 		var proID=$("#proID").val();
@@ -224,7 +179,7 @@ function() {
 		
         $.ajax({ 
             type: "POST", 
-            url: "delNode.action",
+            url: "delEdge.action",
             data: {
             	proID:proID,
 				
@@ -247,11 +202,11 @@ function() {
 		var tid=-1;
 		var sid=-1
 		if(checkSpecial(g)){
-			for(var i=0;i<g.rightConnArray;i++){
+			for(var i=0;i<g.rightConnArray.length;i++){
 				 rline=g.rightConnArray[i];
 				 this.updateConnect(rline.ids,g.ids,-1);
 				}
-			for(var i=0;i<g.leftConnArray;i++){
+			for(var i=0;i<g.leftConnArray.length;i++){
 				 lline=g.leftConnArray[i];
 				 this.updateConnect(lline.ids,-1,g.ids);
 				}
@@ -317,6 +272,52 @@ function() {
             		}
             } 
           });		
+	}
+	this.imgLoad = function (url,type,id,i){
+		
+		this.imgobj[i] = new Image();
+	
+	    if (this.imgobj[i].complete) {
+	        this.createIMG(this.imgobj[i],type,id,i);
+	        platform.leftDraw();
+	   } else {
+	    	
+	    	this.imgobj[i].onload = function () {	    		
+	    		 //alert('get');
+	    		//leftpoly.imgobj[i].src = url;
+	    		leftpoly.createIMG(leftpoly.imgobj[i],type,id,i);
+	 	        leftpoly.imgobj[i].onload = null;
+	        	//alert('in');
+	 	       
+	        };
+	    };
+	    //setTimeout("leftpoly.imgobj["+i+"].src = "+url+";",1000); 
+	    this.imgobj[i].src = url;
+	};
+	this.createIMG = function (img,type,id,i){
+		
+		leftpoly.polys[i] = new Kinetic.Image({
+		    x: 35,
+		    y: 10+i*60,
+		    image: img,
+		    width: this.polywidth,
+		    name : type,
+		    height:this.polyhight
+		  });
+		leftpoly.polys[i].nameid=id;
+		
+	}
+
+	this.getImgage=function (g){
+		name=g.name();
+		index=name.substr(4,1);
+		return this.imgobj[index];
+	}
+	this.reloadIMG=function(){
+		for ( var k=0;k<this.polys.length;k++) {
+		this.polys[k].setImage(this.imgobj[k]);
+		}
+		
 	}
 	this.init = function() {
 		var urllist=[];
@@ -581,15 +582,10 @@ function() {
 				//this.id(getTimeByS());
 				
 				
-					if(checkPipe(this)){
-						leftpoly.PipeTemp=this;
-						leftpoly.PipeTempType=this.TYPE;
-						$('#add_ysj_modal').modal();
-						return;
-					}else{						
+											
 						var name=prompt("请输入元件名称","");
 						//leftpoly.addPointByInput(this,name);
-					}
+					
 					var po=this;
 					if(name==null||name==''){
 						po.destroy();
@@ -639,12 +635,12 @@ function() {
 				&&platform.selectPainting!=null &&this.getLayer()!= platform.selectPainting.p) {
 			
 			var cloneOfItem = this.clone();
-			hideConnection(this);
+			//hideConnection(this);
 			
-			hideConnection(cloneOfItem);
+			//hideConnection(cloneOfItem);
 			// cloneOfItem.off('mousedown touchstart');
 			platform.leftlayer.add(cloneOfItem);
-			cloneOfItem.TYPE=this.TYPE;
+			cloneOfItem.basicid=this.basicid;
 			leftpoly.polyGroups[leftpoly.searchPointIndex(this)]=cloneOfItem;
 			
 		}

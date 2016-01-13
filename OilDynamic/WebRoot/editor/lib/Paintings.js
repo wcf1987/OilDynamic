@@ -89,7 +89,7 @@ var Paintings = function() {
 					}
 				
 				linep.x(startP.x()+dis.x/2-leftpoly.polylineLength);
-				linep.y(startP.y()+dis.y/2+leftpoly.polyhight);
+				linep.y(startP.y()+dis.y/2+leftpoly.polyhight*1.85);
 				resizePoint(linep);
 				//连接管道左边点与原件
 				var	llp=getLeftPoint(linep);

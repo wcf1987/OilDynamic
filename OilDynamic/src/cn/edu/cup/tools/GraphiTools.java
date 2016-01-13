@@ -148,7 +148,7 @@ public class GraphiTools {
 		gefSourceNode = (Node) NodeMap.get(source.getId());
 		if (gefSourceNode == null) {
 			gefSourceNode = new Node();
-			gefSourceNode.width = 100;
+			gefSourceNode.width = 150;
 			gefSourceNode.height = 80;
 			//gefSourceNode.setPadding(new Insets(GraphProp.NODE_TOP_PAD,GraphProp.NODE_LEFT_PAD, GraphProp.NODE_BOTTOM_PAD,GraphProp.NODE_RIGHT_PAD));
 			directedGraph.nodes.add(gefSourceNode);
@@ -158,7 +158,7 @@ public class GraphiTools {
 		gefTargetNode = (Node) NodeMap.get(target.getId());
 		if (gefTargetNode == null) {
 			gefTargetNode = new Node();
-			gefSourceNode.width = 100;
+			gefSourceNode.width = 150;
 			gefSourceNode.height = 80;
 			//gefTargetNode.setPadding(new Insets(GraphProp.NODE_TOP_PAD,GraphProp.NODE_LEFT_PAD, GraphProp.NODE_BOTTOM_PAD,GraphProp.NODE_RIGHT_PAD));
 			directedGraph.nodes.add(gefTargetNode);

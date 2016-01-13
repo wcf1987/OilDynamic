@@ -14,6 +14,13 @@ public class EdgeAction {
 	int sourceID;
 	int targetID;
 	String msg;
+	int re;
+	public int getRe() {
+		return re;
+	}
+	public void setRe(int re) {
+		this.re = re;
+	}
 	public String addEdge(){
 		EdgeDao dao=new EdgeDao();
 		int re=dao.addEdge(edgeName,basicNodeID,proID,sourceID,targetID);
@@ -25,7 +32,7 @@ public class EdgeAction {
 	}
 	public String addEdgeByGUI(){
 		EdgeDao dao=new EdgeDao();
-		int re=dao.addEdge(edgeName,"0",proID,0,0);
+		re=dao.addEdge(edgeName,"0",proID,0,0);
 		if(re==-1){
 			msg="添加连接边失败";
 		}
