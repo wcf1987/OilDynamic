@@ -765,10 +765,15 @@ function() {
 							});
 							platform.selectPainting.p.draw();
 						}else if (text == '属性') {
-							platform.selectPainting.hasChange();	
+							
+							if(checkSpecial(clickshape)){
+								platform.selectPainting.hasChange();	
+								$("#contextmenu").hide();
+								//pro_id=$(".active > input[name='proID']").val();
+								showPrameter(point_name,proID,point_type,attrtop,attrleft);									
+								platform.selectPainting.p.draw();
+							}
 							$("#contextmenu").hide();
-							//pro_id=$(".active > input[name='proID']").val();
-							showPrameter(point_name,proID,point_type,attrtop,attrleft);									
 							platform.selectPainting.p.draw();
 						}if (text == '输出属性') {
 							
