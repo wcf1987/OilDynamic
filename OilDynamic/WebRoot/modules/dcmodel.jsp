@@ -37,13 +37,13 @@
 	  </ul>
 	</div>
 
-	<div id="container">
+	<div id="container" style="margin-left: auto;margin-right: auto;width:1072px">
 	
 	</div>		
 </div>
 <input type="hidden" id="proID" />
 
-<ul id="contextmenu" style="display:none;z-index:100">	
+<ul id="contextmenu" style="display:none;z-index:100;background-color:#eee;">	
 	<li><a>解除锁定</a></li>
 	<li><a>顺时针旋转90°</a></li>
 	<li><a>逆时针旋转90°</a></li>	

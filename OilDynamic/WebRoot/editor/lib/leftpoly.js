@@ -804,8 +804,8 @@ function() {
 				});//找出元件group中除了连接点外的真正的图形
 			$("#contextmenu").css("position","absolute");
 			$("#contextmenu").css({				
-				top : clickshape.getAbsolutePosition().y+150,//300
-				left : clickshape.getAbsolutePosition().x + 150,//450
+				top : clickshape.getAbsolutePosition().y+80,//300
+				left : clickshape.getAbsolutePosition().x+window.innerWidth/4+10,//450
 			});
 			
 		    //执行延时
