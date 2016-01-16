@@ -1,5 +1,6 @@
 package cn.edu.cup.graphi.dao;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +19,7 @@ import cn.edu.cup.graphi.business.Line;
 import cn.edu.cup.graphi.business.Point;
 import cn.edu.cup.tools.FileExcel;
 import cn.edu.cup.tools.HibernateSessionManager;
+import cn.edu.cup.tools.SheetContent;
 
 public class GraphiProjectsDao {
 	 Session session ;
@@ -193,13 +195,13 @@ public class GraphiProjectsDao {
 		FileExcel excel=new FileExcel();
 		//excel.createExcel();
 		 q = session
-				.createSQLQuery("select t1.ID,t1.nodeName,t2.TypeName,t1.latitude,t1.longitude,t1.x_location,t1.y_location,t1.x_location_geo,t1.y_location_geo from t_node t1,t_basicnode t2 where t1.BasicNodeID=t2.ID and t1.proID=?");
+				.createSQLQuery("select t1.nodeName,t2.TypeName,t1.latitude,t1.longitude,t1.x_location,t1.y_location,t1.x_location_geo,t1.y_location_geo from t_node t1,t_basicnode t2 where t1.BasicNodeID=t2.ID and t1.proID=?");
 		q.setParameter(0, id);		
 		List l = q.list();
 		excel.addNode(l);
 		
 		 q = session
-					.createSQLQuery("select t1.ID,t1.EdgeName,t1.sourceid,t1.targetid from t_edge t1 where  t1.proID=?");
+					.createSQLQuery("select t1.EdgeName,t2.nodeName as 'n1',t3.nodeName as 'n2' from t_edge t1,t_node t2,t_node t3 where  t1.proID=? and t2.ID=t1.sourceid and t3.ID=t1.targetid");
 			q.setParameter(0, id);		
 			l = q.list();
 		excel.addEdge(l);
@@ -214,5 +216,106 @@ public class GraphiProjectsDao {
 		return excel.getFileNameUrl();
 	}
 
+	public int importFile(int id, String impFile) {
+		FileExcel excel=new FileExcel();
+		int re=0;
+		try {
+			excel.readExcel(impFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
+		
+		
+		SQLQuery q;
+		HibernateSessionManager.getThreadLocalTransaction();
+		
+		q = session.createSQLQuery("delete from t_node where proID=?");
+		q.setParameter(0, id);
+		re = q.executeUpdate();
+		
+		q = session.createSQLQuery("delete from t_edge where proID=?");
+		q.setParameter(0, id);
+		re = q.executeUpdate();
+		
+		q = session.createSQLQuery("delete from t_nodeproper where proID=?");
+		q.setParameter(0, id);
+		re = q.executeUpdate();
+		
+		
+		SheetContent rows=excel.getSheetByName("节点");
+		for(int i=1;i<rows.sheetContent.size();i++){
+			q = session.createSQLQuery("insert into t_node (nodeName,x_location,y_location,latitude,longitude,x_location_geo,y_location_geo,proID,BasicNodeID) values (?,?,?,?,?,?,?,?,?)");
+			q.setParameter(0, rows.sheetContent.get(i).get(0));
+
+			q.setParameter(1, rows.sheetContent.get(i).get(2));
+			q.setParameter(2, rows.sheetContent.get(i).get(3));
+			q.setParameter(3, rows.sheetContent.get(i).get(4));
+			q.setParameter(4, rows.sheetContent.get(i).get(5));
+			q.setParameter(5, rows.sheetContent.get(i).get(6));
+			q.setParameter(6, rows.sheetContent.get(i).get(7));
+			
+			q.setParameter(7,id);
+			q.setParameter(8,getIDByName(rows.sheetContent.get(i).get(1)));
+			
+			
+			re=q.executeUpdate();
+		}
+		//HibernateSessionManager.commitThreadLocalTransaction();
+		//HibernateSessionManager.getThreadLocalTransaction();
+		
+		rows=excel.getSheetByName("连接");
+		for(int i=1;i<rows.sheetContent.size();i++){
+			q = session.createSQLQuery("insert into t_edge(EdgeName,sourceid,targetid,BasicNodeID,proID) VALUES(?,?,?,?,?)");
+			q.setParameter(0, rows.sheetContent.get(i).get(0));
+			
+			q.setParameter(1, getNodeIDByName(rows.sheetContent.get(i).get(1),id));
+			q.setParameter(2, getNodeIDByName(rows.sheetContent.get(i).get(2),id));
+			
+			q.setParameter(3,0);
+			q.setParameter(4, id);
+			
+			re=q.executeUpdate();
+		}
+		
+		rows=excel.getSheetByName("节点属性");
+		for(int i=1;i<rows.sheetContent.size();i++){
+			q = session.createSQLQuery("insert into t_nodeproper (properID,propervalue,parentID,proID) VALUES (?,?,?,?)");
+			q.setParameter(0, getProperIDByName(rows.sheetContent.get(i).get(0),rows.sheetContent.get(i).get(2)));
+			q.setParameter(1, rows.sheetContent.get(i).get(3));
+			
+			q.setParameter(2, getNodeIDByName(rows.sheetContent.get(i).get(1),id));
+			q.setParameter(3, id);
+			
+			
+			re=q.executeUpdate();
+		}
+		this.close();
+		return re;
+	}
+	public Integer getIDByName(String typeName) {
+		String sql = "select id from t_basicnode t1  where TypeName=? ";
+		SQLQuery q = session.createSQLQuery(sql);
+		q.setParameter(0, typeName);
+		Integer count = ((Integer) q.uniqueResult()).intValue();
+		return count;
+	}
+	public Integer getNodeIDByName(String nodeName,int proID) {
+		String sql = "select max(id) from t_node t1  where nodename=? and proID=?";
+		SQLQuery q = session.createSQLQuery(sql);
+		q.setParameter(0, nodeName);
+		q.setParameter(1, proID);
+		Integer count = ((Integer) q.uniqueResult()).intValue();
+		return count;
+	}
+	public Integer getProperIDByName(String typeName,String properName) {
+		String sql = "select t1.id from t_proper t1,t_basicnode t2  where t1.ParentID=t2.ID and t2.TypeName=? and t1.ProperName=?";
+		SQLQuery q = session.createSQLQuery(sql);
+		q.setParameter(0, typeName);
+		q.setParameter(1, properName);
+		Integer count = ((Integer) q.uniqueResult()).intValue();
+		return count;
+	}
 
 }

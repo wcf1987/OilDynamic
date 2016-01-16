@@ -60,7 +60,7 @@ public class FileExcel {
 	 */
 	public static void main(String args[]) {
 		FileExcel a=new FileExcel();
-		a.test();
+		
 	}
 
 	public int getProID() {
@@ -87,15 +87,15 @@ public class FileExcel {
 	public String getFileNameUrl() {
 		return ExceluploadTemp+"/"+ this.fileName;
 	}
-	public int readExcel(int proID, int algid, String InOrOut, String fileName)
+	public int readExcel(String fileName)
 			throws IOException {
-		this.proID = proID;
-		this.algID = algid;
+
 		this.fileName = fileName;
-		this.InOrOut = InOrOut;
+		
 		InputStream inputStream;
 		try {
-			String path = Tools.getWebRoot() + fileName;
+			//String path = Tools.getWebRoot() + fileName;
+			String path = fileName;
 			inputStream = new FileInputStream(new File(path));
 			// System.out.println(123);
 			Workbook wb = null;
@@ -113,7 +113,7 @@ public class FileExcel {
 			excleContent = new ArrayList<SheetContent>();
 			for (int i = 0; i < sheetNum; i++) {
 				Sheet sheet = wb.getSheetAt(i);// 第i个工作表
-				SheetContent temp = new SheetContent(sheet, i);
+				SheetContent temp = new SheetContent(sheet);
 				excleContent.add(temp);
 				// System.out.println(sheet.getSheetName());
 
@@ -292,15 +292,14 @@ public class FileExcel {
 		HSSFSheet sheet=wb.createSheet("节点");		
 		
 		HSSFRow row1 = sheet.createRow(0);
-		insertCell(row1,  0, "序号");
-		insertCell(row1,  1, "节点名称");
-		insertCell(row1, 2, "节点类型");
-		insertCell(row1, 3, "经度");
-		insertCell(row1,  4, "纬度");
-		insertCell(row1,  5, "相对坐标X");
-		insertCell(row1, 6, "相对坐标Y");
-		insertCell(row1,  7, "大地坐标X");
-		insertCell(row1,  8, "大地坐标Y");		
+		insertCell(row1,  0, "节点名称");
+		insertCell(row1, 1, "节点类型");
+		insertCell(row1, 2, "经度");
+		insertCell(row1,  3, "纬度");
+		insertCell(row1,  4, "相对坐标X");
+		insertCell(row1, 5, "相对坐标Y");
+		insertCell(row1,  6, "大地坐标X");
+		insertCell(row1,  7, "大地坐标Y");		
 		
 		
 		for (int k = 0; k < l.size(); k++) {
@@ -313,10 +312,9 @@ public class FileExcel {
 		HSSFSheet sheet=wb.createSheet("连接");		
 		
 		HSSFRow row1 = sheet.createRow(0);
-		insertCell(row1, 0, "序号");
-		insertCell(row1,  1, "连接名称");
-		insertCell(row1,  2, "起点节点序号");
-		insertCell(row1,  3, "终点节点序号");
+		insertCell(row1,  0, "连接名称");
+		insertCell(row1,  1, "起点节点");
+		insertCell(row1,  2, "终点节点");
 			
 		
 		
@@ -341,6 +339,15 @@ public class FileExcel {
 			insertRow(sheet, k+1,  (Object[])l.get(k));
 		}
 		
+	}
+
+	public SheetContent getSheetByName(String sName) {
+		for(int i=0;i<excleContent.size();i++){
+			if(excleContent.get(i).Name.equalsIgnoreCase(sName)){
+				return excleContent.get(i);
+			}
+		}
+		return null;
 	}
 
 	// 读取表头

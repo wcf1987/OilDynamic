@@ -82,9 +82,11 @@ function list_project(nodeid){
 							align : "center",
 							formatter : function(value, grid, rows,
 									state) {
+								
 //								alert(rows.ID);
 								return "<a href=\"javascript:void(0)\" style=\"color:#798991\" onclick=\"openProject("
 										+ rows.id+ ","+rows.proName+")\">打开</a>"
+										
 							},
 							sortable:true
 						}
@@ -98,10 +100,10 @@ function list_project(nodeid){
 				rowList:[10,20,30],
 				cellEdit:true,
 				cellsubmit : 'remote',
-				cellurl : 'modifyBasicNodeProper.action',				
+				cellurl : 'modifyGraphiProjects.action',				
 				beforeSubmitCell : function(rowid,celname,value,iRow,iCol) { 
-					var index_ID=$("#propertyProperList").jqGrid("getRowData", iRow).id;
-					var colModels=$("#propertyProperList").jqGrid('getGridParam','colModel');
+					var index_ID=$("#projectList").jqGrid("getRowData", iRow).id;
+					var colModels=$("#projectList").jqGrid('getGridParam','colModel');
 					var p=colModels[iCol].name;
 					var z={
 							id:index_ID,				
@@ -196,12 +198,7 @@ function deleteProject2() {
           type: "POST", 
           url: "delGraphiProjects.action", 
           data: selectedIDs, 
-          beforeSend: function() { 
-               $().message("正在请求..."); 
-          }, 
-          error:function(){ 
-               $().message("请求失败..."); 
-          }, 
+          
           
           success: function(msg){ 
         	alert("删除成功！");

@@ -85,15 +85,12 @@ public class SheetContent {
 		return content;
 	}
 	int sheetID;
-	public SheetContent(Sheet sheet,int sheetID) {
-		this.sheetID=sheetID;
+	public SheetContent(Sheet sheet) {
 		int firstRowIndex = sheet.getFirstRowNum();
 		int lastRowIndex = sheet.getLastRowNum();
 		List<String> valueTemp;
 		this.Name=sheet.getSheetName();
-		this.sheetTitle=new HashMap<String,Integer>();
 		
-		getType(this.Name);
 		sheetContent=new ArrayList<List<String>>();
 		Row row;
 		Cell temp;
@@ -101,71 +98,21 @@ public class SheetContent {
 		int firstCellIndex;
 		int lastCellIndex;
 		for (int rIndex = firstRowIndex; rIndex <= lastRowIndex; rIndex++) {
-			row = sheet.getRow(rIndex);
-			
-			boolean flag=false;
-			if(row!=null){
-			for (int tIdex = row.getFirstCellNum();tIdex < row.getLastCellNum(); tIdex++) {
-				if(rIndex==10&&this.Name.equals("节点参数")){
-					//System.out.println("sus");
-				}
-				temp = row.getCell(tIdex);
-				String str=null;
-				if(temp==null){
-					
-				}else{
-					str=temp.toString();
-				}
-				if(str!=null&&!str.equals("")){
-					flag=true;
-				}
-				
-			}
-			}
-			if (row != null&&flag) {
+			row = sheet.getRow(rIndex);			
+			if (row != null) {
 				 firstCellIndex = sheet.getRow(firstRowIndex).getFirstCellNum();
 				 lastCellIndex = sheet.getRow(firstRowIndex).getLastCellNum();
 				valueTemp=new ArrayList<String>();
-				
-				
-				
 				for (int cIndex = firstCellIndex; cIndex < lastCellIndex; cIndex++) {
-					cell = row.getCell(cIndex);
-					
+					cell = row.getCell(cIndex);					
 					String value = "";
 					if (cell != null) {
 						value = cell.toString();
-						
-						if(rIndex==0&&value.equals(""))
-						{
-						
-						}else{
-							value=Tools.checkContent(value);
-							valueTemp.add(value);
-							
-						}
-						//System.out.print(value + "\t");
-						if(rIndex==0&&!value.equals("")){
-							if(this.sheetID==1){
-							//	System.out.println("catch");
-							}
-							value=Tools.checkContent(value);
-							this.sheetTitle.put(value, cIndex+1);
-							
-						}
-					}else{
-						value = "";
-						if(rIndex>0)
-						{
-							value=Tools.checkContent(value);
-							valueTemp.add(value);
-						}
-						
-					}
-					
+						value=Tools.checkContent(value);
+						valueTemp.add(value);
+					}					
 				}
 				sheetContent.add(valueTemp);
-				//System.out.println();
 			}
 		}
 	}
@@ -179,7 +126,7 @@ public class SheetContent {
 		return type;
 	}
 	
-	List<List<String>> sheetContent;//二维数组，第一行是list是title的数组
+	public List<List<String>> sheetContent;//二维数组，第一行是list是title的数组
 	Map<String,Integer>  sheetTitle;
 	int type;
 	String Name;

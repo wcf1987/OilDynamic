@@ -12,9 +12,24 @@ public class GraphiProjectAction {
 	int authorID;
 	String msg;
 	String exportUrl;
-	
+	String impFile;
+	public static void main(String args[]){
+		GraphiProjectAction a=new GraphiProjectAction();
+		a.id=6;
+		a.impFile="D:\\software\\tomcat7\\webapps\\OilDynamic\\uploadTemp\\f40b9b261e7e4e4884065b76657477bf.xls";
+		a.importByProID();
+	}
 	public String importByProID(){
+		GraphiProjectsDao dao=new GraphiProjectsDao();
+		
+		int re=dao.importFile(id,impFile);
 		return Action.SUCCESS;
+	}
+	public String getImpFile() {
+		return impFile;
+	}
+	public void setImpFile(String impFile) {
+		this.impFile = impFile;
 	}
 	public String exportByProID(){
 		GraphiProjectsDao dao=new GraphiProjectsDao();
