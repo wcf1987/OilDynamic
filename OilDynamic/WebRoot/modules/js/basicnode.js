@@ -61,16 +61,19 @@ function list_property(){
 							sortable:true
 						},
 						
-						{
-							name : 'iconFile',
-							index : 'iconFile',
-							width : 150,
-							align : "center",
-							editable:true,
-							 editor:'text',
-							sortable:true
-						},
 						
+						 { name: 'iconFile', 
+							index: 'iconFile', 
+							width: 150, 
+							align: "center", 
+							sortable: false, 
+							editable: false, 
+							formatter: function(value, grid, rows,
+									state) {
+//								alert(rows.ID);
+								return "<img src=\"uploadICONS/"+rows.iconFile+"\" height=\"20px\"/>"
+							} 
+							},
 						{				
 							name : 'open',
 							index : 'open',

@@ -1,4 +1,10 @@
-
+function importPro(){
+	var proID=getCookie('proid');
+	alert(proID);
+}
+function exportPro(){
+	
+}
 $(function(){
 		
 	var nodeTypes={};

@@ -50,6 +50,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="modules/js/jquery.tipsy.js"></script>
 <script type="text/javascript" src="modules/js/jquery.custom.js"></script>
 <script type="text/javascript" src="modules/js/jquery.search.js"></script>
+<script defer="defer" type="text/javascript" src="editor/lib/tools.js"></script>
 
 	<script type="text/javascript" src="js/upload/jquery.uploadify.min.js"></script>
 	<script type="text/javascript" src="js/jquery-validation-1.11.1/dist/jquery.validate.js"></script>
@@ -210,8 +211,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</div>
 							
             				  <div>
-								<a href="#" class="btn btn-large btn-block btn-primary" style="width:100px;float:left;margin-left:5px;margin-top:5px">导入项目</a>		
-								<a href="#" class="btn btn-large btn-block btn-primary" style="width:100px;float:left;margin-left:5px;">导出项目</a>
+								<a href="javascript:importPro()" class="btn btn-large btn-block btn-primary" style="width:100px;float:left;margin-left:5px;margin-top:5px">导入项目</a>		
+								<a href="javascript:exportPro()" class="btn btn-large btn-block btn-primary" style="width:100px;float:left;margin-left:5px;">导出项目</a>
 								<a href="modules/map.jsp" class="btn btn-large btn-block btn-primary" style="width:100px;float:left;margin-left:5px;">图形化展示</a>					
 						 	 	<a href="modules/editor.jsp" class="btn btn-large btn-block btn-primary" style="width:100px;float:left;margin-left:5px;">笛卡尔建模</a>					
 						 	 	
