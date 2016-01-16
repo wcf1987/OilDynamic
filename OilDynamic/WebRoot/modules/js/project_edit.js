@@ -3,7 +3,21 @@ function importPro(){
 	alert(proID);
 }
 function exportPro(){
-	
+	var proID=getCookie('proid');
+
+	$.ajax({ 
+        type: "POST", 
+        url: "exportByProID.action",  
+        data : {
+			id : proID					
+		}, 
+        async:false,
+        
+        success: function(data){ 
+        	//alert(data['exportUrl']);
+        	window.location.href=data['exportUrl'];
+        } 
+      }); 
 }
 $(function(){
 		

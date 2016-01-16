@@ -81,7 +81,7 @@ public class BasicNodeDao {
 		SQLQuery q;
 		
 		 q = session
-				.createSQLQuery("select t1.ID,t1.TypeName,t1.iconfile,t1.type from t_basicnode t1 where t1.id>0 order by id desc");
+				.createSQLQuery("select t1.ID,t1.TypeName,t1.iconfile,t1.type from t_basicnode t1 where t1.id>0 and t1.type>0 order by id desc");
 			
 		List l = q.list();
 		

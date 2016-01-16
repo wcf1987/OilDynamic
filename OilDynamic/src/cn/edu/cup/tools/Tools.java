@@ -152,24 +152,42 @@ public class Tools {
 	     *         2 代表是浮点数
 	     *         3 代表是字符串
 	     */
-	    public static int getType(String str){
-	     if(str==null )
-	      return -1;
-	     double a;
-	     try{
-	    	  a=Double.parseDouble(str);
-	    	}catch(NumberFormatException  e){
-	    		
-	    		return 3;
-	    	}
+	    public static int getType(Object str){
+	    	if(str==null )
+	  	      return -1;
+	    	Integer tb;
+	    	Double td;
+	    	String ts;
+	     try {
+			 tb=(Integer)str;
+			 
+			 return 1;
+			 
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			
+		}
 	     
-	     int b=(int)a;  
-	     double c=a%1;
-	     if(c>-0.00000000001&&c<=0.00000000001){
-	    	    
-	    	 return 1;
-	     }
-	     return 2;
+	     try {
+			 td=(Double)str;
+			 
+			 return 2;
+			 
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			
+		}
+	     
+	     try {
+			 ts=(String)str;
+			 
+			 return 3;
+			 
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			
+		}
+	     return -1;
 	    }
 	    public static void main(String args[]){
 	    	System.out.println(getType("4800.000000000001"));
