@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,11 +12,11 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 import cn.edu.cup.graphi.business.BasicNode;
-import cn.edu.cup.graphi.business.DeviceKV;
 import cn.edu.cup.graphi.business.Graphi;
 import cn.edu.cup.graphi.business.GraphiProjects;
 import cn.edu.cup.graphi.business.Line;
 import cn.edu.cup.graphi.business.Point;
+import cn.edu.cup.tools.FileExcel;
 import cn.edu.cup.tools.HibernateSessionManager;
 
 public class GraphiProjectsDao {
@@ -187,6 +186,32 @@ public class GraphiProjectsDao {
 		
 		String json=((String)q.uniqueResult());
 		return json;
+	}
+
+	public String exportFile(int id) {
+		SQLQuery q;
+		FileExcel excel=new FileExcel();
+		//excel.createExcel();
+		 q = session
+				.createSQLQuery("select t1.ID,t1.nodeName,t2.TypeName,t1.latitude,t1.longitude,t1.x_location,t1.y_location,t1.x_location_geo,t1.y_location_geo from t_node t1,t_basicnode t2 where t1.BasicNodeID=t2.ID and t1.proID=?");
+		q.setParameter(0, id);		
+		List l = q.list();
+		excel.addNode(l);
+		
+		 q = session
+					.createSQLQuery("select t1.ID,t1.EdgeName,t1.sourceid,t1.targetid from t_edge t1 where  t1.proID=?");
+			q.setParameter(0, id);		
+			l = q.list();
+		excel.addEdge(l);
+		
+		q = session
+				.createSQLQuery("select t4.TypeName,t3.nodeName,t2.ProperName,t1.propervalue,t2.ProperUnit from t_nodeproper t1,t_proper t2,t_node t3,t_basicnode t4 where t1.properID=t2.ID and t1.parentID=t3.ID and t3.BasicNodeID=t4.ID and t1.proID=? order by t4.TypeName,t3.nodeName");
+		q.setParameter(0, id);		
+		l = q.list();
+		excel.addNodeProper(l);
+			//System.out.println(l.size());
+		excel.saveExcel();
+		return excel.getFileNameUrl();
 	}
 
 

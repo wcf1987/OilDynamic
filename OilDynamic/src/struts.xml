@@ -110,6 +110,14 @@
 			<result type="json">				
 			</result>
 		</action>
+		<action name="importByProID" method="importByProID" class="cn.edu.cup.graphi.action.GraphiProjectAction">
+			<result type="json">				
+			</result>
+		</action>
+		<action name="exportByProID" method="exportByProID" class="cn.edu.cup.graphi.action.GraphiProjectAction">
+			<result type="json">				
+			</result>
+		</action>
 		<!--图展示action -->
 		<action name="viewGUI" class="cn.edu.cup.graphi.action.GraphiShowAction"  method="viewGUI">
 			<result type="json">				

@@ -11,6 +11,22 @@ public class GraphiProjectAction {
 	String proName;
 	int authorID;
 	String msg;
+	String exportUrl;
+	
+	public String importByProID(){
+		return Action.SUCCESS;
+	}
+	public String exportByProID(){
+		GraphiProjectsDao dao=new GraphiProjectsDao();
+		exportUrl=dao.exportFile(id);
+		return Action.SUCCESS;
+	}
+	public String getExportUrl() {
+		return exportUrl;
+	}
+	public void setExportUrl(String exportUrl) {
+		this.exportUrl = exportUrl;
+	}
 	public String addGraphiProject(){
 		GraphiProjectsDao dao=new GraphiProjectsDao();
 		int re=dao.addGraphiProject(proName,authorID);
