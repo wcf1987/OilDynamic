@@ -210,8 +210,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								  </div>
 							  </div>		
 							</div>
-							
+							<div id="excelQueue" class="fileQueue"></div>
             				  <div>
+            				  <div id="excelQueue" class="fileQueue"></div>            				
             				  	<a href="modules/map.jsp" class="btn btn-large btn-block btn-primary" style="width:100px;height:30px;float:left;margin-left:5px;margin-top:5px;">图形化展示</a>					
 						 	 	<a href="modules/editor.jsp" class="btn btn-large btn-block btn-primary" style="width:100px;height:30px;float:left;margin-left:5px;">笛卡尔建模</a>					
 						 	 	<a href="javascript:exportPro()" class="btn btn-large btn-block btn-primary" style="width:100px;height:30px;float:left;margin-left:5px;">导出项目</a>

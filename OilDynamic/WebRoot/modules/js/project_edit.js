@@ -37,7 +37,8 @@ $(function(){
 		'swf' : 'js/upload/uploadify.swf',				
 		'cancelImg'   : 'js/upload/cancel.png',
 		'uploader' : 'importByProID.action',
-		'queueID' : 'fileQueue',
+		'queueID' : 'excelQueue',
+		'progressData'	: 'percentage',	
 		'auto' : true,
 		'multi' : false,
 		'buttonText' : '导入项目',
@@ -49,8 +50,10 @@ $(function(){
 	    'fileTypeExts' : '*.xls; *.xlsx;',
 	    'onUploadStart': function (file) { 		
 	    	//$('#importExcel').message("正在上传"); 
+	    	jQuery("#vertexList").message("正在上传");
 	    	$("#importExcel").uploadify("settings", "formData",
 	    			{ 'id':$.cookie('proid')});  
+	    	
 	    }
 
 	});
