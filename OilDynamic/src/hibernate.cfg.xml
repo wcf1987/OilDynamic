@@ -5,10 +5,15 @@
 		<property name="show_sql">true</property>
 		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-
+<!-- 
 		<property name="connection.url"> <![CDATA[jdbc:mysql://127.0.0.1:3306/oildynamic?useUnicode=true&characterEncoding=utf8]]></property>
 		<property name="connection.username">oilmanage</property>
-		<property name="connection.password">xjtuoil</property>
+		<property name="connection.password">xjtuoil</property> -->
+
+ 		<property name="connection.url"> <![CDATA[jdbc:mysql://202.204.194.18:3306/cbmdynamic?useUnicode=true&characterEncoding=utf8]]></property>
+		<property name="connection.username">sample</property>
+		<property name="connection.password">sample@chuyun</property> 
+
 		
 		<property name="hbm2ddl.auto">update</property>
 		<!-- 连接池配置 -->

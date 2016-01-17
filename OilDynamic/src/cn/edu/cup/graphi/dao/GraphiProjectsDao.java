@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -224,84 +225,92 @@ public class GraphiProjectsDao {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return -1;
+			return -2;
 		}
 		
 		
 		SQLQuery q;
 		HibernateSessionManager.getThreadLocalTransaction();
 		
-		q = session.createSQLQuery("delete from t_node where proID=?");
-		q.setParameter(0, id);
-		re = q.executeUpdate();
-		
-		q = session.createSQLQuery("delete from t_edge where proID=?");
-		q.setParameter(0, id);
-		re = q.executeUpdate();
-		
-		q = session.createSQLQuery("delete from t_nodeproper where proID=?");
-		q.setParameter(0, id);
-		re = q.executeUpdate();
-		
-		
-		SheetContent rows=excel.getSheetByName("节点");
-		for(int i=1;i<rows.sheetContent.size();i++){
-			q = session.createSQLQuery("insert into t_node (nodeName,x_location,y_location,latitude,longitude,x_location_geo,y_location_geo,proID,BasicNodeID) values (?,?,?,?,?,?,?,?,?)");
-			q.setParameter(0, rows.sheetContent.get(i).get(0));
+		try {
+			q = session.createSQLQuery("delete from t_node where proID=?");
+			q.setParameter(0, id);
+			re = q.executeUpdate();
+			
+			q = session.createSQLQuery("delete from t_edge where proID=?");
+			q.setParameter(0, id);
+			re = q.executeUpdate();
+			
+			q = session.createSQLQuery("delete from t_nodeproper where proID=?");
+			q.setParameter(0, id);
+			re = q.executeUpdate();
+			
+			
+			SheetContent rows=excel.getSheetByName("节点");
+			for(int i=1;i<rows.sheetContent.size();i++){
+				q = session.createSQLQuery("insert into t_node (nodeName,x_location,y_location,latitude,longitude,x_location_geo,y_location_geo,proID,BasicNodeID) values (?,?,?,?,?,?,?,?,?)");
+				q.setParameter(0, rows.sheetContent.get(i).get(0));
 
-			q.setParameter(1, rows.sheetContent.get(i).get(2));
-			q.setParameter(2, rows.sheetContent.get(i).get(3));
-			q.setParameter(3, rows.sheetContent.get(i).get(4));
-			q.setParameter(4, rows.sheetContent.get(i).get(5));
-			q.setParameter(5, rows.sheetContent.get(i).get(6));
-			q.setParameter(6, rows.sheetContent.get(i).get(7));
+				q.setParameter(1, rows.sheetContent.get(i).get(2));
+				q.setParameter(2, rows.sheetContent.get(i).get(3));
+				q.setParameter(3, rows.sheetContent.get(i).get(4));
+				q.setParameter(4, rows.sheetContent.get(i).get(5));
+				q.setParameter(5, rows.sheetContent.get(i).get(6));
+				q.setParameter(6, rows.sheetContent.get(i).get(7));
+				
+				q.setParameter(7,id);
+				q.setParameter(8,getIDByName(rows.sheetContent.get(i).get(1)));
+				
+				
+				re=q.executeUpdate();
+			}
+			//HibernateSessionManager.commitThreadLocalTransaction();
+			//HibernateSessionManager.getThreadLocalTransaction();
 			
-			q.setParameter(7,id);
-			q.setParameter(8,getIDByName(rows.sheetContent.get(i).get(1)));
+			rows=excel.getSheetByName("连接");
+			for(int i=1;i<rows.sheetContent.size();i++){
+				q = session.createSQLQuery("insert into t_edge(EdgeName,sourceid,targetid,BasicNodeID,proID) VALUES(?,?,?,?,?)");
+				q.setParameter(0, rows.sheetContent.get(i).get(0));
+				
+				q.setParameter(1, getNodeIDByName(rows.sheetContent.get(i).get(1),id));
+				q.setParameter(2, getNodeIDByName(rows.sheetContent.get(i).get(2),id));
+				
+				q.setParameter(3,0);
+				q.setParameter(4, id);
+				
+				re=q.executeUpdate();
+			}
 			
-			
-			re=q.executeUpdate();
+			rows=excel.getSheetByName("节点属性");
+			for(int i=1;i<rows.sheetContent.size();i++){
+				q = session.createSQLQuery("insert into t_nodeproper (properID,propervalue,parentID,proID) VALUES (?,?,?,?)");
+				q.setParameter(0, getProperIDByName(rows.sheetContent.get(i).get(0),rows.sheetContent.get(i).get(2)));
+				q.setParameter(1, rows.sheetContent.get(i).get(3));
+				
+				q.setParameter(2, getNodeIDByName(rows.sheetContent.get(i).get(1),id));
+				q.setParameter(3, id);
+				
+				
+				re=q.executeUpdate();
+			}
+		} catch (Exception e) {
+			re=-1;
+			this.roll();
+			e.printStackTrace();
+		}finally{
+
+			this.close();
 		}
-		//HibernateSessionManager.commitThreadLocalTransaction();
-		//HibernateSessionManager.getThreadLocalTransaction();
-		
-		rows=excel.getSheetByName("连接");
-		for(int i=1;i<rows.sheetContent.size();i++){
-			q = session.createSQLQuery("insert into t_edge(EdgeName,sourceid,targetid,BasicNodeID,proID) VALUES(?,?,?,?,?)");
-			q.setParameter(0, rows.sheetContent.get(i).get(0));
-			
-			q.setParameter(1, getNodeIDByName(rows.sheetContent.get(i).get(1),id));
-			q.setParameter(2, getNodeIDByName(rows.sheetContent.get(i).get(2),id));
-			
-			q.setParameter(3,0);
-			q.setParameter(4, id);
-			
-			re=q.executeUpdate();
-		}
-		
-		rows=excel.getSheetByName("节点属性");
-		for(int i=1;i<rows.sheetContent.size();i++){
-			q = session.createSQLQuery("insert into t_nodeproper (properID,propervalue,parentID,proID) VALUES (?,?,?,?)");
-			q.setParameter(0, getProperIDByName(rows.sheetContent.get(i).get(0),rows.sheetContent.get(i).get(2)));
-			q.setParameter(1, rows.sheetContent.get(i).get(3));
-			
-			q.setParameter(2, getNodeIDByName(rows.sheetContent.get(i).get(1),id));
-			q.setParameter(3, id);
-			
-			
-			re=q.executeUpdate();
-		}
-		this.close();
 		return re;
 	}
-	public Integer getIDByName(String typeName) {
+	public Integer getIDByName(String typeName) throws Exception {
 		String sql = "select id from t_basicnode t1  where TypeName=? ";
 		SQLQuery q = session.createSQLQuery(sql);
 		q.setParameter(0, typeName);
 		Integer count = ((Integer) q.uniqueResult()).intValue();
 		return count;
 	}
-	public Integer getNodeIDByName(String nodeName,int proID) {
+	public Integer getNodeIDByName(String nodeName,int proID) throws Exception{
 		String sql = "select max(id) from t_node t1  where nodename=? and proID=?";
 		SQLQuery q = session.createSQLQuery(sql);
 		q.setParameter(0, nodeName);
@@ -309,7 +318,7 @@ public class GraphiProjectsDao {
 		Integer count = ((Integer) q.uniqueResult()).intValue();
 		return count;
 	}
-	public Integer getProperIDByName(String typeName,String properName) {
+	public Integer getProperIDByName(String typeName,String properName) throws Exception{
 		String sql = "select t1.id from t_proper t1,t_basicnode t2  where t1.ParentID=t2.ID and t2.TypeName=? and t1.ProperName=?";
 		SQLQuery q = session.createSQLQuery(sql);
 		q.setParameter(0, typeName);

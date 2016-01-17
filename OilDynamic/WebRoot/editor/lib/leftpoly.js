@@ -115,7 +115,7 @@ function() {
             url: "addNodeByGUI.action",
             data: {
             	proID:proID,				
-            	basicNodeID:type,
+            	basicNodeID:p.basicid,
             	nodeNameStr:name
 			 }, 
 			 success : function(data) {

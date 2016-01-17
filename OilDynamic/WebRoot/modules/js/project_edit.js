@@ -19,6 +19,7 @@ function exportPro(){
         } 
       }); 
 }
+
 $(function(){
 		
 	var nodeTypes={};
@@ -31,7 +32,50 @@ $(function(){
 	listnodes($.cookie('proid'));
 		
 	listedge($.cookie('proid'));
+	
+	$('#importExcel').uploadify({
+		'swf' : 'js/upload/uploadify.swf',				
+		'cancelImg'   : 'js/upload/cancel.png',
+		'uploader' : 'importByProID.action',
+		'queueID' : 'fileQueue',
+		'auto' : true,
+		'multi' : false,
+		'buttonText' : '导入项目',
+		'fileSizeLimit' : '5MB',
+		'fileObjName' : 'excelImport',
+		'onUploadSuccess' : uploadComplete,
+		'method' : 'post',
+		'fileTypeDesc' : '请选择xls xlsx文件',
+	    'fileTypeExts' : '*.xls; *.xlsx;',
+	    'onUploadStart': function (file) { 		
+	    	//$('#importExcel').message("正在上传"); 
+	    	$("#importExcel").uploadify("settings", "formData",
+	    			{ 'id':$.cookie('proid')});  
+	    }
 
+	});
+	$('#importExcel-button').attr("class", "btn btn-large btn-block btn-primary");
+	$('#importExcel-button').css("width", "100px");	
+	$('#importExcel-button').css("height", "30px");
+	$('#importExcel-button').css("float", "left");
+	$('#importExcel-button').css("margin-left", "5px");
+	$('#importExcel-button').css("margin-top", "5px");
+	$('#importExcel-button').css("line-height", "18px");
+	$('#SWFUpload_0').css("margin-left", "-100px");
+
+function uploadComplete(file, data, response) {
+		var tempJson = jQuery.parseJSON(data);
+		if(tempJson['msg']==null||tempJson['msg']==''){
+			alert("上传成功！");
+			//openProject($("#proID").val());
+		
+			jQuery("#vertexList").trigger("reloadGrid");
+			jQuery("#vertexList").trigger("reloadGrid");
+		 
+		}else{
+			alert(tempJson['msg']);
+		}
+	}
 function loadNodeTypes(){
 	$.ajax({ 
         type: "POST", 
@@ -504,14 +548,14 @@ function listedge(proid){
 	}).jqGrid('navButtonAdd',"#edgePager",{
 				title:'删除',
 				caption:"删除",	
-				id:"delete_propertyProper",
-				onClickButton:deletePropertyProper,
+				id:"delEdge",
+				onClickButton:delEdge,
 				position:"first"
 			});
 }
 
 
-function deletePropertyProper() {
+function delEdge() {
     var sels = $("#edgeList").jqGrid('getGridParam','selarrrow'); 
     if(sels==""){ 
        //$().message("请选择要删除的项！"); 
@@ -527,7 +571,7 @@ function deletePropertyProper() {
        if(confirm("您是否确认删除？")){ 
         $.ajax({ 
           type: "POST", 
-          url: "delBasicNodesProper.action", 
+          url: "delEdges.action", 
           data: selectedIDs, 
           beforeSend: function() { 
                $().message("正在请求..."); 

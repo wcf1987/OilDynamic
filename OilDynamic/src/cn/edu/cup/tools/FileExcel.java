@@ -100,15 +100,12 @@ public class FileExcel {
 			// System.out.println(123);
 			Workbook wb = null;
 			// 解析xls格式
-			if (fileName.endsWith("xls")) {
+			
 
 				// System.out.println("read excel"+fileName);
-				wb = new HSSFWorkbook(inputStream);
+			wb = new HSSFWorkbook(inputStream);
 
-				// 解析xlsx格式
-			} else if (fileName.endsWith("xlsx")) {
-				wb = new XSSFWorkbook(inputStream);// 解析xlsx格式
-			}
+			
 			sheetNum = wb.getNumberOfSheets();
 			excleContent = new ArrayList<SheetContent>();
 			for (int i = 0; i < sheetNum; i++) {

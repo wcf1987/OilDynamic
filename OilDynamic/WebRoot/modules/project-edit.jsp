@@ -71,6 +71,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="modules/js/dmuploader.js"></script>
 <script src="js/jqGrid/js/i18n/grid.locale-cn.js" type="text/javascript"></script>
 <script src="js/jqGrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="js/upload/uploadify.css">
 	<!--[if lt IE 9]>
 	<style type="text/css" media="screen">
 	#backtotop > span,
@@ -211,11 +212,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</div>
 							
             				  <div>
-								<a href="javascript:importPro()" class="btn btn-large btn-block btn-primary" style="width:100px;float:left;margin-left:5px;margin-top:5px">导入项目</a>		
-								<a href="javascript:exportPro()" class="btn btn-large btn-block btn-primary" style="width:100px;float:left;margin-left:5px;">导出项目</a>
-								<a href="modules/map.jsp" class="btn btn-large btn-block btn-primary" style="width:100px;float:left;margin-left:5px;">图形化展示</a>					
-						 	 	<a href="modules/editor.jsp" class="btn btn-large btn-block btn-primary" style="width:100px;float:left;margin-left:5px;">笛卡尔建模</a>					
-						 	 	
+            				  	<a href="modules/map.jsp" class="btn btn-large btn-block btn-primary" style="width:100px;height:30px;float:left;margin-left:5px;margin-top:5px;">图形化展示</a>					
+						 	 	<a href="modules/editor.jsp" class="btn btn-large btn-block btn-primary" style="width:100px;height:30px;float:left;margin-left:5px;">笛卡尔建模</a>					
+						 	 	<a href="javascript:exportPro()" class="btn btn-large btn-block btn-primary" style="width:100px;height:30px;float:left;margin-left:5px;">导出项目</a>
+								<div id="impdiv" style="width:100px;height:30px;float:left;margin-left:2px;"><input type="file" name="importExcel" id="importExcel"/></div>
+								
 						 	 </div>	
                         </div>
                         

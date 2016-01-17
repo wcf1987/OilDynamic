@@ -110,10 +110,16 @@
 			<result type="json">				
 			</result>
 		</action>
+		
 		<action name="importByProID" method="importByProID" class="cn.edu.cup.graphi.action.GraphiProjectAction">
-			<result type="json">				
+			<param name="savePath">/uploadTemp</param>
+			<result name="SUCCESS" type="json">
+
 			</result>
 		</action>
+		
+		
+		
 		<action name="exportByProID" method="exportByProID" class="cn.edu.cup.graphi.action.GraphiProjectAction">
 			<result type="json">				
 			</result>

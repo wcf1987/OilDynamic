@@ -85,7 +85,7 @@ function list_project(nodeid){
 								
 //								alert(rows.ID);
 								return "<a href=\"javascript:void(0)\" style=\"color:#798991\" onclick=\"openProject("
-										+ rows.id+ ","+rows.proName+")\">打开</a>"
+										+ rows.id+ ",'"+rows.proName+"')\">打开</a>"
 										
 							},
 							sortable:true

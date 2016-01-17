@@ -1,5 +1,6 @@
 package cn.edu.cup.graphi.action;
 
+import java.io.File;
 import java.util.List;
 
 import cn.edu.cup.graphi.business.GraphiProjects;
@@ -13,17 +14,34 @@ public class GraphiProjectAction {
 	String msg;
 	String exportUrl;
 	String impFile;
+	File excelImport;
+	public File getExcelImport() {
+		return excelImport;
+	}
+	public void setExcelImport(File excelImport) {
+		this.excelImport = excelImport;
+	}
 	public static void main(String args[]){
-		GraphiProjectAction a=new GraphiProjectAction();
+	/*	GraphiProjectAction a=new GraphiProjectAction();
 		a.id=6;
 		a.impFile="D:\\software\\tomcat7\\webapps\\OilDynamic\\uploadTemp\\f40b9b261e7e4e4884065b76657477bf.xls";
-		a.importByProID();
+		a.importByProID();*/
 	}
 	public String importByProID(){
+		if(id==0){
+			msg="项目编号为空";
+			return "SUCCESS";
+		}
 		GraphiProjectsDao dao=new GraphiProjectsDao();
 		
-		int re=dao.importFile(id,impFile);
-		return Action.SUCCESS;
+		int re=dao.importFile(id,excelImport.getAbsolutePath());
+		if(re==-2){
+			msg="上传文件格式有误";
+		}
+		if(re==-1){
+			msg="Excel内容存在错误";
+		}
+		return "SUCCESS";
 	}
 	public String getImpFile() {
 		return impFile;
