@@ -37,7 +37,7 @@ var Paintings = function() {
 			point.ids=p['id'];
 			point.id(p['id']);
 			point.basicid=p['basicid'];			
-			
+			point.TYPE=p['basicid'];	
 			this.p.add(point);
 			setPointText(point,p['nodeName']);
 			point.x(p.x_location);

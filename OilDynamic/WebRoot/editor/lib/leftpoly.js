@@ -641,6 +641,7 @@ function() {
 			// cloneOfItem.off('mousedown touchstart');
 			platform.leftlayer.add(cloneOfItem);
 			cloneOfItem.basicid=this.basicid;
+			cloneOfItem.TYPE=this.TYPE;
 			leftpoly.polyGroups[leftpoly.searchPointIndex(this)]=cloneOfItem;
 			
 		}
